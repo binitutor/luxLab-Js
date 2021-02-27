@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    
+    <title>Create Calendar</title>
+    
+    <!--  Bootstrap modal popup  -->
+
+    <!--  Bootstrap css file  -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- jQuery file -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!--  Bootstrap min file -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+    <!--  datePicker.js  -->
+    <!--<script src="../assets/js/datePicker.js"></script>-->
+    
+    <!--  datePickerWidget.js  -->
+    <!--<script src="../assets/js/datePickerWidget.js"></script>-->
+
+    <style>
+    	table, tr, th, td {
+            border: 1px solid #e3e3e3;
+            padding: 10px;
+            /*font-size: 0.9em;*/
+            text-align: center;
+        }
+        table tr td:hover {
+        	background: #222;
+        	color: #f4f3f2;
+        	cursor: pointer;
+        }
+        .success, .error{
+            width: 20%;
+            border: 1px solid;
+            margin: 10px 0px;
+            padding:15px 10px 15px 50px;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            display: inline-block;
+          }
+        .success {
+          color: #4F8A10;
+          background-color: #DFF2BF;
+        }
+        
+        .error {
+          color: #D8000C;
+          background-color: #FFBABA;
+        }
+        .spacer {
+        	height: 100px;
+        	width: 1400px;
+        }
+        #hoursDiv td:hover {
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<!-- Fetch Date & Hours from DB  -->
+			<div class="col-lg-8">
+			
+			    <h1>Request Data and time for Calendar DB</h1>
+				<p><strong>Please fill in the form and click save.</strong></p>
+				<p class="text-danger">(for use by the staff)</p>
+				
+				
+				<form id="bookingCreationForm">
+					<div id="notify"></div>
+					<div class="form-row">
+						<div class="form-group">
+                            <label for="date">Pick a Date</label>
+                            <input type="date" id="crDate" class="form-control" placeholder="Select a date" />
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="time">Pick a start time</label>
+                            <select name="cars" type="text" id="crTime" class="form-control">
+                                <option value="">Select a time</option>
+                                <option value="12:00am">12:00am</option>
+                                <option value="1:00am">1:00am</option>
+                                <option value="2:00am">2:00am</option>
+                                <option value="3:00am">3:00am</option>
+                                <option value="4:00am">4:00am</option>
+                                <option value="5:00am">5:00am</option>
+                                <option value="6:00am">6:00am</option>
+                                <option value="7:00am">7:00am</option>
+                                <option value="8:00am ">8:00am</option>
+                                <option value="9:00am">9:00am</option>
+                                <option value="10:00am">10:00am</option>
+                                <option value="11:00am">11:00am</option>
+                                <option value="12:00pm">12:00pm</option>
+                                <option value="1:00pm">1:00pm</option>
+                                <option value="2:00pm">2:00pm</option>
+                                <option value="3:00pm">3:00pm</option>
+                                <option value="4:00pm">4:00pm</option>
+                                <option value="5:00pm">5:00pm</option>
+                                <option value="6:00pm">6:00pm</option>
+                                <option value="7:00pm">7:00pm</option>
+                                <option value="8:00pm ">8:00pm</option>
+                                <option value="9:00pm">9:00pm</option>
+                                <option value="10:00pm">10:00pm</option>
+                                <option value="11:00pm">11:00pm</option>
+                            </select>
+                        </div>
+                        <input type="submit" id="saveRecord" value="Create Booking" class="btn btn-primary btn-block">
+					</div>
+				</form>
+				<!--
+				<script>
+					// on click, create booking hours on date for calendar 
+					$("#saveRecord").on('click', function(){
+						// get values from form: date and time
+						var crDate    = $("#crDate").val();       
+                        var crTime    = $("#crTime").val();
+                        
+                        $.ajax({
+                        	method: "POST",
+                        	url:    "saveCalendarHour.php",
+                            data: { "crDate": crDate, "crTime": crTime}
+                        }).done(function( data ) {
+                        	var result = $.parseJSON(data);
+                        	var str = '';
+                            var cls = '';
+                            if(result == 1) {
+                                str = 'Data record saved successfully.';
+                                cls = 'success';  
+                            }else if( result == 2) {
+                                str = 'All fields are required.';
+                                cls = 'error';
+                            }else if( result == 3) {
+                                str = 'Enter a valid email address.';
+                                cls = 'error';
+                            }else{
+                                str = 'User data could not be saved. Please try again';
+                                cls = 'error';
+                            }
+                            $("#notify").show(2000).html(str).addClass('cls').hide(2000);
+                        });//.../ajax
+                        
+                        
+					});
+				</script>
+				-->
+				
+				<div class="spacer"></div>
+			    <div class="spacer"></div>
+			    <div class="spacer"></div>
+			</div> <!-- /col 1 fetch data  -->
+            
+            
+            
+            <div class="col-lg-4">
+			    <div>
+			        <h1>Created Hours (now): </h1>
+			        <div id="createdHours"></div>
+			    </div>
+			    
+			    <div class="spacer"></div>
+			    
+			    <div>
+			        <h1>Created Hours (from Database): </h1>
+			        <div id="createdHoursDb"></div>
+			    </div>
+			    
+			    <input type="button" value="Fetch Data" id="fetchHours" class="btn btn-block btn-primary">
+			    <div class="spacer"></div>
+			    <div class="spacer"></div>
+			</div> <!-- /col 2 display selection  -->
+			    
+			<script src="createCal.js"></script>
+
+		</div> <!-- row ends -->
+	</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
