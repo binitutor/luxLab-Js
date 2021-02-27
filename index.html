@@ -1,50 +1,226 @@
 <!DOCTYPE html>
-<form id="contact-form" method="post">
-
+<html>
 <head>
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/yeti/bootstrap.min.css" > -->
+    <title>Lux Lab Booking</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/cf4bf43f9b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/yeti/bootstrap.min.css" >
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
     />
     <style type="text/css">
-      
-      input, textarea{
-          width: 100%;
-      padding: 10px 15px;
-      margin: 1px 0;
-      box-sizing: border-box;
-      border: 2px solid black;
-      border-radius: 4px;
-      background-color: lightblue;
-      }
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,500;1,700;1,900&display=swap');
 
-      h4{
-      text-align: center;
-      font-family: Verdana, sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: #fff;
         }
 
-        body{
-          background-color: #E6E6DC;
+        .nav {
+            box-shadow: 2px 0px 8px 2px #888888;
+            padding: 0 10%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background-color: #fff;
+            z-index: 3;
         }
 
-        .center{
-      margin: 0;
-      position: absolute;
-      top: 65%;
-      left: 45%;
-      
+        /*social media links*/
+        .social-menu ul {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translate(0%, -50%);
+            padding: 0;
+            margin: 0;
+            display: flex;
+            color: inherit;
         }
-      button {
-        margin: 10px;
-        padding: 5px 20px;
-        font-size: 20px;
-      }
 
-      .calendar {
-          width: 60rem;
+        .social-menu ul li {
+            list-style: none;
+            margin: 0 10px;
+        }
+        .social-menu ul li .fa {
+            color: #000000;
+            font-size: 25px;
+            line-height: 50px;
+            transition: .1s;
+        }
+        .social-menu ul li .fa:hover {
+            color: #ffffff;
+        }
+        .social-menu ul li a {
+            position: relative;
+            display: block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: white;
+            text-align: center;
+            transition: 0.5s;
+            transform: translate(0,0px);
+            box-shadow: 0px 7px 5px rgba(0, 0, 0, 0.5);
+        }
+        .social-menu ul li a:hover {
+            transform: rotate(0deg) skew(0deg) translate(0, -10px);
+        }
+        .social-menu ul li:nth-child(1) a:hover {
+            background-color: #3b5999;
+        }
+        .social-menu ul li:nth-child(2) a:hover {
+            background-color: #55acee;
+        }
+        .social-menu ul li:nth-child(3) a:hover {
+            background-color: #e4405f;
+        }
+        .social-menu ul li:nth-child(4) a:hover {
+            background-color: #cd201f;
+        }
+        .social-menu ul li:nth-child(5) a:hover {
+            background-color: #0077B5;
+        }
+
+        .social-menu ul li a i {
+            border-radius: 50%;
+            background: inherit;
+        }
+
+        /*side nav arrows */
+
+        #sideNav {
+            z-index: 2;
+            position: fixed;
+            top: 50%;
+            text-align: center;
+            color: #fff;
+            left: 0;
+            right: 0;
+            opacity: 0.5;
+        }
+
+        #sideNav:hover {
+            opacity: 1;
+            transition: .2s;
+            cursor: pointer;
+        }
+
+        #sideNav:hover > #pgLeft, #pgRight {
+            box-shadow: 2px 0px 8px 2px #888888;
+        }
+
+        #sideNav i {
+            background: inherit;
+            padding-top: 10px;
+            font-size: 2rem;
+            border-radius: 50px;
+        }
+
+        #pgLeft {
+            background: #333;
+            width: 100px;
+            height: 60px;
+            left: 0; 
+            position: absolute; 
+            border-radius: 1px 15px 15px 1px;
+        }
+
+        #pgRight {
+            background: #333;
+            width: 100px;
+            height: 60px;
+            right: 0;
+            position: absolute;
+            border-radius: 15px 1px 1px 15px;
+        }
+
+        #pgLeft:active, #pgRight:active {
+            background: #122;
+        }
+
+
+        /*footer */
+
+        .footer {
+            background-color: #222;
+            color: #fff;
+            position: fixed;
+            font-size: 14px;
+            text-align: center;
+            bottom: 0;
+            width: 100%;
+            z-index: 3;
+            left: 0;
+        }
+
+        .footer p {
+            padding: 5px 50px;
+            background: inherit;
+            word-spacing: 5px;
+            letter-spacing: 2px;
+        }
+        .footer .row {
+            background: inherit;
+        }
+
+        .footer .row .col-8 {
+            background: inherit;
+            border-right: 2px solid #ccc;
+        }
+
+        .footer .row .col-4{
+            background: inherit;
+        }
+
+        .footer i {
+            color: red;
+            background: inherit;
+        }
+
+        .footer a {
+            color: #3c97bf;
+            text-decoration: none;
+        }
+
+        #content {
+            margin-top: 100px;
+            height: 768px;
+        }
+
+        /*content left */
+
+        #col-1 {
+            background: #fcfcfc;
+            z-index: 1;
+            padding: 1%;
+        }
+
+        /*content right*/
+
+        #col-2 {
+            /*background: #e9f2f5;*/
+            background: #fcfcfc;
+            z-index: 1;
+            padding: 1%;
+        }
+
+        
+        /*calendas styling*/ 
+
+        .calendar {
+          width: 50rem;
+          /*width: auto;*/
+          /*width: 100%;*/
           height: 30rem;
           background-color: #222227;
+          /*box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.4);*/
           color: #fff;
           text-align: center;
           align-items: center;
@@ -52,7 +228,7 @@
           margin-right: auto;
         }
 
-      .month {
+        .month {
           width: 100%;
           height: 6rem;
           background-color: #167e56;
@@ -133,7 +309,7 @@
 
         .days div:hover:not(.today) {
           background-color: #262626;
-          /*border: 0.2rem solid #777;*/
+          border: 0.2rem solid #777;
           cursor: pointer;
         }
 
@@ -146,60 +322,14 @@
           background-color: #167e56;
         }
 
-        /*simple display box of calendar selection*/
-        #input-display {
-          height: 100px;
-          width: 40%;
-          background: #333;
-          color: #fff;
-          margin: 100px;
-          padding: 10px;
-          text-align: left;
-        }
-        #date-input, #time-input {
-          float: right;
-        }
-
-        #input-display {
-           position: relative;
-           display: inline-block;
-           border-bottom: 1px dotted black;
-           cursor: pointer;
-           
-         }
-         #input-display .bookTime {
-           visibility: hidden;
-           width: 450px;
-           height: 170px;
-           background-color: black;
-           color: #fff;
-           text-align: center;
-           border-radius: 6px;
-           padding: 5px 0;
-           position: absolute;
-           z-index: 1;
-           bottom: 100%;
-           left: 0%;
-         }
-         #input-display .bookTime::after {
-           content: "";
-           position: absolute;
-           top: 100%;
-           left: 50%;
-           margin-left: -5px;
-           border-width: 5px;
-           border-style: solid;
-           border-color: black transparent transparent transparent;
-         }
-         #input-display:hover .bookTime {
-           visibility: visible;
-           display: block;
-           cursor: pointer;
-         }
-        
-
         @media only screen and (max-width: 1200px) {
             /* Desktops: lg*/
+            .nav {
+                padding: 1% 8%;
+            }
+            .nav h1 {
+                font-size: 2.8rem;
+            }
             .calendar {
                 width: 45rem;
                 height: 30rem;
@@ -208,6 +338,10 @@
 
         @media only screen and (max-width: 992px) {
             /* Tablets: md*/
+            .social-menu ul {
+                display: none;
+            }
+            
             .calendar {
                 width: 45rem;
                 height: 30rem;
@@ -216,6 +350,12 @@
 
         @media only screen and (max-width: 768px) {
             /* Phone: sm*/
+            .nav {
+                padding: 1% 8%;
+            }
+            .nav h1 {
+                font-size: 2.3rem;
+            }
             .calendar {
                 width: 35rem;
                 height: 22rem;
@@ -275,115 +415,50 @@
         }
     </style>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
-    </script>
-
+    <!-- datePicker.js -->
     <script>
-      
-      // this is for getting date value when clicked from calendar list
-      function getBookDate(event) { 
-        // capture clicked date
-        // gets the value inside the element
-        var bookDate = event.target.textContent; 
-        
-        // assign a div the value
-        document.querySelector('#date-input').innerHTML = bookDate;
-      }
-
-      // this is for capturing date value when button is clicked 
-      $(document).ready(function() {
-            $(".button").click(function(){
-                
-                var bookTime = $(".button").val();
-                // assign a div the value
-                document.querySelector('#time-input').innerHTML = bookTime;
-                // console.log("Booked time: " + bookTime);
-
-                // prevent default for the button
-                return false;
-            }); 
-        });
-
-
-      function submitToAPI(e) {
-           e.preventDefault();
-           var URL = "https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/pets";
-                      
-                var Namere = /[A-Za-z]{1}[A-Za-z]/;
-                if (!Namere.test($("#name-input").val())) {
-                             alert ("Name can not less than 2 char");
-                    return;
-                }
-                var mobilere = /[0-9]{10}/;
-                if (!mobilere.test($("#phone-input").val())) {
-                    alert ("Please enter valid mobile number");
-                    return;
-                }
-                if ($("#email-input").val()=="") {
-                    alert ("Please enter your email id");
-                    return;
-                }
-
-                var reeamil = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
-                if (!reeamil.test($("#email-input").val())) {
-                    alert ("Please enter valid email address");
-                    return;
-                }
-          
-
-           var bookDate = document.querySelector('#date-input').textContent;
-           // console.log("Booked date: " + bookDate);
-
-           var bookTime = document.querySelector('#time-input').textContent;
-           // console.log("Booked time: " + bookTime);
-
-           var name = $("#name-input").val();
-           var phone = $("#phone-input").val();
-           var email = $("#email-input").val();
-           var desc = $("#description-input").val();
-           var data = {
-              date : bookDate,
-              time : bookTime,
-              name : name,
-              phone : phone,
-              email : email,
-              desc : desc
-            };
-
-          
-
-           $.ajax({
-             type: "POST",
-             
-             url : "https://we4jv8puh7.execute-api.us-east-1.amazonaws.com/myPetStage/",
-             dataType: "json",
-             crossDomain: "true",
-             contentType: "application/json; charset=utf-8",
-             data: JSON.stringify(data),
-
-             
-             success: function () {
-               // clear form and show a success message
-               alert("Thank you for your feedback");
-               document.getElementById("contact-form").reset();
-               document.querySelector('#date-input').innerHTML = '';
-               document.querySelector('#time-input').innerHTML = '';
-           location.reload();
-             },
-             error: function () {
-               // show an error message
-               alert("UnSuccessfull");
-             }});
-         }
+        var datefield=document.createElement("input")
+        datefield.setAttribute("type", "date")
+        if (datefield.type!="date"){ //if browser doesn't support input type="date", load files for jQuery UI Date Picker
+            document.write('<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />\n')
+            document.write('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"><\/script>\n')
+            document.write('<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"><\/script>\n') 
+        }
     </script>
-    
+
+    <!-- datePickerWidget.js -->
+    <script>
+        if (datefield.type!="date"){ //if browser doesn't support input type="date", initialize date picker widget:
+            jQuery(function($){ //on document.ready
+                $('#bookDate').datepicker();
+            })
+        }
+    </script>
 </head>
 <body>
-  <div>
-    <h4>Calendar</h4>
+    <div class="container-fluid mt-4">
+        <div class="nav">
+            <h1 class="display-4 text-center">
+                <i class="fas fa-book-open text-primary"></i>
+                <span class="text-primary">Lux Lab</span> Booking
+            </h1>
+            
+            <div class="social-menu">
+                <ul>
+                    <li><a href=""><i class="fa fa-facebook"></i></a></li>
+                    <li><a href=""><i class="fa fa-twitter"></i></a></li>
+                    <li><a href=""><i class="fa fa-instagram"></i></a></li>
+                    <li><a href=""><i class="fa fa-youtube"></i></a></li>
+                    <li><a href=""><i class="fa fa-linkedin"></i></a></li>
+                  </ul>
+            </div>
+        </div>
 
-    <!-- capture these data from calendar forms -->
-    <!-- calendar -->
+        <div class="row" id="content">
+            <div class="col-lg-8" id="col-1">
+                <!-- main content -->
+
+                <!-- calendar -->
                 
                 <div class="col-8">
                     <div class="calendar">
@@ -391,7 +466,7 @@
                             <i class="fas fa-angle-left prev"></i>
                             <div class="date">
                                 <h1>February</h1>
-                                <p></p>
+                                <p>Tue Feb 2, 2021</p>
                             </div>
                             <i class="fas fa-angle-right next"></i>
                         </div>
@@ -406,29 +481,16 @@
                             <div>Sat</div>
                         </div>
 
-                        <div class="days" onclick="getBookDate(event)"></div>
+                        <div class="days"></div>
                     </div>
                 </div>
-    <div id="input-display">
-      <p>Hover on this box to view dates available.</p>
-      <span class="bookTime">
-          <table>
-            <tr>
-              <td>9:00am - 10:00am<button class='button' value="9:00am-10:00am">Book Now 1</button></td> 
-              <td>10:00am - 11:00am<button class='button' value="10:00am-11:00am">Book Now 2</button></td>
-              <td>11:00am - 12:00pm<button class='button' value="11:00am-12:00pm">Book Now 3</button></td>
-            </tr>
-          </table>
-        </span>
 
-      <span>Selected Date</span>
-      <div id="date-input" class="date-input"></div> <br/>
-      <span>Selected Time</span>
-      <div id="time-input" class="time-input"></div>
-    </div>
-    
-                
-                <!-- calendar.js -->
+                <!-- /// calendar ends -->
+
+            </div>
+
+
+            <!-- calendar.js -->
             <script>
                 const date = new Date();
 
@@ -474,12 +536,11 @@
                     "December",
                   ];
 
-            
                   document.querySelector(".date h1").innerHTML = months[date.getMonth()];
 
                   document.querySelector(".date p").innerHTML = new Date().toDateString();
                   
-                  let days = ""; 
+                  let days = "";
 
                   for (let x = firstDayIndex; x > 0; x--) {
                     days += `<div class="prev-date">${prevLastDay - x + 1}</div>`;
@@ -490,11 +551,9 @@
                       i === new Date().getDate() &&
                       date.getMonth() === new Date().getMonth()
                     ) {
-                      // today only
                       days += `<div class="today">${i}</div>`;
                     } else {
-                      // all days of month except today
-                      days += (`<div>${i}</div>`); 
+                      days += `<div>${i}</div>`;
                     }
                   }
 
@@ -514,35 +573,318 @@
                   renderCalendar();
                 });
 
+                document.querySelector(".days").addEventListener("click", (e) => {
+
+                  // set the day
+                  date.setDate(e.target);
+
+
+                  renderCalendar();
+
+                });
+
                 renderCalendar();
             </script>
 
-  </div>
 
-  <form>
-      <h4>Name</h4>
-      <input type="text" style="height:35px;" id="name-input" placeholder="Enter name here" class="form-control" style="width:100%;" />
-      <br/>
-      
-      <h4>Phone</h4>
-      <input type="phone" style="height:35px;" id="phone-input" placeholder="Enter phone number here" class="form-control" style="width:100%;"/>
-      <br/>
-      
-      <h4>Email</h4>
-      <input type="email" style="height:35px;" id="email-input" placeholder="Enter email here" class="form-control" style="width:100%;"/>
-      <br/>
-      
-      <h4>Your Feedback or Suggestion</h4>
-      <textarea id="description-input" rows="3" placeholder="Enter your message" class="form-control" style="with:100%;"></textarea>
-      <br/>
-      <div class="g-recaptcha" data-sitekey="6Lc7cVMUAAAAAM1yxf64wrmO8gvi8A1oQ_ead1ys" class="form-control" style="width:100%;">
+
+
+
+
+            <div class="col-lg-4" id="col-2">
+                <!-- Sidebar -->
+
+                <!-- create open hours -->
+
+                <h3 class="display-5 text-center">Create Booking</h3>
+       
+                <form id="bookingCreationForm">
+                    
+                    <p>Enter date and time open for booking.</p>
+                        
+                    <div class="form-group">
+                        <label for="date">Pick a Date</label>
+                        <input type="date" id="bookDate" class="form-control" placeholder="Select a date" />
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="time">Pick a Time</label>
+                        <select name="cars" type="text" id="bookTime" class="form-control">
+                            <option value="">Select a time</option>
+                            <option value="8:00am - 9:00am">8:00am - 9:00am</option>
+                            <option value="9:00am - 10:00am">9:00am - 10:00am</option>
+                            <option value="10:00am - 11:00am">10:00am - 11:00am</option>
+                            <option value="11:00am - 12:00pm">11:00am - 12:00pm</option>
+                            <option value="12:00pm - 1:00pm">12:00pm - 1:00pm</option>
+                            <option value="1:00pm - 2:00pm">1:00pm - 2:00pm</option>
+                            <option value="2:00pm - 3:00pm">2:00pm - 3:00pm</option>
+                            <option value="3:00pm - 4:00pm">3:00pm - 4:00pm</option>
+                            <option value="4:00pm - 5:00pm">4:00pm - 5:00pm</option>
+                            <option value="5:00pm - 6:00pm">5:00pm - 6:00pm</option>
+                            <option value="6:00pm - 7:00pm">6:00pm - 7:00pm</option>
+                            <option value="7:00pm - 8:00pm">7:00pm - 8:00pm</option>
+                        </select>
+                    </div>
+
+                    <input type="submit" value="Create Booking" class="btn btn-primary btn-block">
+                </form>
+
+
+
+                <div class="mb-5"><hr/></div>
+
+
+                
+
+                <!-- booking form -->
+                <table class="table table-striped mt-5 mb-5" id="hourTable">
+                    <h3 class="text-center">Open hours</h3>
+
+                    <thead>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th></th>
+                    </thead>
+                    <tbody id="bookList"></tbody>
+                </table>
+
+                <div class="mb-5"><hr/></div>
+                <div class="mb-5"><hr/></div>
+
+            </div>
+        </div>
+        <div id="sideNav">
+            <div id="pgLeft"> <i class="fas fa-arrow-left"></i> </div>
+            <div id="pgRight"> <i class="fas fa-arrow-right"></i> </div>
+        </div>
+
+        <div class="footer mt-4">
+            <div class="row">
+                <div class="col-8">
+                    <p class="text-left">
+                        Created with <i class="fa fa-heart">
+                        </i> by <a target="_blank" rel="noreferrer" href="http://portfolio.binitutor.com"> BiniTutor</a>. 
+                        &copy; 2021 All rights reserved.
+                    </p>
+                </div>
+                <div class="col-4">
+                    <p class="text-right">
+                        <a target="_blank" rel="noreferrer" href="#"> Admin Login</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- script.js -->
+        <script>
+            class Booking {
+                constructor(bookDate, bookTime) {
+                    this.bookDate = bookDate;
+                    this.bookTime = bookTime;
+                }
+            }
+
+            // user interface
+            class BookingUI {
+                static createBookings() {
+                    // get already created bookings from storage.
+                    // in this case, local storage
+                    const bookings = BookingLocalStorage.getBookingsFromStorage();
+
+                    // Api call data currently saved
+                    // const bookings = ApiCall.getBookingsFromStorage();
+
+                    // loop through the item metadata and pass to display
+                    bookings.forEach( 
+                        (booking) => BookingUI.displayBookings(booking) 
+                    );
+                }
+
+                // displays booking metadata on table
+                static displayBookings(booking) {
+                    // create a table row for each data passed
+                    const row = document.createElement('tr');
+
+                    // add table data to the row
+                    // it should be suitable to be in a calendar form!!
+                    row.innerHTML = (`
+                        <td>${booking.bookDate}</td>
+                        <td>${booking.bookTime}</td>
+                        <td><a class="btn btn-danger btn-sm deleteBook"> X </a></td>
+                    `);
+
+                    // add row to table
+                    document.querySelector('#bookList').appendChild(row);
+                }
+
+                // this method clears the input fields after submission
+                static clearField() {
+                    document.querySelector('#bookDate').value = '';
+                    document.querySelector('#bookTime').value = '';
+                }
+
+                // this method deletes created bookings
+                static deleteBook(cell) {
+                    if(cell.classList.contains('deleteBook')) {
+                        cell.parentElement.parentElement.remove();
+                        BookingUI.displayAlerts('Book Removed', 'danger');
+                    }
+                }
+
+                // display notifications and warnings
+                static displayAlerts(message, classField) {
+                    // create a div for messages
+                    const div = document.createElement('div');
+
+                    // add a bootstrap class name to the div
+                    div.className = `alert alert-${classField}`;
+
+                    // add message to the div
+                    div.appendChild( document.createTextNode(message) );
+
+                    // select the location you want this div to appear, container
+                    const container = document.querySelector('.container');
+
+                    // select the form
+                    const hourTable = document.querySelector('#hourTable');
+
+                    // display the div inside the container before the form
+                    container.insertBefore(div, hourTable);
+
+                    // make the message vanish in 3 seconds
+                    setTimeout( () => document.querySelector('.alert').remove(), 3000);
+                }
+            }
+
+            // this class gives access to methods of localStorage
+            class BookingLocalStorage {
+
+                // this method gets booking currently saved in local storage
+                static getBookingsFromStorage(){
+                    let bookings;
+                    if(localStorage.getItem('Bookings') === null) {
+                        bookings = [];
+                    } else {
+                        bookings = JSON.parse(localStorage.getItem('Bookings'));
+                    }
+
+                    return bookings;
+                }
+
+                // this method adds new booking to local storage
+                static addBookingsToStorage(newBookings){
+                    // calls open bookings currently saved in local storage
+                    const bookings = BookingLocalStorage.getBookingsFromStorage();
+
+                    // adds newly created bookings to the list
+                    bookings.push(newBookings);
+
+                    // saves the updated list to local storage
+                    localStorage.setItem('Bookings', JSON.stringify(bookings));
+                }
+
+                // this method removes data from local storage by matching date and time
+                static removeBookingsFromStorage(date, time){
+                    // calls open bookings currently saved in local storage
+                    const bookings = BookingLocalStorage.getBookingsFromStorage();
+
+                    bookings.forEach( (booking, index) => {
+                        if(booking.bookDate === date && booking.bookTime === time) {
+                            bookings.splice(index, 1);
+                        }
+                    });
+
+                    localStorage.setItem('Bookings', JSON.stringify(bookings));
+                }
+            }
+
+
+            // EVENT: on page load calls createBookings method
+            document.addEventListener('DOMContentLoaded', BookingUI.createBookings);
+
+
+            // EVENT: user adds new Books
+            document.querySelector('#bookingCreationForm').addEventListener('submit', (e) => {
+              // Prevent actual submit
+              e.preventDefault();
+
+              // Get form values
+              const bookDate = document.querySelector('#bookDate').value;
+              const bookTime = document.querySelector('#bookTime').value;
+              
+              // check if the fields are empty or not
+              if(bookDate === '' || bookTime === '')
+              {
+                // display alert
+                // message, className, container, beforeEl
+                BookingUI.displayAlerts('Please fill in all fields', 'danger');
+              }
+              else {
+                // Instatiate book object
+                const book = new Booking(bookDate, bookTime);
+
+                // add bookings to UI
+                BookingUI.displayBookings(book);
+
+                // add bookings to local storage
+                BookingLocalStorage.addBookingsToStorage(book);
+
+                // display alert for successfully added book
+                BookingUI.displayAlerts('Book Added', 'success');
+
+                // calls the method to Clear the fields
+                BookingUI.clearField();
+              }
+            });
+
+            // EVENT: delete a book from the list
+            document.querySelector('#hourTable').addEventListener('click', (e) => {
+                // Remove book from UI
+                BookingUI.deleteBook(e.target);
+                
+                // date and time of selected row
+                const bookDate = e.target.parentElement.previousElementSibling.previousElementSibling.textContent;
+                const bookTime = e.target.parentElement.previousElementSibling.textContent;
+                
+                // Remove book from local storage
+                BookingLocalStorage.removeBookingsFromStorage(bookDate, bookTime);
+            });
+        </script>
         
-      </div>
-      
-      <button type="button" onClick="submitToAPI(event)" >
-          Submit
-        </button>
-  </form>
+    </div>
 </body>
-<html/>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
