@@ -1,0 +1,216 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+
+/* ================ sidebar ============= */
+#sidebar-wrapper {
+    z-index: 1;
+    position: fixed;
+    width: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #222; /*#2c3e50*/
+    color: #fff;
+    opacity: 0.9;
+    transition: 0.5s ease;
+}
+
+#sidebar-hidden {
+    z-index: 1;
+    position: fixed;
+    width: 50px;
+    height: 100%;
+    overflow: visible;
+    background: #222;
+    color: #fff;
+    opacity: 1;
+    transition: 0.5s ease;
+    text-align: center;
+}
+
+#sidebar-header {
+    background: inherit;
+}
+
+.profilePic {
+    width: 100%;
+    /*border-radius: 50%;*/
+    /*border: 1px solid #f4f3f2;*/
+}
+
+.sidebar-nav {
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li{
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #ddd;
+    transition: 0.5s ease;
+}
+
+.sidebar-nav li a i {
+    padding-right: 5px;
+}
+
+.sidebar-nav li a:hover {
+    background: #16a085;
+}
+
+/*for hidden sidebar ul*/
+#sidebar-hidden .sidebar-nav {
+    padding-top: 40px;
+}
+#sidebar-hidden .sidebar-nav li{
+    text-indent: 5px;
+}
+
+#sidebar-hidden .sidebar-nav li a i{
+    padding: 20px 0;
+    display: block;
+}
+
+
+
+/* ================ main content ============= */
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+    background: #f4f3f2;
+    transition: 0.5s ease;
+}
+
+.container-fluid {
+    background: #f2f3f4;
+}
+.card {
+    margin-top: 20px;
+    border: 1px solid rgb(31, 28, 28);
+    border-radius: 15px;
+    box-shadow: 3px 4px 15px #222;
+    background: #fff;
+    padding: 20px;
+}
+
+/* ================ change the width of sidebar to display it ============= */
+#wrapper.menuDisplayed #sidebar-wrapper{
+    width: 250px;
+    overflow: visible;
+    transition: 0.5s ease;
+}
+
+#wrapper.menuDisplayed #sidebar-hidden {
+    display: none;
+    transition: 0.5s ease;
+}
+
+#wrapper.menuDisplayed #page-content-wrapper{
+    margin-left: 250px;
+    transition: 0.5s ease;
+}
+
+/* ================ toggler ============= */
+.toggler{
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    /*left: 50px*/
+    height: auto;
+    margin-bottom: 20px;
+    margin-left: 40px;
+    background: #f4f3f2;
+    color: #222;
+    opacity: 1;
+    padding: 10px;
+    box-shadow: 5px 3px 15px #222;
+    transform: translateX(-5px);
+}
+
+#toggle-btn {
+    text-decoration: none;
+}
+#toggle-btn  i {
+    padding: 5px;
+    font-size: 2.2em;
+    width: 50px;
+}
+.fa-window-close {
+    display: none;
+}
+.fa-bars{
+    display: block;
+}
+.btnOpenClose > .fa.fa-window-close{
+    display: block;
+}
+.btnOpenClose >.fa.fa-bars{
+    display: none;
+}
+
+
+/* ================ footer ============= */
+footer {
+    width: 100%;
+    /*transform: translateX(-50px);
+    transform: translateY(50px);*/
+    background: #333;
+    height: auto;
+    color: #f4f4f4;
+}
+.row.footer-area {
+    background: #333;
+
+}
+
+/* ================ arrow-up ============= */
+.arrow-up {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+}
+
+/* ================ spacer ============= */
+.spacer0 {
+    height: 10px;
+    width: 100%;
+}
+.spacer {
+    height: 50px;
+    width: 100%;
+}
+.spacer-1 {
+    height: 100px;
+    width: 100%;
+}
+.spacer-2 {
+    height: 200px;
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,70 @@
+<html>
+<head>
+   <title>php</title>
+   <style>
+    body{
+       font-family: "Arial Black", Gadget, sans-serif;
+    }
+    .container{
+       width: 60%;
+       margin: 0 auto;
+     }
+    table, tr, th, td {
+        border: 1px solid #e3e3e3;
+        padding: 10px;
+    }
+</style>
+</head>
+<body>
+    <div class = "container" >
+       <h3>AJAX Post method example with php and MySQL</h3>
+       <p><strong>click button to fetch data</strong></p>
+       <div id="records">table goes here ...</div>
+       <p><input type="button" id="getusers" value="Fetch Records"></p>
+    </div>
+    
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        $(function(){
+            $("#getusers").on('click', function(){
+                $.ajax({
+                  method: "GET",
+                  url:    "fetchCalendarHour.php"
+                 }).done(function( data ) {
+                    var result = $.parseJSON(data);
+                    var string = '<table width="100%"><tr><th>#</th><th>Date</th><th>Hour</th><th>Available</th></tr>';
+                    
+                  $.each(result, function(ket, value){
+                      string += "<tr><td>" + value['id'] + 
+                        "</td><td>" + value['crDate'] + 
+                        "</td><td>" + value['crHour'] + 
+                        "</td><td>" + value['available'] + "</td></tr>";
+                  });
+                    string += "</table>";
+                      
+                    $('#records').html(string);
+                });
+            });
+         });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

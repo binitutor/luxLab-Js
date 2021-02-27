@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lux Lab | Open Hours</title>
+    <!--  Bootstrap css file  -->
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- jQuery file -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!--  Bootstrap min file -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    
+    <!--  font awesome icons  -->
+    <!-- <link rel="stylesheet" href="./assets/css/all.min.css"> -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <!-- <link rel="stylesheet" href="all.min.css"> -->
+
+    <!--  custom css file  -->
+    <!-- <link rel="stylesheet" type="text/css" href="./assets/css/stylesheet.css"> -->
+    <link rel="stylesheet" type="text/css" href="../assets/css/stylesheet.css">
+    
+    <script src="../assets/js/animateContent.js"></script>
+    
+    <!--  custom css file for open hours -->
+    <link rel="stylesheet" type="text/css" href="../assets/css/hours.css">
+    
+    <style>
+        table, tr, th, td {
+            border: 1px solid #e3e3e3;
+            padding: 10px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        table tr td:hover {
+        	background: #222;
+        	color: #f4f3f2;
+        	cursor: pointer;
+        }
+        .success, .error{
+            width: 20%;
+            border: 1px solid;
+            margin: 10px 0px;
+            padding:15px 10px 15px 50px;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            display: inline-block;
+          }
+        .success {
+          color: #4F8A10;
+          background-color: #DFF2BF;
+        }
+        
+        .error {
+          color: #D8000C;
+          background-color: #FFBABA;
+        }
+        #hoursDiv td:hover {
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        
+<!--  ======================= sidebar =======================  -->
+        <div id="sidebar-wrapper">
+
+            <div class="spacer"></div>
+
+            <!-- logo & social -->
+            <div class="container-fluid" id="sidebar-header">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-xs-4">
+                        <a href="../index.html">
+                        <img src="../assets/img/logoLuxLab.png" alt="Logo" class="profilePic">
+                        </a>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-xs-8">
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <a href="../index.html">
+                                <h3>Lux Lab <br>Hair Salon</h3>
+                                </a>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="social text-center">
+                                    <h5 class="text-uppercase">Social</h5>
+                                    <a href="" target="_blank"><i class="fab fa-facebook"></i></a>
+                                    <a href="" target="_blank"><i class="fab fa-instagram"></i></a>
+                                    <a href="" target="_blank"><i class="fab fa-youtube"></i></a>
+                                    <a href="" target="_blank"><i class="fab fa-twitter"></i></a>
+                                    <a href="" target="_blank"><i class="fab fa-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="spacer"></div>
+
+
+            <ul class="sidebar-nav">
+                <li><a href="hours.html"><i class="fa fa-user-clock"></i> Open Hours</a></li>
+                <li><a href="about.html"><i class="fa fa-address-card"></i> About Us</a></li>
+                <li><a href="location.html"><i class="fa fa-location-arrow"></i> Location</a></li>
+                <li><a href="contact.html"><i class="fa fa-file-signature"></i> Contact Us</a></li>
+                <li><a href="create.html"><i class="fa fa-book"></i> Create Booking</a></li>
+                <li><a href="decision.html"><i class="fa fa-table"></i> Decision Table</a></li>
+            </ul>
+        </div>
+
+        <div id="sidebar-hidden">
+            <ul class="sidebar-nav">
+                <a href="../index.html">
+                <img src="../assets/img/logoLuxLab.png" alt="Logo" class="profilePic">
+                </a>
+                <li><a href="hours.html"><i class="fa fa-user-clock"></i></a></li>
+                <li><a href="about.html"><i class="fa fa-address-card"></i> </a></li>
+                <li><a href="location.html"><i class="fa fa-location-arrow"></i></a></li>
+                <li><a href="contact.html"><i class="fa fa-file-signature"></i></a></li>
+                <li><a href="create.html"><i class="fa fa-book"></i></a></li>
+                <li><a href="decision.html"><i class="fa fa-table"></i></a></li>
+            </ul>
+        </div>
+
+<!--  ======================= main content =======================  -->
+        <div id="page-content-wrapper">
+            
+            <!--  ======================= sidebar =======================  -->
+            <div class="toggler">                            
+                <div class="col-xs-1 col-md-1 col-lg-1">
+                    <a href="#" class="" id="menu-toggle">
+                        <div id="toggle-btn">
+                            <i class="fa fa-bars btn btn-success"></i>
+                            <i class="fa fa-window-close btn btn-danger"></i>
+                        </div>                   
+                    </a>
+                </div>
+
+                <div class="col-xs-11 col-md-11 col-lg-11">
+                    <h2 class="display-4 text-center">
+                        <i class="fa fa-tachometer-alt-fast"></i> 
+                        <span class="text-primary">Lux Lab</span> Hair Salon
+                    </h2>
+                </div>
+            </div>                
+
+            <!--  ======================= content =======================  -->
+            <div class="container-fluid">
+                <div class="row">
+                    
+                    <div class="spacer-1"></div>
+                    
+                    <div class="col-xs-8 col-md-8 col-lg-8 text-center fade-in-1">
+                        <!-- calendar -->
+                        <div class="fade-in-1 card">
+                            <h1>Request Data and time for Calendar DB</h1>
+            				<p><strong>Please fill in the form and click save.</strong></p>
+            				<!-- calendar -->
+            				<table class="table table-striped text-center table-hover table-responsive-lg" id="calendarForm">
+            					<thead>
+            						<tr>
+            							<th colspan="7">February</th>
+            						</tr>
+            						<tr>
+            							<th>Su</th>
+            							<th>Mo</th>
+            							<th>Tu</th>
+            							<th>We</th>
+            							<th>Th</th>
+            							<th>Fr</th>
+            							<th>Sa</th>
+            						</tr>
+            					</thead>
+            					<tbody id="calendar">
+            						<tr>
+            							<td>1</td>
+            							<td>2</td>
+            							<td>3</td>
+            							<td>4</td>
+            							<td>5</td>
+            							<td>6</td>
+            							<td>7</td>
+            						</tr>
+            						<tr>
+            							<td>8</td>
+            							<td>9</td>
+            							<td>10</td>
+            							<td>11</td>
+            							<td>12</td>
+            							<td>13</td>
+            							<td>14</td>
+            						</tr>
+            						<tr>
+            							<td>15</td>
+            							<td>16</td>
+            							<td>17</td>
+            							<td>18</td>
+            							<td>19</td>
+            							<td>20</td>
+            							<td>21</td>
+            						</tr>
+            						<tr>
+            							<td>22</td>
+            							<td>23</td>
+            							<td>24</td>
+            							<td>25</td>
+            							<td>26</td>
+            							<td>27</td>
+            							<td>28</td>
+            						</tr>
+            						<tr>
+            							<td>29</td>
+            							<td>30</td>
+            							<td></td>
+            							<td></td>
+            							<td></td>
+            							<td></td>
+            							<td></td>
+            						</tr>
+            					</tbody>
+            				</table>
+            				
+            				<form>
+            					<div class="form-row">
+            					    
+            						<div class="col-md-4 mb-3">
+            							<label for="validationDefault01">Full Name</label>
+            					      	<input type="text" class="form-control" id="cusName" placeholder="Full Name ... " required>
+            					    </div>
+            					    <div class="col-md-4 mb-3">
+            					      	<label for="validationDefault02">Phone Number</label>
+            					      	<input type="text" class="form-control" id="cusPhone" placeholder="Phone Number ..." required>
+            					    </div>
+            					    <div class="col-md-4 mb-3">
+            					      	<label for="validationDefaultEmail">Email</label>
+            					      	<div class="input-group">
+            					        	<input type="email" class="form-control" id="cusEmail" placeholder="Email address ..." aria-describedby="inputGroupPrepend2" required>
+            					      	</div>
+            					    </div>
+            
+            					    <!-- modal -->
+            					    <div class="modal fade mb-5" tabindex="-1" role="dialog" id="calModal">
+            					    	<div class="modal-dialog modal-dialog-centered" role="document">
+            					    		<div class="modal-content">
+            					    			<div class="modal-header">
+            					    				<h5 class="modal-title">Hours available for the day</h5>
+            								        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            								          	<span aria-hidden="true">&times;</span>
+            								        </button>
+            					    			</div>
+            
+            					    			<div class="modal-body">
+            					    				<h2>Day: <span class="text-primary" id="selectedDate"></span></h2>
+            
+            					    				<table class="table table-striped table-responsive-lg table-hover" id="hoursDiv">
+            					    					<tbody >
+            					    					    <tr id="hoursDiv"></tr>
+            					    					</tbody>
+            					    				</table>
+            					    			</div>
+            
+            					    			<div class="modal-footer">
+            					    				<button type="button" class="btn btn-primary">Save changes</button>
+                    								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            					    			</div>
+            
+            					    		</div>
+            					    	</div>
+            					    </div>
+            					    
+            					    <div class="spacer-1"></div>
+            					    <input type="submit" id="sendRequest" value="Send Request" class="btn btn-primary btn-block">
+            					    
+            					    
+            					    
+            					    <div class="spacer"></div>
+            					</div>
+            				</form>
+            				
+            				<div class="spacer"></div>
+            			    <div class="spacer"></div>
+            			    <div class="spacer"></div>
+                            
+                        </div>
+                    </div><!-- /col 1 fetch data  -->
+                    
+                    <div class="col-xs-4 col-md-4 col-lg-4 text-center fade-in-1">
+                        <div class="card">
+                            <div>
+            			        <h1>Display selections</h1>
+            			        <div id="shortData"></div>
+            			    </div>
+            			    
+            			    <div class="spacer"></div>
+            			    <div class="spacer"></div>
+            			    <div class="spacer"></div>
+                            
+                        </div>
+                    </div><!-- /col 2 display selection -->
+                    <script src="../assets/js/bookCal/bookCal.js"></script>
+                    
+                    <div class="spacer-1"></div>
+                    
+                    
+                </div>
+
+                <div class="spacer"></div>
+
+                <!-- footer -->
+                <div class="row footer-area">
+                    <div class="col-md-12">
+                        
+                        <footer class="footer-area">
+                            
+                                <div class="social text-center">
+                                    <h5 class="text-uppercase">Follow Us | Lux Lab Social</h5>
+                                        <a href="" target="_blank"><i class="fab fa-facebook"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-instagram"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-youtube"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-twitter"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-linkedin"></i></a>
+                                </div>
+
+                                <div class="copyrights text-center">
+                                    <p class="para">
+                                        Copyright &copy; 2021
+                                        <!--<script>-->
+                                        <!--    var date = new Date();-->
+                                        <!--    document.write(date.getFullYear());-->
+                                        <!--</script> -->
+                                        All rights reserved | Lux Lab Hair Salon | Developer info <i class="fa fa-heart"></i>
+                                        <a href="http://portfolio.binitutor.com/" target="_blank"><span style="color: var(--primary-color);">BiniTutor</span>
+                                        </a>
+                                    </p>
+                                </div>
+                            
+                        </footer>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow-up"><i class="fa fa-arrow-up"></i></div>
+    </div>
+
+
+<!--  ======================= Scripts =======================  -->
+    <!-- sidemenu toggle script -->
+    <script src="../assets/js/toggleScript.js"></script>
+
+    <script src="../assets/js/script.js"></script>
+    
+    <!--booking requst script-->
+    <!--<script src="../assets/js/reqBooking.js"></script>-->
+    
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

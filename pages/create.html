@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lux Lab | Create Booking</title>
+    <!--  Bootstrap css file  -->
+    <!-- <link rel="stylesheet" href="./assets/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="bootstrap.min.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    
+    <!--  font awesome icons  -->
+    <!-- <link rel="stylesheet" href="./assets/css/all.min.css"> -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <!-- <link rel="stylesheet" href="all.min.css"> -->
+
+    <!--  custom css file  -->
+    <!-- <link rel="stylesheet" type="text/css" href="./assets/css/stylesheet.css"> -->
+    <link rel="stylesheet" type="text/css" href="../assets/css/stylesheet.css">
+    
+    <script src="../assets/js/animateContent.js"></script>
+    
+    <!--  custom css file for create booking -->
+    <link rel="stylesheet" type="text/css" href="../assets/css/createBooking.css">
+    
+    <!--  datePicker.js  -->
+    <script src="../assets/js/datePicker.js"></script>
+    
+    <!--  datePickerWidget.js  -->
+    <script src="../assets/js/datePickerWidget.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        
+<!--  ======================= sidebar =======================  -->
+        <div id="sidebar-wrapper">
+
+            <div class="spacer"></div>
+
+            <!-- logo & social -->
+            <div class="container-fluid" id="sidebar-header">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-xs-4">
+                        <a href="../index.html">
+                        <img src="../assets/img/logoLuxLab.png" alt="Logo" class="profilePic">
+                        </a>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-xs-8">
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <a href="../index.html">
+                                <h3>Lux Lab <br>Hair Salon</h3>
+                                </a>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="social text-center">
+                                    <h5 class="text-uppercase">Social</h5>
+                                    <a href="" target="_blank"><i class="fab fa-facebook"></i></a>
+                                    <a href="" target="_blank"><i class="fab fa-instagram"></i></a>
+                                    <a href="" target="_blank"><i class="fab fa-youtube"></i></a>
+                                    <a href="" target="_blank"><i class="fab fa-twitter"></i></a>
+                                    <a href="" target="_blank"><i class="fab fa-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="spacer"></div>
+
+
+            <ul class="sidebar-nav">
+                <li><a href="hours.html"><i class="fa fa-user-clock"></i> Open Hours</a></li>
+                <li><a href="about.html"><i class="fa fa-address-card"></i> About Us</a></li>
+                <li><a href="location.html"><i class="fa fa-location-arrow"></i> Location</a></li>
+                <li><a href="contact.html"><i class="fa fa-file-signature"></i> Contact Us</a></li>
+                <li><a href="create.html"><i class="fa fa-book"></i> Create Booking</a></li>
+                <li><a href="decision.html"><i class="fa fa-table"></i> Decision Table</a></li>
+            </ul>
+        </div>
+
+        <div id="sidebar-hidden">
+            <ul class="sidebar-nav">
+                <a href="../index.html">
+                <img src="../assets/img/logoLuxLab.png" alt="Logo" class="profilePic">
+                </a>
+                <li><a href="hours.html"><i class="fa fa-user-clock"></i></a></li>
+                <li><a href="about.html"><i class="fa fa-address-card"></i> </a></li>
+                <li><a href="location.html"><i class="fa fa-location-arrow"></i></a></li>
+                <li><a href="contact.html"><i class="fa fa-file-signature"></i></a></li>
+                <li><a href="create.html"><i class="fa fa-book"></i></a></li>
+                <li><a href="decision.html"><i class="fa fa-table"></i></a></li>
+            </ul>
+        </div>
+
+<!--  ======================= main content =======================  -->
+        <div id="page-content-wrapper">
+            
+            <!--  ======================= sidebar =======================  -->
+            <div class="toggler">                            
+                <div class="col-xs-1 col-md-1 col-lg-1">
+                    <a href="#" class="" id="menu-toggle">
+                        <div id="toggle-btn">
+                            <i class="fa fa-bars btn btn-success"></i>
+                            <i class="fa fa-window-close btn btn-danger"></i>
+                        </div>                   
+                    </a>
+                </div>
+
+                <div class="col-xs-11 col-md-11 col-lg-11">
+                    <h2 class="display-4 text-center">
+                        <i class="fa fa-tachometer-alt-fast"></i> 
+                        <span class="text-primary">Lux Lab</span> Hair Salon
+                    </h2>
+                </div>
+            </div>                
+
+            <!--  ======================= content =======================  -->
+            <div class="container-fluid">
+                <div class="row">
+                    
+                    <div class="spacer-1"></div>
+
+                    <div class="col-xs-10 col-md-10 text-center">                
+                        <div class="row">
+                            <!-- col 1 -->
+                            <div class="col-lg-8 fade-in-1 card" id="col-1">
+                                <div class="row">
+                                    <!-- create booking -->
+                                    <div class="col-lg-12">
+                                        <h3 class="display-5 text-center">Create Booking</h3>
+                                        <p>Enter date and time open for booking.</p>
+                                        <p class="text-danger">This is for Lux Lab hairsalon staff.</p>
+                                        
+                                        <form id="bookingCreationForm">
+                                            <div class="form-group">
+                                                <label for="date">Pick a Date</label>
+                                                <input type="date" id="bookDate" class="form-control" placeholder="Select a date" />
+                                            </div>
+                        
+                                            <div class="form-group mb-4">
+                                                <label for="time">Pick a Time</label>
+                                                <select name="cars" type="text" id="bookTime" class="form-control">
+                                                    <option value="">Select a time</option>
+                                                    <option value="8:00am - 9:00am">8:00am - 9:00am</option>
+                                                    <option value="9:00am - 10:00am">9:00am - 10:00am</option>
+                                                    <option value="10:00am - 11:00am">10:00am - 11:00am</option>
+                                                    <option value="11:00am - 12:00pm">11:00am - 12:00pm</option>
+                                                    <option value="12:00pm - 1:00pm">12:00pm - 1:00pm</option>
+                                                    <option value="1:00pm - 2:00pm">1:00pm - 2:00pm</option>
+                                                    <option value="2:00pm - 3:00pm">2:00pm - 3:00pm</option>
+                                                    <option value="3:00pm - 4:00pm">3:00pm - 4:00pm</option>
+                                                    <option value="4:00pm - 5:00pm">4:00pm - 5:00pm</option>
+                                                    <option value="5:00pm - 6:00pm">5:00pm - 6:00pm</option>
+                                                    <option value="6:00pm - 7:00pm">6:00pm - 7:00pm</option>
+                                                    <option value="7:00pm - 8:00pm">7:00pm - 8:00pm</option>
+                                                </select>
+                                            </div>
+                        
+                                            <input type="submit" value="Create Booking" class="btn btn-primary btn-block">
+                                        </form>
+                                    </div><!-- /create booking -->
+                                    
+                                    
+                                </div>
+                
+                            </div><!-- /col 1 -->
+                            
+                            
+                            <!-- col 2 -->
+                            <div class="col-lg-4 fade-in-3 card">
+                                <div class="row">
+                                    <!-- created list -->
+                                    <div class="col-lg-12">
+                                        <h3 class="text-center">Created hours</h3>
+                                        
+                                        <table class="table table-striped mt-5 mb-5" id="hourTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Time</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="bookList"></tbody>
+                                        </table>
+                                        
+                                        <div class="mb-5"><hr/></div>
+                                        <div class="mb-5"><hr/></div>
+                                        <div class="spacer"></div>
+                                    </div> <!-- /created list -->
+                                    
+                                </div>
+                                
+                            </div><!-- /col 2 -->
+                            
+                        </div><!-- /col 2 -->
+                    </div>           
+                </div>
+
+                <div class="spacer"></div>
+
+                <!-- footer -->
+                <div class="row footer-area">
+                    <div class="col-md-12">
+                        
+                        <footer class="footer-area">
+                            
+                                <div class="social text-center">
+                                    <h5 class="text-uppercase">Follow Us | Lux Lab Social</h5>
+                                        <a href="" target="_blank"><i class="fab fa-facebook"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-instagram"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-youtube"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-twitter"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-linkedin"></i></a>
+                                </div>
+
+                                <div class="copyrights text-center">
+                                    <p class="para">
+                                        Copyright &copy; 
+                                        <script>
+                                            var date = new Date();
+                                            document.write(date.getFullYear());
+                                        </script> 
+                                        All rights reserved | Lux Lab Hair Salon | Developer info <i class="fa fa-heart"></i>
+                                        <a href="http://portfolio.binitutor.com/" target="_blank"><span style="color: var(--primary-color);">BiniTutor</span>
+                                        </a>
+                                    </p>
+                                </div>
+                            
+                        </footer>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow-up"><i class="fa fa-arrow-up"></i></div>
+    </div>
+
+
+<!--  ======================= Scripts =======================  -->
+    <!-- sidemenu toggle script -->
+    <script src="../assets/js/toggleScript.js"></script>
+
+    <script src="../assets/js/script.js"></script>
+    
+    <!--booking create script-->
+    <script src="../assets/js/createBooking.js"></script>
+    
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
