@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<form id="contact-form" method="post">
+
+<head>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/yeti/bootstrap.min.css" > -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
+    <style type="text/css">
+      
+      input, textarea{
+          width: 100%;
+      padding: 10px 15px;
+      margin: 1px 0;
+      box-sizing: border-box;
+      border: 2px solid black;
+      border-radius: 4px;
+      background-color: lightblue;
+      }
+
+      h4{
+      text-align: center;
+      font-family: Verdana, sans-serif;
+        }
+
+        body{
+          background-color: #E6E6DC;
+        }
+
+        .center{
+      margin: 0;
+      position: absolute;
+      top: 65%;
+      left: 45%;
+      
+        }
+      button {
+        margin: 10px;
+        padding: 5px 20px;
+        font-size: 20px;
+      }
+
+      .calendar {
+          width: 60rem;
+          height: 30rem;
+          background-color: #222227;
+          color: #fff;
+          text-align: center;
+          align-items: center;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+      .month {
+          width: 100%;
+          height: 6rem;
+          background-color: #167e56;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 2rem;
+          text-align: center;
+          text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+        }
+
+        .month i {
+          font-size: 2.5rem;
+          cursor: pointer;
+          background: inherit;
+        }
+
+        .month h1 {
+          font-size: 1.5rem;
+          font-weight: 400;
+          text-transform: uppercase;
+          letter-spacing: 0.2rem;
+        }
+
+        .month p {
+          font-size: 1rem;
+          background: inherit;
+        }
+
+        .date {
+            background: inherit;
+        }
+
+        .date h1 {
+            background: inherit;
+        }
+
+        .weekdays {
+          width: 100%;
+          height: 2.5rem;
+          padding: 0 0.4rem;
+          display: flex;
+          align-items: center;
+          background: inherit;
+        }
+
+        .weekdays div {
+          font-size: 1rem;
+          font-weight: 400;
+          letter-spacing: 0.1rem;
+          width: calc(44rem / 7);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+          background: inherit;
+        }
+
+        .days {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          padding: 0.1rem;
+          background: inherit;
+        }
+
+        .days div {
+          font-size: 1rem;
+          width: calc(44rem / 7);
+          height: 3rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+          transition: background-color 0.2s;
+          background: inherit;
+        }
+
+        .days div:hover:not(.today) {
+          background-color: #262626;
+          /*border: 0.2rem solid #777;*/
+          cursor: pointer;
+        }
+
+        .prev-date,
+        .next-date {
+          opacity: 0.5;
+        }
+
+        .today {
+          background-color: #167e56;
+        }
+
+        /*simple display box of calendar selection*/
+        #input-display {
+          height: 100px;
+          width: 40%;
+          background: #333;
+          color: #fff;
+          margin: 100px;
+          padding: 10px;
+          text-align: left;
+        }
+        #date-input, #time-input {
+          float: right;
+        }
+
+        #input-display {
+           position: relative;
+           display: inline-block;
+           border-bottom: 1px dotted black;
+           cursor: pointer;
+           
+         }
+         #input-display .bookTime {
+           visibility: hidden;
+           width: 450px;
+           height: 170px;
+           background-color: black;
+           color: #fff;
+           text-align: center;
+           border-radius: 6px;
+           padding: 5px 0;
+           position: absolute;
+           z-index: 1;
+           bottom: 100%;
+           left: 0%;
+         }
+         #input-display .bookTime::after {
+           content: "";
+           position: absolute;
+           top: 100%;
+           left: 50%;
+           margin-left: -5px;
+           border-width: 5px;
+           border-style: solid;
+           border-color: black transparent transparent transparent;
+         }
+         #input-display:hover .bookTime {
+           visibility: visible;
+           display: block;
+           cursor: pointer;
+         }
+        
+
+        @media only screen and (max-width: 1200px) {
+            /* Desktops: lg*/
+            .calendar {
+                width: 45rem;
+                height: 30rem;
+              }
+        }
+
+        @media only screen and (max-width: 992px) {
+            /* Tablets: md*/
+            .calendar {
+                width: 45rem;
+                height: 30rem;
+              }
+        }
+
+        @media only screen and (max-width: 768px) {
+            /* Phone: sm*/
+            .calendar {
+                width: 35rem;
+                height: 22rem;
+            }
+            .month {
+                height: 5rem;
+              }
+
+            .month i {
+                font-size: 1rem;
+              }
+              .month h1 {
+                font-size: 0.8rem;
+                margin-top: .8rem;
+              }
+
+              .month p {
+                font-size: 0.5rem;
+              }
+
+              .days div {
+                font-size: 0.8rem;
+                width: calc(34rem / 7);
+                height: 2.3rem;
+              }
+
+        }
+
+        @media only screen and (max-width: 576px) {
+            /* watch*/
+            .calendar {
+                width: 25rem;
+                height: 18rem;
+            }
+            .month {
+                height: 3rem;
+              }
+
+            .month i {
+                font-size: 1rem;
+              }
+              .month h1 {
+                font-size: 0.6rem;
+                margin-top: .1rem;
+                margin-bottom: 0.1rem;
+              }
+
+              .month p {
+                font-size: 0.4rem;
+              }
+
+              .days div {
+                font-size: 0.4rem;
+                width: calc(24rem / 7);
+                height: 2rem;
+              }
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+
+    <script>
+      
+      // this is for getting date value when clicked from calendar list
+      function getBookDate(event) { 
+        // capture clicked date
+        // gets the value inside the element
+        var bookDate = event.target.textContent; 
+        
+        // assign a div the value
+        document.querySelector('#date-input').innerHTML = bookDate;
+      }
+
+      // this is for capturing date value when button is clicked 
+      $(document).ready(function() {
+            $(".button").click(function(){
+                
+                var bookTime = $(".button").val();
+                // assign a div the value
+                document.querySelector('#time-input').innerHTML = bookTime;
+                // console.log("Booked time: " + bookTime);
+
+                // prevent default for the button
+                return false;
+            }); 
+        });
+
+
+      function submitToAPI(e) {
+           e.preventDefault();
+           var URL = "https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/pets";
+                      
+                var Namere = /[A-Za-z]{1}[A-Za-z]/;
+                if (!Namere.test($("#name-input").val())) {
+                             alert ("Name can not less than 2 char");
+                    return;
+                }
+                var mobilere = /[0-9]{10}/;
+                if (!mobilere.test($("#phone-input").val())) {
+                    alert ("Please enter valid mobile number");
+                    return;
+                }
+                if ($("#email-input").val()=="") {
+                    alert ("Please enter your email id");
+                    return;
+                }
+
+                var reeamil = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
+                if (!reeamil.test($("#email-input").val())) {
+                    alert ("Please enter valid email address");
+                    return;
+                }
+          
+
+           var bookDate = document.querySelector('#date-input').textContent;
+           // console.log("Booked date: " + bookDate);
+
+           var bookTime = document.querySelector('#time-input').textContent;
+           // console.log("Booked time: " + bookTime);
+
+           var name = $("#name-input").val();
+           var phone = $("#phone-input").val();
+           var email = $("#email-input").val();
+           var desc = $("#description-input").val();
+           var data = {
+              date : bookDate,
+              time : bookTime,
+              name : name,
+              phone : phone,
+              email : email,
+              desc : desc
+            };
+
+          
+
+           $.ajax({
+             type: "POST",
+             
+             url : "https://we4jv8puh7.execute-api.us-east-1.amazonaws.com/myPetStage/",
+             dataType: "json",
+             crossDomain: "true",
+             contentType: "application/json; charset=utf-8",
+             data: JSON.stringify(data),
+
+             
+             success: function () {
+               // clear form and show a success message
+               alert("Thank you for your feedback");
+               document.getElementById("contact-form").reset();
+               document.querySelector('#date-input').innerHTML = '';
+               document.querySelector('#time-input').innerHTML = '';
+           location.reload();
+             },
+             error: function () {
+               // show an error message
+               alert("UnSuccessfull");
+             }});
+         }
+    </script>
+    
+</head>
+<body>
+  <div>
+    <h4>Calendar</h4>
+
+    <!-- capture these data from calendar forms -->
+    <!-- calendar -->
+                
+                <div class="col-8">
+                    <div class="calendar">
+                        <div class="month">
+                            <i class="fas fa-angle-left prev"></i>
+                            <div class="date">
+                                <h1>February</h1>
+                                <p></p>
+                            </div>
+                            <i class="fas fa-angle-right next"></i>
+                        </div>
+
+                        <div class="weekdays">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+
+                        <div class="days" onclick="getBookDate(event)"></div>
+                    </div>
+                </div>
+    <div id="input-display">
+      <p>Hover on this box to view dates available.</p>
+      <span class="bookTime">
+          <table>
+            <tr>
+              <td>9:00am - 10:00am<button class='button' value="9:00am-10:00am">Book Now 1</button></td> 
+              <td>10:00am - 11:00am<button class='button' value="10:00am-11:00am">Book Now 2</button></td>
+              <td>11:00am - 12:00pm<button class='button' value="11:00am-12:00pm">Book Now 3</button></td>
+            </tr>
+          </table>
+        </span>
+
+      <span>Selected Date</span>
+      <div id="date-input" class="date-input"></div> <br/>
+      <span>Selected Time</span>
+      <div id="time-input" class="time-input"></div>
+    </div>
+    
+                
+                <!-- calendar.js -->
+            <script>
+                const date = new Date();
+
+                const renderCalendar = () => {
+                  date.setDate(1);
+
+                  const monthDays = document.querySelector(".days");
+
+                  const lastDay = new Date(
+                    date.getFullYear(),
+                    date.getMonth() + 1,
+                    0
+                  ).getDate();
+
+                  const prevLastDay = new Date(
+                    date.getFullYear(),
+                    date.getMonth(),
+                    0
+                  ).getDate();
+
+                  const firstDayIndex = date.getDay();
+
+                  const lastDayIndex = new Date(
+                    date.getFullYear(),
+                    date.getMonth() + 1,
+                    0
+                  ).getDay();
+
+                  const nextDays = 7 - lastDayIndex - 1;
+
+                  const months = [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                  ];
+
+            
+                  document.querySelector(".date h1").innerHTML = months[date.getMonth()];
+
+                  document.querySelector(".date p").innerHTML = new Date().toDateString();
+                  
+                  let days = ""; 
+
+                  for (let x = firstDayIndex; x > 0; x--) {
+                    days += `<div class="prev-date">${prevLastDay - x + 1}</div>`;
+                  }
+
+                  for (let i = 1; i <= lastDay; i++) {
+                    if (
+                      i === new Date().getDate() &&
+                      date.getMonth() === new Date().getMonth()
+                    ) {
+                      // today only
+                      days += `<div class="today">${i}</div>`;
+                    } else {
+                      // all days of month except today
+                      days += (`<div>${i}</div>`); 
+                    }
+                  }
+
+                  for (let j = 1; j <= nextDays; j++) {
+                    days += `<div class="next-date">${j}</div>`;
+                    monthDays.innerHTML = days;
+                  }
+                };
+
+                document.querySelector(".prev").addEventListener("click", () => {
+                  date.setMonth(date.getMonth() - 1);
+                  renderCalendar();
+                });
+
+                document.querySelector(".next").addEventListener("click", () => {
+                  date.setMonth(date.getMonth() + 1);
+                  renderCalendar();
+                });
+
+                renderCalendar();
+            </script>
+
+  </div>
+
+  <form>
+      <h4>Name</h4>
+      <input type="text" style="height:35px;" id="name-input" placeholder="Enter name here" class="form-control" style="width:100%;" />
+      <br/>
+      
+      <h4>Phone</h4>
+      <input type="phone" style="height:35px;" id="phone-input" placeholder="Enter phone number here" class="form-control" style="width:100%;"/>
+      <br/>
+      
+      <h4>Email</h4>
+      <input type="email" style="height:35px;" id="email-input" placeholder="Enter email here" class="form-control" style="width:100%;"/>
+      <br/>
+      
+      <h4>Your Feedback or Suggestion</h4>
+      <textarea id="description-input" rows="3" placeholder="Enter your message" class="form-control" style="with:100%;"></textarea>
+      <br/>
+      <div class="g-recaptcha" data-sitekey="6Lc7cVMUAAAAAM1yxf64wrmO8gvi8A1oQ_ead1ys" class="form-control" style="width:100%;">
+        
+      </div>
+      
+      <button type="button" onClick="submitToAPI(event)" >
+          Submit
+        </button>
+  </form>
+</body>
+<html/>
+
