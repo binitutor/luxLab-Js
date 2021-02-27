@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    
+    <title>Pass Decision</title>
+    
+    <!--  Bootstrap modal popup  -->
+
+    <!--  Bootstrap css file  -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- jQuery file -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!--  Bootstrap min file -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+    <!--  datePicker.js  -->
+    <!--<script src="../assets/js/datePicker.js"></script>-->
+    
+    <!--  datePickerWidget.js  -->
+    <!--<script src="../assets/js/datePickerWidget.js"></script>-->
+
+    <style>
+    	table, tr, th, td {
+            border: 1px solid #e3e3e3;
+            padding: 10px;
+            /*font-size: 0.9em;*/
+            text-align: center;
+        }
+        table tr td:hover {
+        	background: #222;
+        	color: #f4f3f2;
+        	cursor: pointer;
+        }
+        .success, .error{
+            width: 20%;
+            border: 1px solid;
+            margin: 10px 0px;
+            padding:15px 10px 15px 50px;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            display: inline-block;
+          }
+        .success {
+          color: #4F8A10;
+          background-color: #DFF2BF;
+        }
+        
+        .error {
+          color: #D8000C;
+          background-color: #FFBABA;
+        }
+        .spacer {
+        	height: 100px;
+        	width: 1400px;
+        }
+        #hoursDiv td:hover {
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<!-- Fetch Date & Hours from DB  -->
+			<div class="col-lg-8">
+			
+			    <h1>Decide on requests</h1>
+				<p class="text-danger"><strong>Please fill in the form and click save.</strong></p>
+				<!-- decision table -->
+				
+				<table class="table table-responsive-lg table-hover">
+				    <thead>
+				        <tr>
+				            <td rowspan=2>#</td>
+				            <td colspan=3>Customer Info.</td>
+				            <td colspan=3>Request Info.</td>
+				        </tr>
+				        <tr>
+				            <td>Full Name</td>
+				            <td>Phone Number</td>
+				            <td>Email</td>
+				            <td>Date</td>
+				            <td>Time</td>
+				            <td>Decision</td>
+				        </tr>
+				    </thead>
+				    <tbody id="decisionTable"></tbody>
+				</table>
+				<div class="spacer"></div>
+				
+				<input type="submit" id="fetchRequests" value="Fetch Requests" class="btn btn-primary">
+				
+				<input type="submit" id="passDecision" value="Pass Decision" class="btn btn-success">
+				
+				<script>
+				    $(document).ready(function(){
+				        alert('Accepted!');
+                        $('#accept').click(function(e){
+                            alert('Accepted!');
+                            //var row = $(this).parents().parents().text();
+                            // .parent().previousSibling();
+                            // alert(row);
+                        });
+                    });
+				</script>
+				
+			    <div class="spacer"></div>
+			    <div class="spacer"></div>
+			</div> <!-- /col 1 fetch data  -->
+            
+            
+            
+            <div class="col-lg-4">
+			    <div>
+			        <h1>Accepted List: </h1>
+			        <div id="acceptedList"></div>
+			    </div>
+			    
+			    <div class="spacer"></div>
+			    <div>
+			        <h1>Rejected List: </h1>
+			        <div id="rejectedList"></div>
+			    </div>
+			    
+			    <div class="spacer"></div>
+			    <div class="spacer"></div>
+			</div> <!-- /col 2 display selection  -->
+			    
+			<script src="decision.js"></script>
+
+		</div> <!-- row ends -->
+	</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
