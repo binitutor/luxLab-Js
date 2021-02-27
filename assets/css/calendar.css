@@ -1,0 +1,344 @@
+
+.calendar {
+  width: 40rem;
+  height: 30rem;
+  border-radius: 15px;
+  background-color: #222227;
+  color: #fff;
+  text-align: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.month {
+  width: 100%;
+  height: 6rem;
+  border-radius: 15px;
+  background-color: #167e56;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  text-align: center;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+        .month i {
+          font-size: 2.5rem;
+          cursor: pointer;
+          background: inherit;
+        }
+
+        .month h1 {
+          font-size: 1.5rem;
+          font-weight: 400;
+          text-transform: uppercase;
+          letter-spacing: 0.2rem;
+          line-height: .2em;
+        }
+
+        .month p {
+          font-size: 1rem;
+          background: inherit;
+        }
+
+        .date {
+            background: inherit;
+        }
+
+        .date h1 {
+            background: inherit;
+        }
+
+        .weekdays {
+          width: 100%;
+          height: 2.5rem;
+          padding: 0 0.4rem;
+          display: flex;
+          align-items: center;
+          background: inherit;
+        }
+
+        .weekdays div {
+          font-size: 1rem;
+          font-weight: 400;
+          letter-spacing: 0.1rem;
+          width: calc(39rem / 7);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+          background: inherit;
+        }
+
+        .days {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          padding: 0.1rem;
+          background: inherit;
+          border-radius: 15px;
+
+        }
+
+        .days div {
+          font-size: 1rem;
+          width: calc(39rem / 7);
+          height: 3rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+          transition: background-color 0.2s;
+          background: inherit;
+        }
+
+        .days div:hover:not(.today) {
+          background-color: #262626;
+          cursor: pointer;
+          border: 1px solid #fff;
+        }
+
+        .prev-date,
+        .next-date {
+          opacity: 0.5;
+        }
+
+        .today {
+          background-color: #167e56;
+
+        }
+
+        /*simple display box of calendar selection*/
+        #input-display {
+          height: 100px;
+          width: 100%;
+          background: #333;
+          color: #fff;
+          padding: 10px;
+          margin-top: 10px;
+          text-align: left;
+          border-radius: 15px;
+        }
+        #date-input, #time-input {
+          float: right;
+        }
+
+        #input-display {
+           position: relative;
+           display: inline-block;
+           border-bottom: 1px dotted black;
+           cursor: pointer;
+           
+         }
+         #input-display .bookTime {
+           visibility: hidden;
+           width: 100%;
+           height: 80px;
+           background-color: black;
+           color: #fff;
+           text-align: center;
+           border-radius: 6px;
+           padding: 5px 0;
+           position: absolute;
+           z-index: 1;
+           bottom: 100%;
+           left: 0%;
+         }
+         #input-display .bookTime::after {
+           content: "";
+           position: absolute;
+           top: 100%;
+           left: 50%;
+           margin-left: -5px;
+           border-width: 5px;
+           border-style: solid;
+           border-color: black transparent transparent transparent;
+         }
+         #input-display:hover .bookTime {
+           visibility: visible;
+           display: block;
+           cursor: pointer;
+         }
+         /*#input-display:active .bookTime {
+           visibility: visible;
+           display: block;
+           cursor: pointer;
+         }*/
+        /*#input-display .bookTime button {
+          border-radius: 5px;
+          padding: 2px 5px;
+        }
+        #input-display .bookTime button:active {
+          background: orange;
+        }*/
+
+        @media only screen and (max-width: 1400px) {
+          .calendar {
+            width: 35rem;
+            height: 30rem;
+          }
+
+          .weekdays div {
+            width: calc(33rem / 7);
+          }
+
+          .days div {
+            width: calc(33rem / 7);
+          }
+        }
+
+        @media only screen and (max-width: 1300px) {
+            .calendar {
+                width: 30rem;
+                /*height: 30rem;*/
+              }
+              .weekdays div {
+            width: calc(29rem / 7);
+          }
+
+          .days div {
+            width: calc(29rem / 7);
+          }
+        }
+
+        /* Desktops: lg*/
+        @media only screen and (max-width: 1200px) {
+            .calendar {
+                width: 25rem;
+                /*height: 30rem;*/
+              }
+              .weekdays div {
+            width: calc(24rem / 7);
+          }
+
+          .days div {
+            width: calc(24rem / 7);
+          }
+        }
+
+        
+
+        /* Tablets: md*/
+        @media only screen and (max-width: 992px) {
+            .calendar {
+                width: 25rem;
+                /*height: 30rem;*/
+              }
+              .weekdays div {
+            width: calc(24rem / 7);
+          }
+
+          .days div {
+            width: calc(24rem / 7);
+          }
+        }
+
+
+        /* Phone: sm*/
+        @media only screen and (max-width: 768px) {
+            .calendar {
+                width: 40rem;
+                /*height: 22rem;*/
+            }
+            .weekdays div {
+            width: calc(39rem / 7);
+          }
+
+          .days div {
+            width: calc(39rem / 7);
+          }
+        }
+
+        
+
+        @media only screen and (max-width: 720px) {
+          .calendar {
+                width: 35rem;
+                /*height: 22rem;*/
+            }
+            .weekdays div {
+            width: calc(34rem / 7);
+          }
+
+          .days div {
+            width: calc(34rem / 7);
+          }
+        }
+
+        @media only screen and (max-width: 650px) {
+          .calendar {
+                width: 30rem;
+                /*height: 22rem;*/
+            }
+            .weekdays div {
+            width: calc(29rem / 7);
+          }
+
+          .days div {
+            width: calc(29rem / 7);
+          }
+        }
+
+
+        /* watch*/
+        @media only screen and (max-width: 576px) {
+            
+            .calendar {
+                width: 28rem;
+                /*height: 18rem;*/
+            }
+            .weekdays div {
+            width: calc(27rem / 7);
+            font-size: 0.7rem;
+          }
+
+          .days div {
+            width: calc(27rem / 7);
+            font-size: 0.7rem;
+          }
+            
+        }
+
+        @media only screen and (max-width: 500px) {
+          .calendar {
+                width: 15rem;
+                /*height: 22rem;*/
+            }
+            .weekdays div {
+            width: calc(14rem / 7);
+            font-size: 0.5rem;
+          }
+
+          .days div {
+            width: calc(14rem / 7);
+            font-size: 0.5rem;
+          }
+
+          .month i {
+            font-size: 1.5rem;
+          }
+
+          .month h1 {
+            font-size: 0.8rem;
+          }
+
+          .month p {
+            font-size: 0.5rem;
+          }
+          #input-display {
+            height: 120px;
+          }
+        }
+
+
+
+
+
+
+
+
+
+
+

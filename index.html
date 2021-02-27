@@ -1,0 +1,436 @@
+<!--
+=========================================================
+* Luxlab Appointment Booking - v1.0.0
+
+* Product Page: https://www.portfolio.binitutor.com
+* Copyright 2020 BiniTutor (https://www.binitutor.com)
+
+Page Author: Bini Alex
+=========================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Lux Lab</title>
+	<meta charset="utf-8" />
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<!-- favicons -->
+	<link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
+  	<link rel="icon" type="image/png" href="./assets/img/favicon.png">
+
+  	<!-- google fonts -->
+  	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+
+  	<!-- icons -->
+  	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+
+  	<!-- styling -->
+  	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/yeti/bootstrap.min.css" >
+  	<link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
+  	<link href="./assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
+
+  	<!-- custome styling -->
+  	<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+  	<link rel="stylesheet" type="text/css" href="./assets/css/calendar.css">
+
+  	<!-- calendar date -->
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
+
+  	<script>
+      
+      // this is for getting date value when clicked from calendar list
+      function getBookDate(event) { 
+        // capture clicked date
+        // gets the value inside the element
+        var bookDate = event.target.textContent; 
+        
+        // assign a div the value
+        document.querySelector('#date-input').innerHTML = bookDate;
+      }
+
+      // this is for capturing date value when button is clicked 
+      $(document).ready(function() {
+            $(".button").click(function(){
+                
+                var bookTime = $(".button").val();
+                // assign a div the value
+                document.querySelector('#time-input').innerHTML = bookTime;
+                // console.log("Booked time: " + bookTime);
+
+                // prevent default for the button
+                return false;
+            }); 
+        });
+
+
+      function submitToAPI(e) {
+           e.preventDefault();
+           var URL = "https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0";
+                      
+                var Namere = /[A-Za-z]{1}[A-Za-z]/;
+                if (!Namere.test($("#name-input").val())) {
+                             alert ("Name can not less than 2 char");
+                    return;
+                }
+                var mobilere = /[0-9]{10}/;
+                if (!mobilere.test($("#phone-input").val())) {
+                    alert ("Please enter valid mobile number");
+                    return;
+                }
+                if ($("#email-input").val()=="") {
+                    alert ("Please enter your email id");
+                    return;
+                }
+
+                var reeamil = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
+                if (!reeamil.test($("#email-input").val())) {
+                    alert ("Please enter valid email address");
+                    return;
+                }
+          
+
+           var bookDate = document.querySelector('#date-input').textContent;
+           // console.log("Booked date: " + bookDate);
+
+           var bookTime = document.querySelector('#time-input').textContent;
+           // console.log("Booked time: " + bookTime);
+
+           var name = $("#name-input").val();
+           var phone = $("#phone-input").val();
+           var email = $("#email-input").val();
+           var desc = $("#description-input").val();
+           var data = {
+              date : bookDate,
+              time : bookTime,
+              name : name,
+              phone : phone,
+              email : email,
+              desc : desc
+            };
+
+          
+
+           $.ajax({
+             type: "POST",
+             
+             url : "https://we4jv8puh7.execute-api.us-east-1.amazonaws.com/myPetStage/",
+             dataType: "json",
+             crossDomain: "true",
+             contentType: "application/json; charset=utf-8",
+             data: JSON.stringify(data),
+
+             
+             success: function () {
+               // clear form and show a success message
+               alert("Thank you for your feedback");
+               document.getElementById("contact-form").reset();
+               document.querySelector('#date-input').innerHTML = '';
+               document.querySelector('#time-input').innerHTML = '';
+           location.reload();
+             },
+             error: function () {
+               // show an error message
+               alert("UnSuccessfull");
+             }});
+         }
+     </script>
+
+</head>
+<body>
+	<!-- container wrapper -->
+	<div class="wrapper ">
+		<div class="sidebar" data-color="white" data-active-color="danger">
+			<!-- logo -->
+			<div class="logo">
+				<a href="#" class="simple-text ">
+		        	<div class="logo-image-small">
+		            	<img src="assets/img/luxlab-logo.png">
+		        	</div>
+		        </a>
+			</div> <!-- logo ends!! -->
+
+			<!-- sidebar menu -->
+			<div class="sidebar-wrapper">
+		        <ul class="nav">
+		          <li class="active">
+		            <a href="#">
+		              <i class="nc-icon nc-tile-56"></i>
+		              <p>Open Hours</p>
+		            </a>
+		          </li>
+		          <li>
+		            <a href="#">
+		              <i class="nc-icon nc-single-02"></i>
+		              <p>About Us</p>
+		            </a>
+		          </li>
+		          <li>
+		            <a href="#">
+		              <i class="nc-icon nc-pin-3"></i>
+		              <p>Location</p>
+		            </a>
+		          </li>
+		          <li>
+		            <a href="#">
+		              <i class="nc-icon nc-settings-gear-65"></i>
+		              <p>COntact Us</p>
+		            </a>
+		          </li>
+		        </ul>
+		    </div> <!-- sidebar menu ends!! -->
+		</div>
+
+		<!-- main panel -->
+		<div class="main-panel">
+      		<!-- Navbar -->
+	      	<nav class="navbar fixed-top navbar-expand-lg navbar-absolute navbar-transparent">
+		        <div class="container-fluid">
+		          <div class="navbar-wrapper">
+		            <div class="navbar-toggle">
+		              <button type="button" class="navbar-toggler">
+		                <span class="navbar-toggler-bar bar1"></span>
+		                <span class="navbar-toggler-bar bar2"></span>
+		                <span class="navbar-toggler-bar bar3"></span>
+		              </button>
+		            </div>
+		            <a class="navbar-brand" href="javascript:;">Book your appointment now</a>
+		          </div>
+		          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+		            <span class="navbar-toggler-bar navbar-kebab"></span>
+		            <span class="navbar-toggler-bar navbar-kebab"></span>
+		            <span class="navbar-toggler-bar navbar-kebab"></span>
+		          </button>
+		          <div class="collapse navbar-collapse justify-content-end" id="navigation">
+		            <form>
+		              <div class="input-group no-border">
+		                <input type="text" value="" class="form-control" placeholder="Search...">
+		                <div class="input-group-append">
+		                  <div class="input-group-text">
+		                    <i class="nc-icon nc-zoom-split"></i>
+		                  </div>
+		                </div>
+		              </div>
+		            </form>
+		            <ul class="navbar-nav">
+		              <li class="nav-item btn-rotate dropdown">
+		                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		                  <!-- <i class="nc-icon nc-bell-55"></i> -->
+		                  <!-- <i class="nc-icon nc-settings-gear-65"></i> -->
+		                  <i class="nc-icon nc-single-02"></i>
+		                  <p>
+		                    <span class="d-lg-none d-md-block">Account</span>
+		                  </p>
+		                </a>
+		                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+		                  <a class="dropdown-item" href="#">User profile</a>
+		                  <a class="dropdown-item" href="#">Preferences/History</a>
+		                  <a class="dropdown-item" href="#">Login/Signup</a>
+		                </div>
+		              </li>
+		            </ul>
+		          </div>
+		        </div>
+	      	</nav> <!-- Navbar ends !!-->
+
+	    	<!-- content -->
+      		<div class="content">
+        		<div class="row">
+
+        			<!-- left column 2/3 -->
+          			<div class="col-md-8">
+            			<div class="card card-user">
+		            		<div class="card-header">
+		            			<h5 class="card-title">Date Picker</h5>
+		            		</div>
+              	
+              				<!-- left card form -->
+              				<div class="card-body">
+				                <!-- capture these data from calendar forms -->
+    							<div class="col-8">
+				                    <div class="calendar">
+				                        <div class="month">
+				                            <i class="fas fa-angle-left prev"></i>	                        
+				                            <div class="date">
+				                                <!-- <h1>February</h1> -->
+				                                <span style="float: left;">Today: </span><p style="font-size: 15px;"></p>
+				                                <h1 style="width: 200px;">February</h1>
+				                            </div>
+				                            <i class="fas fa-angle-right next"></i>
+				                        </div>
+
+				                        <div class="weekdays">
+				                            <div>Sun</div>
+				                            <div>Mon</div>
+				                            <div>Tue</div>
+				                            <div>Wed</div>
+				                            <div>Thu</div>
+				                            <div>Fri</div>
+				                            <div>Sat</div>
+				                        </div>
+
+				                        <div class="days" onclick="getBookDate(event)"></div>
+				                    </div>
+				                </div>
+
+				                <div id="input-display">
+							      <p>Hover on this box to view dates available.</p>
+							      <span class="bookTime">
+							          <table>
+							            <tr>
+							              <td>9:00am - 10:00am<button class='button btn btn-primary btn-round' value="9:00am-10:00am">Book Now</button></td> 
+							              <td>10:00am - 11:00am<button class='button btn btn-primary btn-round' value="10:00am-11:00am">Book Now</button></td>
+							              <td>11:00am - 12:00pm<button class='button btn btn-primary btn-round' value="11:00am-12:00pm">Book Now</button></td>
+							            </tr>
+							          </table>
+							        </span>
+
+							      <span>Selected Date</span>
+							      <div id="date-input" class="date-input"></div> <br/>
+							      <span>Selected Time</span>
+							      <div id="time-input" class="time-input"></div>
+							    </div>
+							    
+							    <script src="./assets/js/calendar.js"></script>
+
+              				</div> <!-- left card form ends!!-->
+            			</div>
+          			</div> <!-- left column ends!!-->
+
+        			<!-- right column 1/3 -->
+          			<div class="col-md-4">
+			            <!-- user card -->
+			            <div class="card card-user">
+			              <div class="image">
+			                <img src="./assets/img/barbershop.jpg" alt="Customer Profile">
+			              </div>
+			              <div class="card-body">
+			                <div class="author">
+			                  <a href="#">
+			                    <img class="avatar border-gray" src="./assets/img/default-avatar.png" alt="Customer Profile">
+			                    <!-- <h5 class="title">Mr. Bean</h5> -->
+			                  </a>
+			                </div>
+			                
+			                <div>
+			                	<form>
+				                  	<div class="row pl-2 pr-2">
+					                    <div class="col-md-12">
+					                      <div class="form-group">
+					                        <label>Full name</label>
+					                        <input type="text" class="form-control" placeholder="Type your full name ..." id="name-input">
+					                      </div>
+					                    </div>
+
+					                    <div class="col-md-12 ">
+					                      <div class="form-group">
+					                        <label for="InputEmail1">Email address</label>
+					                        <input type="email" class="form-control" placeholder="Type your email address..." id="email-input">
+					                      </div>
+					                    </div>
+
+					                    <div class="col-md-12">
+						                    <div class="form-group">
+						                        <label>Phone Number</label>
+						                        <input type="text" class="form-control" placeholder="Type your phone number..." id="phone-input">
+						                    </div>
+						                </div>
+						                
+				                  	</div>				                  
+				                  
+					                <div class="row pl-2 pr-2">
+					                    <div class="col-md-12">
+					                      <div class="form-group">
+					                        <label>Instructions (optional)</label>
+					                        <textarea class="form-control textarea" placeholder="Please type any preference or instruction for your hair style" id="description-input"></textarea>
+					                      </div>
+					                    </div>
+					                </div>
+
+					                <hr>
+					                <!-- <div class="g-recaptcha" data-sitekey="6Lc7cVMUAAAAAM1yxf64wrmO8gvi8A1oQ_ead1ys" class="form-control" style="width:100%;"></div> -->
+
+					                <div class="row">
+					                    <div class="update ml-auto mr-auto">
+					                      <button type="button" onClick="submitToAPI(event)" class="btn btn-primary btn-round">Book Now</button>
+					                    </div><!-- type="submit"  -->
+					                </div>
+					                
+				                </form>
+			                </div>
+			              </div>
+			            </div> <!-- user card ends!! -->
+          			</div> <!-- right column ends!! -->
+
+          			
+        		</div>
+      		</div> <!-- content ends!!-->
+
+      		<footer class="footer footer-black  footer-white ">
+		        <div class="container-fluid">
+		          <div class="row">
+		            <nav class="footer-nav">
+		              <ul>
+		                <li><a href="#" target="_blank">Social</a></li>
+		                <li><a href="./pages/404.html" target="_blank">Admin Login</a></li>
+		              </ul>
+		            </nav>
+		            <div class="credits ml-auto">
+		              <span class="copyright">
+		                <!-- © --> 
+		                Lux Lab Hair Salon. &copy; <script>
+			                  document.write(new Date().getFullYear())
+			                </script>, All rights reserved.
+		              </span>
+		            </div>
+		          </div>
+		        </div>
+      		</footer>
+    	</div> <!-- main panel wrapper -->
+  	</div> <!-- container wrapper ends!!-->
+
+	<!-- scripts -->
+	<!--   Core JS Files   -->
+  	<script src="./assets/js/core/jquery.min.js"></script>
+  	<script src="./assets/js/core/popper.min.js"></script>
+  	<script src="./assets/js/core/bootstrap.min.js"></script>
+  	<script src="./assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  	<!--  Google Maps Plugin    -->
+  	<!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> -->
+  	<!-- Chart JS -->
+  	<script src="./assets/js/plugins/chartjs.min.js"></script>
+  	<!--  Notifications Plugin    -->
+  	<script src="./assets/js/plugins/bootstrap-notify.js"></script>
+  	<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+  	<script src="./assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+  	<script src="./assets/js/script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
