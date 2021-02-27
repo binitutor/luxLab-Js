@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    
+    <title>Book Hour</title>
+    
+    <!--  Bootstrap modal popup  -->
+
+    <!--  Bootstrap css file  -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- jQuery file -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!--  Bootstrap min file -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+
+    <!--  datePicker.js  -->
+    <!--<script src="../assets/js/datePicker.js"></script>-->
+    
+    <!--  datePickerWidget.js  -->
+    <!--<script src="../assets/js/datePickerWidget.js"></script>-->
+
+    <style>
+    	table, tr, th, td {
+            border: 1px solid #e3e3e3;
+            padding: 10px;
+            /*font-size: 0.9em;*/
+            text-align: center;
+        }
+        table tr td:hover {
+        	background: #222;
+        	color: #f4f3f2;
+        	cursor: pointer;
+        }
+        .success, .error{
+            width: 20%;
+            border: 1px solid;
+            margin: 10px 0px;
+            padding:15px 10px 15px 50px;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            display: inline-block;
+          }
+        .success {
+          color: #4F8A10;
+          background-color: #DFF2BF;
+        }
+        
+        .error {
+          color: #D8000C;
+          background-color: #FFBABA;
+        }
+        .spacer {
+        	height: 100px;
+        	width: 1400px;
+        }
+        #hoursDiv td:hover {
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<!-- Fetch Date & Hours from DB  -->
+			<div class="col-lg-8">
+			
+			    <h1>Request Data and time for Calendar DB</h1>
+				<p><strong>Please fill in the form and click save.</strong></p>
+				<!-- calendar -->
+				<table class="table table-striped text-center table-hover table-responsive-lg" id="calendarForm">
+					<thead>
+						<tr>
+							<th colspan="7">February</th>
+						</tr>
+						<tr>
+							<th>Su</th>
+							<th>Mo</th>
+							<th>Tu</th>
+							<th>We</th>
+							<th>Th</th>
+							<th>Fr</th>
+							<th>Sa</th>
+						</tr>
+					</thead>
+					<tbody id="calendar">
+						<tr>
+							<td>1</td>
+							<td>2</td>
+							<td>3</td>
+							<td>4</td>
+							<td>5</td>
+							<td>6</td>
+							<td>7</td>
+						</tr>
+						<tr>
+							<td>8</td>
+							<td>9</td>
+							<td>10</td>
+							<td>11</td>
+							<td>12</td>
+							<td>13</td>
+							<td>14</td>
+						</tr>
+						<tr>
+							<td>15</td>
+							<td>16</td>
+							<td>17</td>
+							<td>18</td>
+							<td>19</td>
+							<td>20</td>
+							<td>21</td>
+						</tr>
+						<tr>
+							<td>22</td>
+							<td>23</td>
+							<td>24</td>
+							<td>25</td>
+							<td>26</td>
+							<td>27</td>
+							<td>28</td>
+						</tr>
+						<tr>
+							<td>29</td>
+							<td>30</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				<form>
+					<div class="form-row">
+					    
+						<div class="col-md-4 mb-3">
+							<label for="validationDefault01">Full Name</label>
+					      	<input type="text" class="form-control" id="cusName" placeholder="Full Name ... " required>
+					    </div>
+					    <div class="col-md-4 mb-3">
+					      	<label for="validationDefault02">Phone Number</label>
+					      	<input type="text" class="form-control" id="cusPhone" placeholder="Phone Number ..." required>
+					    </div>
+					    <div class="col-md-4 mb-3">
+					      	<label for="validationDefaultEmail">Email</label>
+					      	<div class="input-group">
+					        	<input type="email" class="form-control" id="cusEmail" placeholder="Email address ..." aria-describedby="inputGroupPrepend2" required>
+					      	</div>
+					    </div>
+
+					    <!-- modal -->
+					    <div class="modal fade mb-5" tabindex="-1" role="dialog" id="calModal">
+					    	<div class="modal-dialog modal-dialog-centered" role="document">
+					    		<div class="modal-content">
+					    			<div class="modal-header">
+					    				<h5 class="modal-title">Hours available for the day</h5>
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          	<span aria-hidden="true">&times;</span>
+								        </button>
+					    			</div>
+
+					    			<div class="modal-body">
+					    				<h2>Day: <span class="text-primary" id="selectedDate"></span></h2>
+
+					    				<table class="table table-striped table-responsive-lg table-hover" id="hoursDiv">
+					    					<tbody >
+					    					    <tr id="hoursDiv"></tr>
+					    					</tbody>
+					    				</table>
+					    			</div>
+
+					    			<div class="modal-footer">
+					    				<button type="button" class="btn btn-primary">Save changes</button>
+        								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					    			</div>
+
+					    		</div>
+					    	</div>
+					    </div>
+					    <div class="spacer"></div>
+					    <input type="submit" id="sendRequest" value="Send Request" class="btn btn-primary btn-block">
+					    
+					    
+					    
+					    <div class="spacer"></div>
+					</div>
+				</form>
+				
+				<div class="spacer"></div>
+			    <div class="spacer"></div>
+			    <div class="spacer"></div>
+			</div> <!-- /col 1 fetch data  -->
+            
+            
+            
+            <div class="col-lg-4">
+			    <div>
+			        <h1>Display selections</h1>
+			        <div id="shortData"></div>
+			    </div>
+			    
+			    <div class="spacer"></div>
+			    <div class="spacer"></div>
+			    <div class="spacer"></div>
+			</div> <!-- /col 2 display selection  -->
+			    
+			<script src="bookCal.js"></script>
+
+		</div> <!-- row ends -->
+	</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
