@@ -1,0 +1,92 @@
+<html><head></head><body>
+<!--  ======================= content body =======================  -->
+<div class="spacer-1"></div>
+<div class="container" id="tempoContent">
+    <div class="row">
+        <h1>Create</h1>
+        
+        <div class="col-lg-8 fade-in-1 card" id="col-1">
+            <div class="row">
+                <!-- create booking -->
+                <div class="col-lg-12">
+                    <h3 class="display-5 text-center">Create Booking</h3>
+                    <p>Enter date and time open for booking.</p>
+                    <p class="text-danger">This is for Lux Lab hairsalon staff.</p>
+                    
+                    <form id="bookingCreationForm">
+                        <div class="form-group">
+                            <label for="date">Pick a Date</label>
+                            <input type="date" id="crDate" class="form-control" placeholder="Select a date" />
+                        </div>
+    
+                        <div class="form-group mb-4">
+                            <label for="time">Pick a Time</label>
+                            <select name="cars" type="text" id="bookTime" class="form-control">
+                                <option value="">Select a time</option>
+                                <option value="12:00am">12:00am</option>
+                                <option value="1:00am">1:00am</option>
+                                <option value="2:00am">2:00am</option>
+                                <option value="3:00am">3:00am</option>
+                                <option value="4:00am">4:00am</option>
+                                <option value="5:00am">5:00am</option>
+                                <option value="6:00am">6:00am</option>
+                                <option value="7:00am">7:00am</option>
+                                <option value="8:00am">8:00am</option>
+                                <option value="9:00am">9:00am</option>
+                                <option value="10:00am">10:00am</option>
+                                <option value="11:00am">11:00am</option>
+                                <option value="12:00pm">12:00pm</option>
+                                <option value="1:00pm">1:00pm</option>
+                                <option value="2:00pm">2:00pm</option>
+                                <option value="3:00pm">3:00pm</option>
+                                <option value="4:00pm">4:00pm</option>
+                                <option value="5:00pm">5:00pm</option>
+                                <option value="6:00pm">6:00pm</option>
+                                <option value="7:00pm">7:00pm</option>
+                                <option value="8:00pm">8:00pm</option>
+                                <option value="9:00pm">9:00pm</option>
+                                <option value="10:00pm">10:00pm</option>
+                                <option value="11:00pm">11:00pm</option>
+                            </select>
+                        </div>
+    
+                        <input type="submit" value="Create Booking" class="btn btn-primary btn-block">
+                    </form>
+                </div><!-- /create booking -->
+            </div>
+        </div><!-- /col 1 -->
+
+        <div class="col-lg-4 fade-in-3 card">
+            <div class="row">
+                <!-- created list -->
+                <div class="col-lg-12">
+                    <h3 class="text-center">Created hours</h3>
+                    
+                    <table class="table table-striped mt-5 mb-5" id="hourTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookList"></tbody>
+                    </table>
+                    
+                    <div class="mb-5"><hr/></div>
+                    <div class="mb-5"><hr/></div>
+                    <div class="spacer"></div>
+                </div> <!-- /created list -->
+                
+            </div>
+        </div> <!-- /col 2 -->
+    </div>
+</div> <!-- content body ends-->
+
+<div class="spacer-1"></div>
+
+<!-- script -->
+<script src="../assets/js/create/create.js"></script>
+
+</body></html>
+
