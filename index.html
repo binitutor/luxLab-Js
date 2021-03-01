@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lux Lab | Appointment Booking</title>
+    
+    <!--  Bootstrap css file  -->
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- jQuery file -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--  Bootstrap min file -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <!--  font awesome icons  -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+    
+    <!--  custom css file  -->
+    <link rel="stylesheet" type="text/css" href="./assets/css/stylesheet.css">
+    
+    <!-- slider script -->
+    <!--<script src="./assets/js/animateContent.js"></script>-->
+
+    <!-- ajax loader script -->
+    <script src="./assets/js/loader.js"></script>
+    
+    <!-- favicons -->
+    <link rel="icon" type="image/png" href="./assets/img/favicon/favicon.png"/>
+    <link rel='shortcut icon' type='image/x-icon' href='./assets/img/favicon/favicon.ico' />
+    
+    <link rel="shortcut icon" href="./assets/img/favicon/favicon.ico">
+	<link rel="icon" sizes="16x16 32x32 64x64" href="./assets/img/favicon/favicon.ico">
+	<link rel="icon" type="image/png" sizes="196x196" href="./assets/img/favicon/favicon-192.png">
+	<link rel="icon" type="image/png" sizes="160x160" href="./assets/img/favicon/favicon-160.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="./assets/img/favicon/favicon-96.png">
+	<link rel="icon" type="image/png" sizes="64x64" href="./assets/img/favicon/favicon-64.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon/favicon-32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon/favicon-16.png">
+	<link rel="apple-touch-icon" href="./assets/img/favicon/favicon-57.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="./assets/img/favicon/favicon-114.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="./assets/img/favicon/favicon-72.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="./assets/img/favicon/favicon-144.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="./assets/img/favicon/favicon-60.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="./assets/img/favicon/favicon-120.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="./assets/img/favicon/favicon-76.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="./assets/img/favicon/favicon-152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="./assets/img/favicon/favicon-180.png">
+	<meta name="msapplication-TileColor" content="#FFFFFF">
+	<meta name="msapplication-TileImage" content="./assets/img/favicon/favicon-144.png">
+	<meta name="msapplication-config" content="./assets/img/favicon/browserconfig.xml">
+	<!-- ****** faviconit.com favicons ****** -->
+</head>
+    <body>
+        <div id="wrapper">
+            <!--  ======================= sidebar =======================  -->
+            <div id="sidebar-wrapper">
+                <!--  =================== logo & social =======================  -->
+                <div class="container-fluid" id="sidebar-header">
+                    <div class="row">
+                        <div class="spacer-1"></div>
+                    
+                        <div class="col-lg-4 col-md-4 col-xs-4">
+                            <a href="index.html">
+                                <img src="./assets/img/logoLuxLab.png" alt="Logo" class="profilePic">
+                            </a>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-xs-8">
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <a href="index.html">
+                                    <h3>Lux Lab <br>Hair Salon</h3>
+                                    </a>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="social text-center">
+                                        <h5 class="text-uppercase">Social</h5>
+                                        <a href="" target="_blank"><i class="fab fa-facebook"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-instagram"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-youtube"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-twitter"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-linkedin"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!--logo & social ends-->
+                
+                <ul class="sidebar-nav">
+                    <li id="book"><a href="#" ><i class="fa fa-user-clock"></i> Open Hours</a></li>
+                    <li id="about"><a href="#"><i class="fa fa-address-card"></i> About Us</a></li>
+                    <li id="location"><a href="#"><i class="fa fa-location-arrow"></i> Location</a></li>
+                    <li id="contact"><a href="#"><i class="fa fa-file-signature"></i> Contact Us</a></li>
+                    <li id="create"><a href="#"><i class="fa fa-book"></i> Create Booking</a></li>
+                    <li id="decide"><a href="#"><i class="fa fa-table"></i> Decision Table</a></li>
+                </ul>
+                
+            </div> <!--sidebar ends-->
+            
+            <!--  ======================= sidebar hidden =======================  -->
+            <div id="sidebar-hidden">
+                <ul class="sidebar-nav">
+                    <a href="index.html">
+                        <img src="./assets/img/logoLuxLab.png" alt="Logo" class="profilePic">
+                    </a>
+                    <li class="book-min"><a href="#" ><i class="fa fa-user-clock"></i></a></li>
+                    <li id="about-min"><a href="#"><i class="fa fa-address-card"></i></a></li>
+                    <li id="location-min"><a href="#"><i class="fa fa-location-arrow"></i></a></li>
+                    <li id="contact-min"><a href="#"><i class="fa fa-file-signature"></i></a></li>
+                    <li id="create-min"><a href="#"><i class="fa fa-book"></i></a></li>
+                    <li id="decide-min"><a href="#"><i class="fa fa-table"></i></a></li>
+                </ul>
+            </div><!--sidebar hidden ends-->
+            
+            <!--  ======================= page content =======================  -->
+            <div id="page-content-wrapper">
+                <!--  ======================= toggler =======================  -->
+                <div class="toggler">  
+                    <div class="col-xs-2">
+                        <a href="#" class="" id="menu-toggle">
+                            <div id="toggle-btn">
+                                <i class="fa fa-bars btn btn-success"></i>
+                                <i class="fa fa-window-close btn btn-danger"></i>
+                            </div>                   
+                        </a>
+                    </div>
+    
+                    <div class="col-xs-8">
+                        <h2 class="display-4 text-center">
+                            <!--<i class="fa fa-tachometer-alt-fast"></i> -->
+                            <img src="./assets/img/logoLuxLab.png" alt="Logo">
+                            <span class="text-primary">Lux Lab</span> Hair Salon
+                        </h2>
+                    </div>
+                </div> <!-- toggler ends-->
+                
+                <!--  ======================= content body =======================  -->
+                <div class="container-fluid fade-in" id="tempoContent">
+                    <div class="row">
+                        <header id="showcase">
+                            <h1>Welcome To Lux Lab</h1>
+                            <p>We are ready to serve. Book an appointment and get the best service.</p>
+                            <a href="#" class="button book-min">Book Now</a>
+                        </header>
+                        
+                        <section id="section-a">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit minus impedit maxime, quae soluta quis cumque perferendis! Doloribus quaerat, placeat iste facere, aspernatur.</p>
+                        </section>
+                        <section id="section-b">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit minus impedit maxime, quae soluta quis cumque perferendis! Doloribus quaerat, placeat iste facere, aspernatur ex cum veritatis.</p>
+                        </section>
+                        <section id="section-c">
+                            <div class="box-1">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa dolorum est, molestias dolores quis sunt nobis temporibus veritatis libero odio!
+                            </div>
+                            <div class="box-2">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa dolorum est, molestias dolores quis sunt nobis temporibus veritatis libero odio!
+                            </div>
+                            <div class="box-3">
+                              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa dolorum est, molestias dolores quis sunt nobis temporibus veritatis libero odio!
+                            </div>
+                        </section>
+                    </div>
+                </div> <!-- content body ends-->
+                
+                <!--  ======================= footer =======================  -->
+                <div class="row footer-area">
+                    <div class="col-md-12">
+                        
+                        <footer class="footer-area">
+                            
+                                <div class="social text-center">
+                                    <h5 class="text-uppercase">Follow Us | Lux Lab Social</h5>
+                                        <a href="" target="_blank"><i class="fab fa-facebook"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-instagram"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-youtube"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-twitter"></i></a>
+                                        <a href="" target="_blank"><i class="fab fa-linkedin"></i></a>
+                                </div>
+
+                                <div class="copyrights text-center">
+                                    <p class="para">
+                                        Copyright &copy; 
+                                        <script>
+                                            var date = new Date();
+                                            document.write(date.getFullYear());
+                                        </script> 
+                                        All rights reserved | Lux Lab Hair Salon | Developer info <i class="fa fa-heart"></i>
+                                        <a href="http://portfolio.binitutor.com/" target="_blank"><span style="color: var(--primary-color);">BiniTutor</span>
+                                        </a>
+                                    </p>
+                                </div>
+                            
+                        </footer>
+
+                    </div>
+                </div> <!-- footer ends-->
+                
+            </div> <!-- page content ends-->
+            
+            <div class="arrow-up" href="#wrapper"><i class="fa fa-arrow-up"></i></div>
+            
+        </div> <!-- wrapper ends-->
+        
+        <!--  ======================= Custom Scripts =======================  -->
+        <!-- sidemenu toggle script -->
+        <script src="./assets/js/toggleScript.js"></script>
+        
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

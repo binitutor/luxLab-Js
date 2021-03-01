@@ -1,0 +1,145 @@
+<html><head></head><body>
+<!--  ======================= content body =======================  -->
+<div class="spacer-1"></div>
+<div class="container" id="tempoContent">
+    <div class="row">
+        <h1>Create</h1>
+        
+        <div class="col-lg-8 fade-in card">
+            <!--<div class="row"><div class="col-lg-12"></div></div>-->
+            <!-- create booking -->
+            <h3 class="display-5 text-center">Create Booking</h3>
+            <p>Enter date and time open for booking.</p>
+            <p class="text-danger">This is for Lux Lab hairsalon staff.</p>
+                    
+            <form id="bookingCreationForm">
+                        <div class="form-group">
+                            <label for="date">Pick a Date</label>
+                            <input type="date" id="crDate" name="crDate" class="form-control" placeholder="Select a date" />
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="time">Pick a Time</label>
+                            <select name="cars" type="text" id="bookTime" class="form-control">
+                                <option value="">Select a time</option>
+                                <option value="12:00am">12:00am</option>
+                                <option value="1:00am">1:00am</option>
+                                <option value="2:00am">2:00am</option>
+                                <option value="3:00am">3:00am</option>
+                                <option value="4:00am">4:00am</option>
+                                <option value="5:00am">5:00am</option>
+                                <option value="6:00am">6:00am</option>
+                                <option value="7:00am">7:00am</option>
+                                <option value="8:00am">8:00am</option>
+                                <option value="9:00am">9:00am</option>
+                                <option value="10:00am">10:00am</option>
+                                <option value="11:00am">11:00am</option>
+                                <option value="12:00pm">12:00pm</option>
+                                <option value="1:00pm">1:00pm</option>
+                                <option value="2:00pm">2:00pm</option>
+                                <option value="3:00pm">3:00pm</option>
+                                <option value="4:00pm">4:00pm</option>
+                                <option value="5:00pm">5:00pm</option>
+                                <option value="6:00pm">6:00pm</option>
+                                <option value="7:00pm">7:00pm</option>
+                                <option value="8:00pm">8:00pm</option>
+                                <option value="9:00pm">9:00pm</option>
+                                <option value="10:00pm">10:00pm</option>
+                                <option value="11:00pm">11:00pm</option>
+                            </select>
+                        </div>
+    
+                        <input type="submit" value="Create Booking" id="saveRecord" class="btn btn-primary btn-block">
+                    </form>
+                
+            <!-- /create booking -->
+        </div><!-- /col 1 -->
+
+        <div class="col-lg-4 fade-in card">
+            <!-- created list -->    
+            <h3 class="text-center">Created hours</h3>
+            <div id="createdHours"></div>
+            
+            <hr>
+            <h3 class="text-center">Created hours from database</h3>
+            <table class="table table-striped" id="createdHoursDb"></table>
+            
+            <div class="spacer"></div>
+            <!-- /created list -->
+            <input type="submit" value="Fetch Created Data" id="fetchHours" class="btn btn-primary btn-block">
+            <div class="spacer-1"></div>
+        </div> <!-- /col 2 -->
+    </div>
+</div> <!-- content body ends-->
+
+<div class="spacer-1"></div>
+
+<!-- slider script -->
+<script src="./assets/js/create/create.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<!-- jQuery file -->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+<!--<input type="date" name="datechk" class="datechk">-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- script -->
+<!--<script src="../assets/js/datePicker.js"></script>-->
+<script>
+    var dateClass='.crDate';
+    $(document).ready(function ()
+    {
+      if (document.querySelector(dateClass).type !== 'date')
+      {
+        var oCSS = document.createElement('link');
+        oCSS.type='text/css'; oCSS.rel='stylesheet';
+        oCSS.href='//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css';
+        oCSS.onload=function()
+        {
+          var oJS = document.createElement('script');
+          oJS.type='text/javascript';
+          oJS.src='//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js';
+          oJS.onload=function()
+          {
+            $(dateClass).datepicker();
+          }
+          document.body.appendChild(oJS);
+        }
+        document.body.appendChild(oCSS);
+      }
+    });
+    
+    
+    /*
+    var datefield=document.createElement("input")
+    datefield.setAttribute("type", "date")
+    if (datefield.type!="date"){ //if browser doesn't support input type="date", load files for jQuery UI Date Picker
+        document.write('<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />\n')
+        document.write('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"><\/script>\n')
+        document.write('<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"><\/script>\n') 
+    }
+    */
+</script>
+
+<!--<script src="../assets/js/datePickerWidget.js"></script>-->
+<script>
+    /*
+    if (datefield.type!="date"){ //if browser doesn't support input type="date", initialize date picker widget:
+        jQuery(function($){ //on document.ready
+            $('#crDate').datepicker();
+        })
+    }
+    */
+</script>
+
+</body></html>
+
