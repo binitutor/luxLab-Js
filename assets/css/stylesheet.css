@@ -1,0 +1,417 @@
+/* import css(location.css) */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: #333;
+}
+
+#tempoContent{
+    padding-left: 50px;
+    
+}
+
+#showcase{
+  background-image:url('../img/barbershop.jpg');
+  background-size:cover;
+  background-position:center;
+  height:110vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:0 20px;
+  color: #fff;
+}
+
+#showcase h1 {
+  font-size:50px;
+  line-height:1.2;
+  color: #fff;
+}
+
+#showcase p{
+  font-size:20px;
+  color: #fff;
+}
+
+#showcase .button{
+  font-size:18px;
+  text-decoration:none;
+  border-radius: 20px;
+  border: 1px solid #FF4B2B;
+  background-color: #123b19;
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+}
+
+#showcase .button:hover{
+  background: #123b19;
+  color:#fff;
+  transform: scale(1.1);
+  border: 2px solid #fa583c;
+}
+
+#showcase .button:active{
+    transform: scale(0.95);
+}
+
+#section-a{
+  padding:20px;
+  background:#123b19;
+  color:#fff;
+  text-align:center;
+}
+
+#section-b{
+  padding:20px;
+  background:#f4f4f4;
+  text-align:center;
+  color: #123b19;
+}
+
+#section-c{
+  display:flex;
+}
+
+#section-c div{
+  padding:20px;
+}
+
+#section-c .box-1, #section-c .box-3{
+  background:#123b19;
+  color:#fff;
+}
+
+#section-c .box-2{
+  background:#f9f9f9;
+  color: #123b19;
+}
+
+/* ================ sidebar ============= */
+#sidebar-wrapper {
+    z-index: 1;
+    position: fixed;
+    width: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #222; /*#2c3e50*/
+    color: #fff;
+    transition: 0.5s ease;
+}
+
+#sidebar-hidden {
+    z-index: 1;
+    position: fixed;
+    width: 50px;
+    height: 100%;
+    overflow: visible;
+    background: #222;
+    color: #fff;
+    opacity: 1;
+    transition: 0.5s ease;
+    text-align: center;
+}
+
+#sidebar-header {
+    background: inherit;
+}
+
+.profilePic {
+    width: 100%;
+    /*border-radius: 50%;*/
+    /*border: 1px solid #f4f3f2;*/
+}
+
+.sidebar-nav {
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li{
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #ddd;
+    transition: 0.5s ease;
+}
+
+.sidebar-nav li a i {
+    padding-right: 5px;
+}
+
+.sidebar-nav li a:hover {
+    background: #16a085;
+}
+
+/*for hidden sidebar ul*/
+#sidebar-hidden .sidebar-nav {
+    padding-top: 40px;
+}
+#sidebar-hidden .sidebar-nav li{
+    text-indent: 5px;
+}
+
+#sidebar-hidden .sidebar-nav li a i{
+    padding: 20px 0;
+    display: block;
+}
+
+
+
+/* ================ main content ============= */
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    /*padding: 15px;*/
+    background: #f4f3f2;
+    transition: 0.5s ease;
+}
+
+.container-fluid {
+    background: #f2f3f4;
+}
+.card {
+    margin-top: 20px;
+    border: 1px solid rgb(31, 28, 28);
+    border-radius: 15px;
+    box-shadow: 3px 4px 15px #222;
+    background: #fff;
+    padding: 20px;
+}
+
+/* ================ change the width of sidebar to display it ============= */
+#wrapper.menuDisplayed #sidebar-wrapper{
+    width: 250px;
+    overflow: visible;
+    transition: 0.42s ease;
+}
+
+#wrapper.menuDisplayed #sidebar-hidden {
+    display: none;
+    transition: 0.5s ease;
+}
+
+#wrapper.menuDisplayed #page-content-wrapper{
+    margin-left: 200px;
+    transition: 0.5s ease;
+}
+
+/* ================ toggler ============= */
+.toggler{
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    /*left: 50px*/
+    height: auto;
+    margin-bottom: 20px;
+    margin-left: 40px;
+    background: #f4f3f2;
+    color: #222;
+    opacity: 1;
+    /*padding: 10px;*/
+    padding-top: 10px;
+    box-shadow: 5px 3px 15px #222;
+    transform: translateX(10px);
+}
+.moveLeft {
+    /*transform: translateX(-45px);*/
+    transition: 3.8s ease;
+}
+#toggle-btn {
+    text-decoration: none;
+}
+#toggle-btn  i {
+    /*padding: 5px;*/
+    font-size: 2.2em;
+    width: 50px;
+}
+.fa-window-close {
+    display: none;
+}
+.fa-bars{
+    display: block;
+}
+.btnOpenClose > .fa.fa-window-close{
+    display: block;
+}
+.btnOpenClose >.fa.fa-bars{
+    display: none;
+}
+
+/* ================ map ============= */
+#map, #street {
+    /* display: none; */
+    height: 450px;
+    width: 100%;
+}
+
+/* ================ custom css for calendar ============= */
+table, tr, th, td {
+    border: 1px solid #e3e3e3;
+    padding: 10px;
+    font-size: 0.9em;
+    text-align: center;
+}
+table tr td:hover {
+    background: #222;
+    color: #f4f3f2;
+    cursor: pointer;
+}
+.success, .error{
+    width: 20%;
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    display: inline-block;
+  }
+.success {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+}
+
+.error {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+#hoursDiv td:hover {
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* ================ footer ============= */
+footer {
+    width: 100%;
+    background: #333;
+    height: auto;
+    color: #f4f4f4;
+    padding-left: 50px;
+}
+
+.row.footer-area {
+    background: #333;
+
+}
+
+/* ================ arrow-up ============= */
+.arrow-up {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+}
+
+/* ================ spacer ============= */
+.spacer0 {
+    height: 10px;
+    width: 100%;
+}
+.spacer {
+    height: 50px;
+    width: 100%;
+}
+.spacer-1 {
+    height: 100px;
+    width: 100%;
+}
+.spacer-2 {
+    height: 200px;
+    width: 100%;
+}
+
+/* ================ logo ============= */
+.toggler img {
+    width: 40px;
+    height: 40px;
+}
+    
+    
+/* ================ calButtons ============= */
+#calButtons button {
+    padding: .5em 1.5em;
+}
+
+#calButtons button:hover {
+    background: #0c2418;
+    color: #fff;
+    border-bottom: 2px solid #16a085;
+    transition: transform 300ms ease-in-out;
+}
+
+#calButtons button:active {
+    background: #b3420e;
+    color: #fff;
+}
+ 
+/* ================ @media ============= */
+/* width: 375, 414, 360 */
+@media screen and (max-width: 450px) {
+    #sidebar-hidden {
+        display: none;
+    }
+    #tempoContent{
+        padding-left: 15px;
+    }
+    #wrapper.menuDisplayed #tempoContent {
+        transform: translateX(-150px);
+    }
+    #wrapper .toggler{
+        transform: translateX(-50px);
+    }
+    #wrapper.menuDisplayed #page-content-wrapper{
+        margin-left: 300px;
+    }
+    #wrapper.menuDisplayed .toggler {
+        /*transform: translateX(-40px);*/
+        margin-left: -2px;
+    }
+    
+    .toggler{
+        margin-bottom: 10px;
+        padding-top: 5px;
+    }
+    
+    
+    .toggler h2 {
+        transform: scaleX(0.8);
+    }
+    
+    .toggler img {
+        width: 50px;
+        height: 40px;
+    }
+    
+    form {
+        font-size: 0.8em;
+        text-align: left;
+    }
+
+    form input::placeholder {
+        font-size: 0.8em;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

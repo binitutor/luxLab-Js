@@ -1,0 +1,161 @@
+<html><head></head><body>
+    <h1>Daily calendar view</h1>
+    <div class="row">
+        <!--hardcoded calendar elements-->
+        <div class="col-md-4 card calendarForm">
+            <h3 class="tblDate">Tuesday, March 2, 2021</h3>
+            <h4 class="tblTime">6:00am - 7:00am</h4>
+            <button class="btn btn-primary btn-block" data-toggle = "modal" data-target = "#calModal">Book</button>
+        </div>
+        
+        <div class="col-md-4 card calendarForm">
+            <h3 class="tblDate">Tuesday, March 2, 2021</h3>
+            <h4 class="tblTime">9:00am - 10:00am</h4>
+            <button class="btn btn-primary btn-block" data-toggle = "modal" data-target = "#calModal">Book</button>
+        </div>
+        
+        <div class="col-md-4 card calendarForm">
+            <h3 class="tblDate">Wednesday, March 3, 2021</h3>
+            <h4 class="tblTime">12:00pm - 2:00pm</h4>
+            <button class="btn btn-primary btn-block" data-toggle = "modal" data-target = "#calModal">Book</button>
+        </div>
+        
+        <div class="col-md-4 card calendarForm">
+            <h3 class="tblDate">Tuesday, March 2, 2021</h3>
+            <h4 class="tblTime">6:00pm - 7:00pm</h4>
+            <button class="btn btn-primary btn-block" data-toggle = "modal" data-target = "#calModal">Book</button>
+        </div>
+        
+        <div class="col-md-4 card calendarForm">
+            <h3 class="tblDate">Tuesday, March 2, 2021</h3>
+            <h4 class="tblTime">7:00pm - 8:00pm</h4>
+            <button class="btn btn-secondary btn-block" data-toggle = "modal" data-target = "#calModal">Book</button>
+        </div>
+        
+        <div class="col-md-4 card calendarForm">
+            <h3 class="tblDate">Tuesday, March 2, 2021</h3>
+            <h4 class="tblTime">8:00pm - 9:00pm</h4>
+            <button class="btn btn-secondary btn-block" data-toggle = "modal" data-target = "#calModal">Book</button>
+        </div>
+        
+        <!--popup modal-->
+        <div class="modal fade mb-5" tabindex="-1" role="dialog" id="calModal">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            	<div class="modal-content">
+            		<div class="modal-header">
+            			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            				<span aria-hidden="true">&times;</span>
+            			</button>
+            			<h3 class="modal-title">
+            			    Date: <span class="text-primary" id="modalDate">Tuesday</span> | 
+            			    Hour: <span class="text-primary" id="modalTime">9:00am-10:00am</span>
+            			</h3>
+            		</div>
+            
+            		<div class="modal-body">
+            			<form>
+            			    <div class="form-row">
+            					    
+                    			<div class="col-md-4 mb-3">
+                    				<label for="validationDefault01">Full Name</label>
+                    				<input type="text" class="form-control" id="cusName" placeholder="Full Name ... " required>
+                    			</div>
+                    			<div class="col-md-4 mb-3">
+                    				<label for="validationDefault02">Phone Number</label>
+                    				<input type="text" class="form-control" id="cusPhone" placeholder="Phone Number ..." required>
+                    			</div>
+                    			<div class="col-md-4 mb-3">
+                    				<label for="validationDefaultEmail">Email</label>
+                    				<div class="input-group">
+                    					<input type="email" class="form-control" id="cusEmail" placeholder="Email address ..." aria-describedby="inputGroupPrepend2" required>
+                    				</div>
+                    			</div>
+                    			
+                    			<div class="spacer-1"></div>
+
+            			        <input type="submit" id="sendBookingRequest" value="Send Request" class="btn btn-primary btn-block">
+                    			
+                			</div>
+            			</form>
+            		</div>
+            
+            		<div class="modal-footer">
+            			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            		</div>
+            
+            	</div>
+            </div>
+        </div><!-- /modal ends-->
+        
+        <!-- bookSeed.js -->
+        <script>
+            // saving data to DynamoDb: reqDate, reqTime, cusName, cusPhone, cusEmail
+            // when clicked 'book', capture calendar date and time
+            $( ".calendarForm" ).find( "button" ).click(function(){
+                var btnParent = $(this).parent(); // parent div for button
+                var reqDate = $( btnParent ).find( ".tblDate" ).text(); // tuesday ...
+                var reqTime = $( btnParent ).find( ".tblTime" ).text(); // 6:00am 
+                
+                // update modal with date and time
+                $('#modalDate').html(reqDate);
+                $('#modalTime').html(reqTime);
+                
+                
+                // Popup Screen: on submit click, send booking request
+                $('#sendBookingRequest').click(function(e){
+                    // fetch customer data from the form
+                    var cusName = $("#cusName").val();
+                    var cusPhone = $("#cusPhone").val();
+                    var cusEmail = $("#cusEmail").val();
+                    // alert('cusName: ' + cusName + ', cusPhone: ' + cusPhone + ', cusEmail:' + cusEmail + ', reqDate: ' + reqDate + ', reqTime: ' + reqTime);
+                    
+                    // send data to database: POST
+                    var data = {
+                        name : cusName,
+                        phone : cusPhone,
+                        email : cusEmail,
+                        date : reqDate,
+                        time : reqTime
+                    };
+        
+                    $.ajax({
+                        type: "POST",
+                        url : "URL goes here ...",
+                        dataType: "json",
+                        crossDomain: "true",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(data),
+                        
+                        success: function () {
+                            // clear form and show a success message
+                            alert("Thank you for your feedback");
+                        }, 
+                        error: function () {
+                            // show an error message
+                            alert("Request UnSuccessfull!!");
+                        }
+                    });
+                     
+                });
+            });
+            
+            
+            
+        </script>
+    </div>
+    <div class="spacer"></div>
+</body></html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
