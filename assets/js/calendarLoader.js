@@ -1,6 +1,6 @@
 $(document).ready(function(){
-    // default: load monthly
-    $('.calendarLoader').load('./pages/book/monthly.html');
+    // default: load weekly
+    $('.calendarLoader').load('./pages/book/weekly.html');
     
     // at click daily, load daily calendar view
     $('.daily').click(function(e){
