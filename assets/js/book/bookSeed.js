@@ -261,10 +261,10 @@ $(document).ready(function () {
     /* 
         this function receives json file, and a div ID
         It loops through the data and output the values to the div
-        to call this func: json_Loop(jDATAName, divIDName, fullDateName);
+        to call this func: json_Loop_monthly(jDATAName, divIDName, fullDateName);
         specify is a rule for if crDate includes the str input
     */
-    function json_Loop(jDATA, divID, specify) {
+    function json_Loop_monthly(jDATA, divID, specify) {
         var str = '';
         $.each(jDATA, function (key, value) {
             if (value.crDate.includes(specify)) {
@@ -365,10 +365,10 @@ $(document).ready(function () {
         this function makes ajax call to server: POST
         it receives two arguments: the url and the data
         then it sends data to server
-        to call this func: ajax_call(url, data);
+        to call this func: ajax_call_post(url, data);
     */
 
-    function ajax_call(reqDate, reqTime) {
+    function ajax_call_post(reqDate, reqTime) {
         // Popup Screen: on submit click, send booking request
         $('#sendBookingRequest').click(function (e) {
             // fetch customer data from the form
@@ -377,16 +377,21 @@ $(document).ready(function () {
             var cusEmail = $("#cusEmail").val();
 
             // url
-            var myURL = "URL goes here ...";
+            var myURL = "https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/s3-to-db-insert";
 
             // send data to database: POST
-            var data = {
+            var dataObj = {
                 name: cusName,
                 phone: cusPhone,
                 email: cusEmail,
                 date: reqDate,
                 time: reqTime
             };
+
+            // Get method URL: 
+            //https://3i71kk5ced.execute-api.us-east-1.amazonaws.com/GetRecordsTest/getdynamodbitems
+            //Post method to insert booking to DB URL: 
+            //https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/s3-to-db-insert
 
             // this calls for a function that makes ajax call
             $.ajax({
@@ -395,15 +400,65 @@ $(document).ready(function () {
                 dataType: "json",
                 crossDomain: "true",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(data),
+                data: JSON.stringify(dataObj),
 
                 success: function () {
                     // clear form and show a success message
-                    alert("Thank you for your feedback");
+                    alert("Thank you for your feedback!");
                 },
                 error: function () {
                     // show an error message
                     alert("Request UnSuccessfull!!");
+                }
+            });
+
+        });
+    }
+
+
+    /* 
+        this function makes ajax call to server: GET
+        it recieves json data from database
+        to call this func: ajax_call_get();
+    */
+
+    function ajax_call_get() {
+        // Popup Screen: on submit click, send booking request
+        $('#getBookingRequest').click(function (e) {
+            // url
+            var myURL = "https://3i71kk5ced.execute-api.us-east-1.amazonaws.com/GetRecordsTest/getdynamodbitems";
+
+            // this calls for a function that makes ajax call
+            // $.ajax({
+            //     type: "GET",
+            //     url: myURL,
+            //     dataType: "json",
+            //     data: { "data": "check" },
+            //     success: function (data) {
+            //         alert("Data retrieval successful!");
+            //         window.alert('Retrieved data: ' + data);
+            //     },
+            //     error: function () {
+            //         // show an error message
+            //         alert("Uable to retrieve data from Database!!");
+            //     }
+            // });
+
+            $.ajax(
+            {
+                url: myURL,
+                headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                crossDomain: true,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    alert("Data retrieval successful!");
+                    console.log(data);
+
+                    //converts json file to javascript object
+                    // var obj = JSON.parse(data);
+                    // add data to data table
+                    // $('#dataTable').html(obj);
                 }
             });
 
@@ -466,7 +521,7 @@ $(document).ready(function () {
             MODAL_Loader(reqDate, reqTime);
 
             // Popup Screen: on submit click, send booking request
-            ajax_call(reqDate, reqTime);
+            ajax_call_post(reqDate, reqTime);
 
         });
     }
@@ -491,6 +546,13 @@ $(document).ready(function () {
         var today = dateName + ", " + month + " " + dateNum + ", " + year; // Thursday, March 4, 2021
 
         json_Loop_daily(dateTimeData, dateDivToday, dateDiv, today);
+
+        // MODAL and ajax call
+        MODAL_Ajax_Call_Loader();
+
+        // fetch data from db: GET
+        ajax_call_get();
+
     }); // generating hardcoded date ends !!!
 
 
@@ -516,6 +578,9 @@ $(document).ready(function () {
         json_Loop_weekly(dateTimeData, frDiv, fr, counter);
         json_Loop_weekly(dateTimeData, saDiv, sa, counter);
 
+        // MODAL and ajax call
+        MODAL_Ajax_Call_Loader();
+
     });
 
     // monthly.html script
@@ -538,7 +603,7 @@ $(document).ready(function () {
             var fullDateName = newDateName + ', ' + calMonthName + ' ' + reqDate + ', ' + theYear;
 
             // update div with json data
-            json_Loop(dateTimeData, '#monthDiv', fullDateName);
+            json_Loop_monthly(dateTimeData, '#monthDiv', fullDateName);
 
             // MODAL and ajax call
             MODAL_Ajax_Call_Loader();
@@ -547,13 +612,11 @@ $(document).ready(function () {
     });
 
 
-    // MODAL Loader
-    // saving data to DynamoDb: reqDate, reqTime, cusName, cusPhone, cusEmail
-    // when clicked 'book', capture calendar date and time
-    $(function () {
-        // MODAL and ajax call
-        MODAL_Ajax_Call_Loader();
-    }); // saving data to db ends !!
+
+    // $(function () {
+    //     // MODAL and ajax call
+    //     MODAL_Ajax_Call_Loader();
+    // }); // saving data to db ends !!
 
 
 }); // docu.ready ends !!
