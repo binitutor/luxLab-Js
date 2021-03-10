@@ -1,74 +1,134 @@
-<html><head>
+<html>
+
+<head>
     <!-- ajax loader script -->
-    <script src="./assets/js/calendarLoader.js"></script>
-	<!-- ajax loader script -->
-    <!--<script src="./assets/js/book/bookSeed.js"></script>-->
-</head><body>
-<!--  ======================= content body =======================  -->
-<div class="spacer-1"></div>
-<div class="container" id="tempoContent">
-    <div class="row">
-        <div class="col-md-12 text-center fade-in">
-            <div id="calButtons">
+    <!-- <script src="./assets/js/calendarLoader.js"></script> -->
+    <script>
+        var url = "./assets/js/calendarLoader.js";
+        $.getScript(url);
+    </script>
 
-				<div class="spacer-0"></div>
-                <button class="btn daily">Daily</button>
-                <button class="btn weekly">Weekly</button>
-                <button class="btn monthly">Monthly</button>
+    <!-- ajax loader script -->
+    <!-- <script src="./assets/js/book/bookSeed.js"></script> -->
+    <script>
+        function submitToAPI(e) {
+            e.preventDefault();
+            var cusName = $('#cusName').val();
+            var cusPhone = $('#cusPhone').val();
+            var cusEmail = $('#cusEmail').val();
+            var cusDesc = $('#cusDesc').val();
+            var bookDate = "3/7/21";
+            var bookTime = '8:00am - 9:00am';
+            // alert('working');
+
+            var data = {
+                date: bookDate,
+                time: bookTime,
+                name: cusName,
+                phone: cusPhone,
+                email: cusEmail,
+                desc: cusDesc
+            };
+
+            $.ajax({
+                type: "POST",
+
+                url: "https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/s3-to-db-insert",
+                dataType: "json",
+                crossDomain: "true",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+
+                success: function() {
+                    // clear form and show a success message
+                    alert("Thank you for your feedback");
+                    document.getElementById("contact-form").reset();
+                    // location.reload();
+
+                    // close modal
+                    $('#sendBookingRequest').attr('data-dismiss', 'modal');
+                },
+                error: function() {
+                    // show an error message
+                    alert("UnSuccessfull");
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <!--  ======================= content body =======================  -->
+    <div class="spacer-1"></div>
+    <div class="container" id="tempoContent">
+        <div class="row">
+            <div class="col-md-12 text-center fade-in">
+                <div id="calButtons">
+
+                    <div class="spacer-0"></div>
+                    <!-- <button class="btn daily">Daily</button> -->
+                    <button class="btn weekly">Weekly</button>
+                    <!-- <button class="btn monthly">Monthly</button> -->
+                </div>
+
+                <!--popup modal-->
+                <div class="modal fade mb-5" tabindex="-1" role="dialog" id="calModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+                                <h4 class="modal-title">
+                                    Date: <span class="text-primary" id="modalDate">Tuesday</span> | Hour: <span class="text-primary" id="modalTime">9:00am-10:00am</span>
+                                </h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <form class="request-form">
+                                    <div class="form-row">
+
+                                        <div class="col-md-4 mb-3">
+                                            <label for="cusName">Full Name</label>
+                                            <input type="text" class="form-control is-invalid" id="cusName" placeholder="Full Name ... " required>
+                                            <!-- <code>Please enter more than 5 characters.</code>  -->
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="cusPhone">Phone Number</label>
+                                            <input type="text" class="form-control" id="cusPhone" placeholder="Phone Number ..." required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="cusEmail">Email</label>
+                                            <input type="email" class="form-control" id="cusEmail" placeholder="Email address ..." aria-describedby="inputGroupPrepend2" required>
+                                        </div>
+
+                                        <div class="col-md-12 mb-3">
+                                            <label for="cusEmail">Feedback (optional)</label>
+                                            <textarea class="form-control" id="cusDesc" placeholder="feedback and preferences"></textarea>
+                                        </div>
+
+                                        <div class="spacer-2"></div>
+
+                                        <input type="submit" id="sendBookingRequest" value="Send Request" class="btn btn-primary btn-block" onClick="submitToAPI(event)">
+
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /modal ends-->
+                <div class="calendarLoader card-on"></div>
             </div>
-
-            <!--popup modal-->
-        <div class="modal fade mb-5" tabindex="-1" role="dialog" id="calModal">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-            	<div class="modal-content">
-            		<div class="modal-header">
-            			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            				<span aria-hidden="true">&times;</span>
-            			</button>
-            			<h4 class="modal-title">
-            			    Date: <span class="text-primary" id="modalDate">Tuesday</span> | 
-            			    Hour: <span class="text-primary" id="modalTime">9:00am-10:00am</span>
-            			</h4>
-            		</div> 
-            
-            		<div class="modal-body">
-            			<form>
-            			    <div class="form-row">
-            					    
-                    			<div class="col-md-4 mb-3">
-                    				<label for="validationDefault01">Full Name</label>
-                    				<input type="text" class="form-control" id="cusName" placeholder="Full Name ... " required>
-                    			</div>
-                    			<div class="col-md-4 mb-3">
-                    				<label for="validationDefault02">Phone Number</label>
-                    				<input type="text" class="form-control" id="cusPhone" placeholder="Phone Number ..." required>
-                    			</div>
-                    			<div class="col-md-4 mb-3">
-                    				<label for="validationDefaultEmail">Email</label>
-                    				<div class="input-group">
-                    					<input type="email" class="form-control" id="cusEmail" placeholder="Email address ..." aria-describedby="inputGroupPrepend2" required>
-                    				</div>
-                    			</div>
-                    			
-                    			<div class="spacer-1"></div>
-
-            			        <input type="submit" id="sendBookingRequest" value="Send Request" class="btn btn-primary btn-block">
-                    			
-                			</div>
-            			</form>
-            		</div>
-            
-            		<div class="modal-footer">
-            			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            		</div>
-            
-            	</div>
-            </div>
-        </div><!-- /modal ends-->
-            <div class="calendarLoader card-on"></div>
         </div>
     </div>
-</div>
-<div class="spacer-2"></div>
-                
-</body></html>
+    <!-- <div class="spacer-2"></div> -->
+
+</body>
+
+</html>

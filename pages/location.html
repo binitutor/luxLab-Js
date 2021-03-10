@@ -16,10 +16,11 @@
         
         <div class="col-md-4 fade-in">
             <h1>Lux-Lab Hair Salon</h1>
-            <!-- <div id="street" class="card"></div> -->
+            
             <div class="card-on">
               <p>Our location:</p>
               <p>Historic District, 10370 Festival Ln, Manassas, VA 20109</p>
+              <p>(Salon Plaza)</p>
             </div>
         </div>
         
@@ -27,52 +28,6 @@
 </div> <!-- content body ends-->
 
 <div class="spacer-1"></div>
-
-<!--map-->
-<!--<script src="./assets/js/map.js"></script>-->
-        
-<script>
-    
-    // map
-    
-    $(function(){
-      const map = $('#map');
-      const street = $('#street');
-    
-      $(document).ready(function(){
-        map.show();
-        initMap();
-    
-        street.show();
-        initStreetView();
-      });
-    
-      // Initialize and add street view map
-      function initStreetView() {
-        // The location to load the street view at
-        const manassasMall = {lat: 38.7774855, lng: -77.5044267};
-        const streetDiv = document.getElementById('street');
-        const panorama = new google.maps.StreetViewPanorama(
-          streetDiv, {
-            position: manassasMall
-          });
-      }
-    
-      // Initialize and add the map
-      function initMap() {
-        // The location to load the map at
-        const manassasMall = {lat: 37.7575, lng: -122.4377};
-        // The map, centered at manassas mall
-        const map = new google.maps.Map(
-            document.getElementById('map'), {zoom: 12, center: manassasMall});
-        // The marker, positioned at manassas mall
-        const marker = new google.maps.Marker({position: manassasMall, map: map});
-      }
-    });
-</script>
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRl4AiInNxFpaQSXoCpam3f8-vhB1lIyU&callback=initMap&libraries=&v=weekly">
-        </script>
 
 </body></html>
                 
