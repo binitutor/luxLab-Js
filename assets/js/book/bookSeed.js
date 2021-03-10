@@ -1,5 +1,24 @@
 $(document).ready(function () {
 
+    /* 
+        loops through json for daily table
+    */
+    function json_Loop(jDATA, divID, specify) {
+        var str = '';
+        $.each(jDATA, function (key, value) {
+            if (value.crDate.includes(specify)) {
+                str += '<div class="col-md-3 card-on calendarForm">';
+                str += '<h5 class="tblDate">' + value.crDate + '</h5>';
+                str += '<h6 class="tblTime">' + value.crTime + '</h6>';
+                str += '<button class="btn btn-primary btn-block" data-toggle = "modal" data-target = "#calModal">Book</button>';
+                str += '</div>';
+            }
+        });
+
+        $(divID).html(str);
+    }
+
+
     /*
         this function updates bootstrap modal header section with selected date and time
         it receives two parameters: date & time
@@ -367,17 +386,85 @@ $(document).ready(function () {
         then it sends data to server
         to call this func: ajax_call_post(url, data);
     */
+    function submitToAPI(e) {
+        e.preventDefault();
+        var cusName = $('#cusName').val();
+        var cusPhone = $('#cusPhone').val();
+        var cusEmail = $('#cusEmail').val();
+        var cusDesc = $('#cusDesc').val();
+        var bookDate = "3/7/21";
+        var bookTime = '8:00am - 9:00am';
+        alert('working');
+
+        var data = {
+            date: bookDate,
+            time: bookTime,
+            name: cusName,
+            phone: cusPhone,
+            email: cusEmail,
+            desc: cusDesc
+        };
+
+        $.ajax({
+            type: "POST",
+
+            url: "https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/s3-to-db-insert",
+            dataType: "json",
+            crossDomain: "true",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+
+            success: function () {
+                // clear form and show a success message
+                alert("Thank you for your feedback");
+                document.getElementById("contact-form").reset();
+                location.reload();
+            },
+            error: function () {
+                // show an error message
+                alert("UnSuccessfull");
+            }
+
+        });
+    }
 
     function ajax_call_post(reqDate, reqTime) {
         // Popup Screen: on submit click, send booking request
         $('#sendBookingRequest').click(function (e) {
+            e.preventDefault();
+
             // fetch customer data from the form
             var cusName = $("#cusName").val();
             var cusPhone = $("#cusPhone").val();
             var cusEmail = $("#cusEmail").val();
+            // var desc = $("#cusDesc").val();
+
+            // validate inputs
+
+            var NameCheck = /[A-Za-z]{1}[A-Za-z]/;
+            if (!NameCheck.test(cusName)) {
+                alert("Name can not be less than 2 characters.");
+                return;
+            }
+            var PhoneCheck = /[0-9]{10}/;
+            if (!PhoneCheck.test(cusPhone)) {
+                alert("Please enter valid mobile number");
+                return;
+            }
+            if ($("#email-input").val() == "") {
+                alert("Please enter your email address");
+                return;
+            }
+
+            var EmailCheck = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
+            if (!EmailCheck.test(cusEmail)) {
+                alert("Please enter valid email address");
+                return;
+            }
+
 
             // url
-            var myURL = "https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/s3-to-db-insert";
+            // var myURL = "https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/s3-to-db-insert";
 
             // send data to database: POST
             var dataObj = {
@@ -385,7 +472,8 @@ $(document).ready(function () {
                 phone: cusPhone,
                 email: cusEmail,
                 date: reqDate,
-                time: reqTime
+                time: reqTime,
+                desc: cusDesc
             };
 
             // Get method URL: 
@@ -394,24 +482,30 @@ $(document).ready(function () {
             //https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/s3-to-db-insert
 
             // this calls for a function that makes ajax call
-            $.ajax({
-                type: "POST",
-                url: myURL,
-                dataType: "json",
-                crossDomain: "true",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(dataObj),
+            // $.ajax({
+            //     type: "POST",
+            //     url: "https://we4jv8puh7.execute-api.us-east-1.amazonaws.com/myPetStage/",
+            //     dataType: "json",
+            //     crossDomain: "true",
+            //     contentType: "application/json; charset=utf-8",
+            //     data: JSON.stringify(dataObj),
 
-                success: function () {
-                    // clear form and show a success message
-                    alert("Thank you for your feedback!");
-                },
-                error: function () {
-                    // show an error message
-                    alert("Request UnSuccessfull!!");
-                }
-            });
+            //     success: function () {
+            //         // clear form and show a success message
+            //         alert("Your Request is sent successfully!");
+            //         document.querySelector(".request-form").reset();
+            //         document.querySelector('#cusName').innerHTML = '';
+            //         document.querySelector('#cusPhone').innerHTML = '';
+            //         document.querySelector('#cusEmail').innerHTML = '';
+            //     },
+            //     error: function () {
+            //         // show an error message
+            //         alert("Request UnSuccessfull!!");
+            //     }
+            // });
 
+            // close modal
+            $('#sendBookingRequest').attr('data-dismiss', 'modal');
         });
     }
 
@@ -445,22 +539,22 @@ $(document).ready(function () {
             // });
 
             $.ajax(
-            {
-                url: myURL,
-                headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                crossDomain: true,
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    alert("Data retrieval successful!");
-                    console.log(data);
+                {
+                    url: myURL,
+                    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+                    crossDomain: true,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        alert("Data retrieval successful!");
+                        console.log(data);
 
-                    //converts json file to javascript object
-                    // var obj = JSON.parse(data);
-                    // add data to data table
-                    // $('#dataTable').html(obj);
-                }
-            });
+                        //converts json file to javascript object
+                        // var obj = JSON.parse(data);
+                        // add data to data table
+                        // $('#dataTable').html(obj);
+                    }
+                });
 
         });
     }
@@ -468,7 +562,7 @@ $(document).ready(function () {
     /* 
         this function produces an array of date data
         date_call[0] - date - current date: Sat Mar 06 2021 06:05:55 GMT-0500 (Eastern Standard Time)
-        date_call[1] - dateNum - current date num: 6
+        date_call[1] - dateNumWeek - current date num: 6, (0 - 6)
         date_call[2] - dateName - current date num: Saturday
         date_call[3] - calMonthNum - current month num: 2 (starts count from 0)
         date_call[4] - calMonthNumCorrected - adds 1 to month: 3
@@ -476,6 +570,8 @@ $(document).ready(function () {
         date_call[6] - theYear - adds 1 to month: 2021
         date_call[7] - weekdays - weedays array 
         date_call[8] - months - months array
+        date_call[9] - dateNumMonth - current date num: 15, (1-31)
+        date_call[10] - fullDayToday - // Thursday, March 4, 2021
 
         it receives one arguments: the array number
         then it returns the required date value
@@ -483,9 +579,10 @@ $(document).ready(function () {
     */
     function date_call(num) {
         var date = new Date(); //Sat Mar 06 2021 06:05:55 GMT-0500 (Eastern Standard Time)
-        var dateNum = date.getDay(); // 6
+        var dateNumWeek = date.getDay(); // 6, (0 - 6)
+        var dateNumMonth = date.getDate(); // 15, (1-31)
         var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        var dateName = weekdays[date.getDay()]; // Saturday 
+        var dateName = weekdays[date.getDay()]; // Saturday  
         var calMonthNum = date.getMonth(); // 2 (starts from 0)
         var calMonthNumCorrected = date.getMonth() + 1; // 3
         var months = [
@@ -494,11 +591,15 @@ $(document).ready(function () {
             "September", "October", "November", "December"];
         var calMonthName = months[date.getMonth()]; // March
         var theYear = date.getFullYear(); // 2021
+        var fullDayToday = dateName + ', ' 
+                + calMonthName + ' ' 
+                + dateNumMonth + ', '
+                + theYear; // Thursday, March 4, 2021
 
         var dateArr = [
-            date, dateNum, dateName, calMonthNum,
+            date, dateNumWeek, dateName, calMonthNum,
             calMonthNumCorrected, calMonthName, theYear,
-            weekdays, months
+            weekdays, months, dateNumMonth, fullDayToday
         ]; // holds date formats
 
         return dateArr[num];
@@ -612,11 +713,10 @@ $(document).ready(function () {
     });
 
 
-
+    // generates data for the weekly view
     // $(function () {
-    //     // MODAL and ajax call
-    //     MODAL_Ajax_Call_Loader();
-    // }); // saving data to db ends !!
+        
+    // });
 
 
 }); // docu.ready ends !!

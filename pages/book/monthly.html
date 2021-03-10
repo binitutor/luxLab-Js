@@ -156,10 +156,16 @@
         </div>
 
 		<!-- create calendar script -->
-        <script src="./assets/js/book/createMonthCal.js"></script>
+        <!-- <script src="./assets/js/book/createMonthCal.js"></script> -->
 
         <!-- bookSeed.js -->
-        <script src="./assets/js/book/bookSeed.js"></script>
+        <!-- <script src="./assets/js/book/bookSeed.js"></script> -->
 
+		<script>
+			var url_1 = "./assets/js/book/createMonthCal.js";
+			$.getScript(url_1);
+			var url_2 = "./assets/js/book/bookSeed.js";
+			$.getScript(url_2);
+		</script>
     </div>
 </body></html>
