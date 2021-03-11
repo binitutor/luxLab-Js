@@ -1,0 +1,53 @@
+<html><head></head><body>
+    <h1>Daily calendar view</h1>
+    <div class="row">
+        <!-- data generated from json -->
+        <div class="col-md-12">
+            <h4>Today</h4>
+            <div id="dateDivToday"></div>
+        </div>
+
+        <div class="spacer-2"></div>
+        <hr/>
+        
+        <div class="col-md-12">
+            <h4>Other days</h4>
+            <div id="dateDiv"></div>
+        </div>
+        
+        <!-- bookSeed.js -->
+        <!-- <script src="./assets/js/book/bookSeed.js"></script> -->
+        <script>
+            var url = "./assets/js/book/bookSeed.js";
+            $.getScript(url);
+        </script>
+    </div>
+    <div class="spacer"></div>
+
+    <div class="col-lg-4 fade-in card-on">
+        <h3 class="text-center">Fetch booking requests from database</h3>
+        <p class="text-danger">this is for testing data retrieval</p>
+        
+        <!-- <div id="dataTable"></div> -->
+        <div class="spacer"></div>
+        
+        <input type="submit" value="Fetch Created Data" id="#getBookingRequest" class="btn btn-primary btn-block">
+        <div class="spacer-1"></div>
+    </div>
+    
+    <div class="spacer"></div>
+</body></html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
