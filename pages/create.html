@@ -1,0 +1,536 @@
+<html>
+
+<head>
+
+    <script>
+        // alert messages and notifications
+        function alertBox(num, counter) {
+            //open modal: data-toggle = "modal" data-target = "#messageModal"
+            // adding data: $('#modalDate').html(reqDate); // dismiss: data-dismiss="modal"
+            var message = $('#message');
+            var Notif_Array = [
+                    '',
+                    'Fetch request failed!',
+                    'There are ' + counter + ' new booking request made for today.',
+                    'No more booking request for today.',
+                    'There are ' + counter + ' new booking request made for this week.',
+                    'No more booking request for this week.'
+                ]
+                // update message
+            message.html(Notif_Array[num]);
+
+            var msgTitle = '';
+            if ((num !== 1)) {
+                msgTitle = '<h4 class="text-success">Notification</h4>';
+
+            } else {
+                msgTitle = '<h4 class="text-danger">Warning!</h4>'
+            }
+            $('#modal-title').html(msgTitle);
+
+            // show message
+            $('#messageModal').modal('show');
+
+        }
+
+
+        // fetch all hours from db
+        $('#fetchHours').click(function(e) {
+            // var url = "https://3i71kk5ced.execute-api.us-east-1.amazonaws.com/GetRecordsTest/getdynamodbitems";
+            // var url_two = 'https://prototype1-0.s3.amazonaws.com/luxlab2.0/getRecordsFromDB+-+Copy.html';
+
+            $.ajax({
+                url: 'https://3i71kk5ced.execute-api.us-east-1.amazonaws.com/GetRecordsTest/getdynamodbitems',
+                type: "GET",
+
+                success: function(data) {
+                    var tr = ''; // row
+
+                    data.Items.forEach(function(Item) {
+                        tr += '<tr><td>' + Item.name.S + '</td>';
+                        tr += '<td>' + Item.phone.S + '</td>';
+                        tr += '<td>' + Item.email.S + '</td>';
+                        tr += '<td>' + Item.date.S + '</td>';
+                        tr += '<td>' + Item.time.S + '</td>';
+                        tr += '<td>' + Item.desc.S + '</td></tr>';
+                    });
+
+                    $('#createdHoursDb').html(tr); // update table
+                    // $('#createdHoursDb').append(tr); // update table
+                },
+                error: function() {
+                    // alert('fetch request failed!');
+                    alertBox(1, 0);
+                }
+            });
+
+
+
+        });
+
+        // fetch daily Hours 
+        $('#fetchDailyHours').click(function(e) {
+            var counter = 0;
+
+            var today = date_call(10); //Thursday, March 11, 2021
+            // alert(today)
+            $.ajax({
+                url: 'https://3i71kk5ced.execute-api.us-east-1.amazonaws.com/GetRecordsTest/getdynamodbitems',
+                type: "GET",
+
+                success: function(data) {
+                    var tr = ''; // row
+
+                    data.Items.forEach(function(Item) {
+
+                        if (Item.date.S === today) {
+                            tr += '<tr><td>' + Item.name.S + '</td>';
+                            tr += '<td>' + Item.phone.S + '</td>';
+                            tr += '<td>' + Item.email.S + '</td>';
+                            tr += '<td>' + Item.date.S + '</td>';
+                            tr += '<td>' + Item.time.S + '</td>';
+                            tr += '<td>' + Item.desc.S + '</td></tr>';
+
+                            counter++;
+                        }
+
+                    });
+
+                    if (counter > 0) {
+                        // alert('There are ' + counter + ' new booking request made for today.');
+                        // today = 1;
+                        alertBox(2, counter);
+                    } else {
+                        // alert('No more booking request for today.');
+                        alertBox(3, counter);
+                    }
+
+                    $('#createdHoursDb').html(tr); // update table
+                    // $('#createdHoursDb').append(tr); // update table
+                },
+                error: function() {
+                    // alert('fetch request failed!');
+                    alertBox(1, counter);
+                }
+            });
+
+        });
+
+        function first_last_Date_Objects() {
+            var thisWeekArray = new Array();
+
+            var today = date_call(10); //Thursday, March 11, 2021
+            var todayNum = date_call(1); // 6, (0 - 6)
+            var todayNumMonth = date_call(9); // 17, (1 - 31)
+            var todayYear = date_call(6); // 2021
+            var todayMonth = date_call(3); // 02 (0 - 11)
+
+            // always sunday full format date
+            var firstDay, secondDay, thirdDay, fourthDay, fifthDay, sixthDay, seventhDay;
+
+            if (todayNum == 0) { // sunday 
+                firstDay = new Date(todayYear, todayMonth, todayNumMonth);
+                secondDay = new Date(todayYear, todayMonth, todayNumMonth + 1);
+                thirdDay = new Date(todayYear, todayMonth, todayNumMonth + 2);
+                fourthDay = new Date(todayYear, todayMonth, todayNumMonth + 3);
+                fifthDay = new Date(todayYear, todayMonth, todayNumMonth + 4);
+                sixthDay = new Date(todayYear, todayMonth, todayNumMonth + 5);
+                seventhDay = new Date(todayYear, todayMonth, todayNumMonth + 6);
+
+                thisWeekArray = [firstDay, secondDay, thirdDay, fourthDay, fifthDay, sixthDay, seventhDay];
+            } else if (todayNum == 1) { // Monday
+                firstDay = new Date(todayYear, todayMonth, todayNumMonth - 1);
+                secondDay = new Date(todayYear, todayMonth, todayNumMonth);
+                thirdDay = new Date(todayYear, todayMonth, todayNumMonth + 1);
+                fourthDay = new Date(todayYear, todayMonth, todayNumMonth + 2);
+                fifthDay = new Date(todayYear, todayMonth, todayNumMonth + 3);
+                sixthDay = new Date(todayYear, todayMonth, todayNumMonth + 4);
+                seventhDay = new Date(todayYear, todayMonth, todayNumMonth + 5);
+
+                thisWeekArray = [firstDay, secondDay, thirdDay, fourthDay, fifthDay, sixthDay, seventhDay];
+            } else if (todayNum == 2) { // Tuesday
+                firstDay = new Date(todayYear, todayMonth, todayNumMonth - 2);
+                secondDay = new Date(todayYear, todayMonth, todayNumMonth - 1);
+                thirdDay = new Date(todayYear, todayMonth, todayNumMonth);
+                fourthDay = new Date(todayYear, todayMonth, todayNumMonth + 1);
+                fifthDay = new Date(todayYear, todayMonth, todayNumMonth + 2);
+                sixthDay = new Date(todayYear, todayMonth, todayNumMonth + 3);
+                seventhDay = new Date(todayYear, todayMonth, todayNumMonth + 4);
+
+                thisWeekArray = [firstDay, secondDay, thirdDay, fourthDay, fifthDay, sixthDay, seventhDay];
+            } else if (todayNum == 3) { // Wednesday
+                firstDay = new Date(todayYear, todayMonth, todayNumMonth - 3);
+                secondDay = new Date(todayYear, todayMonth, todayNumMonth - 2);
+                thirdDay = new Date(todayYear, todayMonth, todayNumMonth - 1);
+                fourthDay = new Date(todayYear, todayMonth, todayNumMonth);
+                fifthDay = new Date(todayYear, todayMonth, todayNumMonth + 1);
+                sixthDay = new Date(todayYear, todayMonth, todayNumMonth + 2);
+                seventhDay = new Date(todayYear, todayMonth, todayNumMonth + 3);
+
+                thisWeekArray = [firstDay, secondDay, thirdDay, fourthDay, fifthDay, sixthDay, seventhDay];
+            } else if (todayNum == 4) { // Thursday
+                firstDay = new Date(todayYear, todayMonth, todayNumMonth - 4);
+                secondDay = new Date(todayYear, todayMonth, todayNumMonth - 3);
+                thirdDay = new Date(todayYear, todayMonth, todayNumMonth - 2);
+                fourthDay = new Date(todayYear, todayMonth, todayNumMonth - 1);
+                fifthDay = new Date(todayYear, todayMonth, todayNumMonth);
+                sixthDay = new Date(todayYear, todayMonth, todayNumMonth + 1);
+                seventhDay = new Date(todayYear, todayMonth, todayNumMonth + 2);
+
+                thisWeekArray = [firstDay, secondDay, thirdDay, fourthDay, fifthDay, sixthDay, seventhDay];
+            } else if (todayNum == 5) { // Friday
+                firstDay = new Date(todayYear, todayMonth, todayNumMonth - 5);
+                secondDay = new Date(todayYear, todayMonth, todayNumMonth - 4);
+                thirdDay = new Date(todayYear, todayMonth, todayNumMonth - 3);
+                fourthDay = new Date(todayYear, todayMonth, todayNumMonth - 2);
+                fifthDay = new Date(todayYear, todayMonth, todayNumMonth - 1);
+                sixthDay = new Date(todayYear, todayMonth, todayNumMonth);
+                seventhDay = new Date(todayYear, todayMonth, todayNumMonth + 1);
+
+                thisWeekArray = [firstDay, secondDay, thirdDay, fourthDay, fifthDay, sixthDay, seventhDay];
+            } else if (todayNum == 6) { // Saturday
+                firstDay = new Date(todayYear, todayMonth, todayNumMonth - 6);
+                secondDay = new Date(todayYear, todayMonth, todayNumMonth - 5);
+                thirdDay = new Date(todayYear, todayMonth, todayNumMonth - 4);
+                fourthDay = new Date(todayYear, todayMonth, todayNumMonth - 3);
+                fifthDay = new Date(todayYear, todayMonth, todayNumMonth - 2);
+                sixthDay = new Date(todayYear, todayMonth, todayNumMonth - 1);
+                seventhDay = new Date(todayYear, todayMonth, todayNumMonth);
+
+                thisWeekArray = [firstDay, secondDay, thirdDay, fourthDay, fifthDay, sixthDay, seventhDay];
+            }
+
+            return thisWeekArray;
+        }
+
+        function weekDates(thisWeekDateObj) {
+            var thisWeekDate;
+            var str = '';
+            var newDay, newDate, newDateName, newMonthNum, newMonthName, newYear;
+
+            // find full format of first day of the week
+            newDay = thisWeekDateObj.getDay(); // 0
+            newDateName = date_call(7)[newDay]; // Sunday
+            str = newDateName + ', '; // 'Sunday, '
+            newMonthNum = thisWeekDateObj.getMonth(); // 2
+            newMonthName = date_call(8)[newMonthNum]; // March
+            str += newMonthName + ' '; // 'Sunday, March '
+            newDate = thisWeekDateObj.getDate(); // 7
+            str += newDate + ', '; // 'Sunday, March 7, '
+            newYear = thisWeekDateObj.getFullYear(); // 2021
+            str += newYear; // 'Sunday, March 7, 2021'
+
+            thisWeekDate = str; // Thursday, March 11, 2021
+
+            return thisWeekDate;
+        }
+
+        // fetch weekly hours
+        $('#fetchWeeklyHours').click(function(e) {
+            var counter = 0;
+
+            var thisWeek = first_last_Date_Objects(); // saves array of date objects
+
+            var thisWeekDatesArray = new Array(); // saves array of dates : Thursday, March 11, 2021
+
+            for (var i = 0; i < thisWeek.length; i++) {
+                thisWeekDatesArray[i] = weekDates(thisWeek[i]);
+            }
+
+            $.ajax({
+                url: 'https://3i71kk5ced.execute-api.us-east-1.amazonaws.com/GetRecordsTest/getdynamodbitems',
+                type: "GET",
+
+                success: function(data) {
+                    var tr = ''; // row
+
+                    data.Items.forEach(function(Item) {
+
+                        if (Item.date.S === thisWeekDatesArray[0]) {
+                            tr += '<tr><td>' + Item.name.S + '</td>';
+                            tr += '<td>' + Item.phone.S + '</td>';
+                            tr += '<td>' + Item.email.S + '</td>';
+                            tr += '<td>' + Item.date.S + '</td>';
+                            tr += '<td>' + Item.time.S + '</td>';
+                            tr += '<td>' + Item.desc.S + '</td></tr>';
+
+                            counter++;
+                        }
+                        if (Item.date.S === thisWeekDatesArray[1]) {
+                            tr += '<tr><td>' + Item.name.S + '</td>';
+                            tr += '<td>' + Item.phone.S + '</td>';
+                            tr += '<td>' + Item.email.S + '</td>';
+                            tr += '<td>' + Item.date.S + '</td>';
+                            tr += '<td>' + Item.time.S + '</td>';
+                            tr += '<td>' + Item.desc.S + '</td></tr>';
+
+                            counter++;
+                        }
+                        if (Item.date.S === thisWeekDatesArray[2]) {
+                            tr += '<tr><td>' + Item.name.S + '</td>';
+                            tr += '<td>' + Item.phone.S + '</td>';
+                            tr += '<td>' + Item.email.S + '</td>';
+                            tr += '<td>' + Item.date.S + '</td>';
+                            tr += '<td>' + Item.time.S + '</td>';
+                            tr += '<td>' + Item.desc.S + '</td></tr>';
+
+                            counter++;
+                        }
+                        if (Item.date.S === thisWeekDatesArray[3]) {
+                            tr += '<tr><td>' + Item.name.S + '</td>';
+                            tr += '<td>' + Item.phone.S + '</td>';
+                            tr += '<td>' + Item.email.S + '</td>';
+                            tr += '<td>' + Item.date.S + '</td>';
+                            tr += '<td>' + Item.time.S + '</td>';
+                            tr += '<td>' + Item.desc.S + '</td></tr>';
+
+                            counter++;
+                        }
+                        if (Item.date.S === thisWeekDatesArray[4]) {
+                            tr += '<tr><td>' + Item.name.S + '</td>';
+                            tr += '<td>' + Item.phone.S + '</td>';
+                            tr += '<td>' + Item.email.S + '</td>';
+                            tr += '<td>' + Item.date.S + '</td>';
+                            tr += '<td>' + Item.time.S + '</td>';
+                            tr += '<td>' + Item.desc.S + '</td></tr>';
+
+                            counter++;
+                        }
+                        if (Item.date.S === thisWeekDatesArray[5]) {
+                            tr += '<tr><td>' + Item.name.S + '</td>';
+                            tr += '<td>' + Item.phone.S + '</td>';
+                            tr += '<td>' + Item.email.S + '</td>';
+                            tr += '<td>' + Item.date.S + '</td>';
+                            tr += '<td>' + Item.time.S + '</td>';
+                            tr += '<td>' + Item.desc.S + '</td></tr>';
+
+                            counter++;
+                        }
+                        if (Item.date.S === thisWeekDatesArray[6]) {
+                            tr += '<tr><td>' + Item.name.S + '</td>';
+                            tr += '<td>' + Item.phone.S + '</td>';
+                            tr += '<td>' + Item.email.S + '</td>';
+                            tr += '<td>' + Item.date.S + '</td>';
+                            tr += '<td>' + Item.time.S + '</td>';
+                            tr += '<td>' + Item.desc.S + '</td></tr>';
+
+                            counter++;
+                        }
+
+                    });
+
+                    if (counter > 0) {
+                        // alert('There are ' + counter + ' new booking request made for this week.');
+                        alertBox(4, counter);
+                    } else {
+                        // alert('No more booking request for this week.');
+                        alertBox(5, counter);
+                    }
+
+                    $('#createdHoursDb').html(tr); // update table
+                    // $('#createdHoursDb').append(tr); // update table
+                },
+                error: function() {
+                    // alert('fetch request failed!');
+                    alertBox(1, counter);
+                }
+            });
+
+        });
+
+        /* 
+        this function produces an array of date data
+        date_call[0] - date - current date: Sat Mar 06 2021 06:05:55 GMT-0500 (Eastern Standard Time)
+        date_call[1] - dateNumWeek - current date num: 6, (0 - 6)
+        date_call[2] - dateName - current date num: Saturday
+        date_call[3] - calMonthNum - current month num: 2 (starts count from 0)
+        date_call[4] - calMonthNumCorrected - adds 1 to month: 3
+        date_call[5] - calMonthName - current month name: March
+        date_call[6] - theYear - adds 1 to month: 2021
+        date_call[7] - weekdays - weedays array 
+        date_call[8] - months - months array
+        date_call[9] - dateNumMonth - current date num: 15, (1-31)
+        date_call[10] - fullDayToday - // Thursday, March 4, 2021
+
+        it receives one arguments: the array number
+        then it returns the required date value
+        to call this func: var today = date_call(n);
+    */
+        function date_call(num) {
+            var date = new Date(); //Sat Mar 06 2021 06:05:55 GMT-0500 (Eastern Standard Time)
+            var dateNumWeek = date.getDay(); // 6, (0 - 6)
+            var dateNumMonth = date.getDate(); // 15, (1-31)
+            var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            var dateName = weekdays[date.getDay()]; // Saturday  
+            var calMonthNum = date.getMonth(); // 2 (starts from 0)
+            var calMonthNumCorrected = date.getMonth() + 1; // 3
+            var months = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+            var calMonthName = months[date.getMonth()]; // March
+            var theYear = date.getFullYear(); // 2021
+            var fullDayToday = dateName + ', ' +
+                calMonthName + ' ' +
+                dateNumMonth + ', ' +
+                theYear; // Thursday, March 4, 2021
+
+            var dateArr = [
+                date, dateNumWeek, dateName, calMonthNum,
+                calMonthNumCorrected, calMonthName, theYear,
+                weekdays, months, dateNumMonth, fullDayToday
+            ]; // holds date formats
+
+            return dateArr[num];
+        }
+    </script>
+
+</head>
+
+<body>
+    <!--  ======================= content body =======================  -->
+    <div class="spacer-1"></div>
+    <div class="container" id="tempoContent">
+        <div class="row">
+            <h1>Create</h1>
+
+            <div class="col-lg-8 fade-in card-on">
+                <!--<div class="row"><div class="col-lg-12"></div></div>-->
+                <!-- create booking -->
+                <h3 class="display-5 text-center">Create Booking</h3>
+                <p>Enter date and time open for booking.</p>
+                <p class="text-danger">This is for Lux Lab hairsalon staff.</p>
+
+                <form id="bookingCreationForm">
+                    <div class="form-group">
+                        <label for="date">Pick a Date</label>
+                        <input type="date" id="crDate" name="crDate" class="form-control" placeholder="Select a date" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time">Pick a Time</label>
+                        <select name="cars" type="text" id="bookTime" class="form-control">
+                            <option value="">Select a time</option>
+                            <option value="12:00am">12:00am</option>
+                            <option value="1:00am">1:00am</option>
+                            <option value="2:00am">2:00am</option>
+                            <option value="3:00am">3:00am</option>
+                            <option value="4:00am">4:00am</option>
+                            <option value="5:00am">5:00am</option>
+                            <option value="6:00am">6:00am</option>
+                            <option value="7:00am">7:00am</option>
+                            <option value="8:00am">8:00am</option>
+                            <option value="9:00am">9:00am</option>
+                            <option value="10:00am">10:00am</option>
+                            <option value="11:00am">11:00am</option>
+                            <option value="12:00pm">12:00pm</option>
+                            <option value="1:00pm">1:00pm</option>
+                            <option value="2:00pm">2:00pm</option>
+                            <option value="3:00pm">3:00pm</option>
+                            <option value="4:00pm">4:00pm</option>
+                            <option value="5:00pm">5:00pm</option>
+                            <option value="6:00pm">6:00pm</option>
+                            <option value="7:00pm">7:00pm</option>
+                            <option value="8:00pm">8:00pm</option>
+                            <option value="9:00pm">9:00pm</option>
+                            <option value="10:00pm">10:00pm</option>
+                            <option value="11:00pm">11:00pm</option>
+                        </select>
+                    </div>
+
+                    <input type="submit" value="Create Booking" id="saveRecord" class="btn btn-primary btn-block">
+                </form>
+
+                <!-- /create booking -->
+            </div>
+            <!-- /col 1 -->
+
+            <div class="col-lg-4 fade-in card-on">
+                <h3 class="text-center">Notification</h3>
+                <p class="text-danger">Date and time created now.</p>
+            </div>
+            <!-- /col 2 -->
+
+            <div class="col-lg-12 fade-in card-on">
+                <!-- created list -->
+                <h3 class="text-center">Fetch Booking requests from database</h3>
+
+                <div class="col-lg-12">
+                    <div class="col-lg-4">
+                        <input type="submit" value="Fetch Today's Requests" id="fetchDailyHours" class="btn btn-primary btn-block">
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="submit" value="Fetch Weekly Requests" id="fetchWeeklyHours" class="btn btn-primary btn-block">
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="submit" value="Fetch All Requests" id="fetchHours" class="btn btn-primary btn-block">
+                    </div>
+                </div>
+
+                <div class="spacer-1"></div>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Requested Date</th>
+                            <th>Requested Time</th>
+                            <th>Customer Feedback</th>
+                        </tr>
+                    </thead>
+                    <tbody id="createdHoursDb"></tbody>
+                </table>
+
+                <div class="spacer"></div>
+                <!-- /created list -->
+
+                <!-- modal 2 -->
+                <div class="modal fade mb-5" tabindex="-1" role="dialog" id="messageModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+                                <h4 class="modal-title" id="modal-title">Notification</h4>
+
+                            </div>
+
+                            <div class="modal-body">
+                                <form class="request-form">
+                                    <div class="form-row">
+
+                                        <div id="message"></div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /modal 2 -->
+
+                <div class="spacer-1"></div>
+            </div>
+            <!-- /col 3 -->
+        </div>
+    </div>
+    <!-- content body ends-->
+
+    <div class="spacer-1"></div>
+
+    <!-- slider script -->
+    <!--<script src="./assets/js/create/create.js"></script>-->
+
+</body>
+
+</html>

@@ -1,0 +1,171 @@
+<html><head>
+    <style>
+        /* ================ custom css for calendar ============= */
+        .wrapper {
+		  margin: 15px auto;
+		  max-width: 1100px;
+		}
+
+		.container-calendar {
+		  background: #ffffff;
+		  padding: 15px;
+		  max-width: 475px;
+		  margin: 0 auto;
+		  overflow: auto;
+		}
+        
+        .button-container-calendar button {
+		  cursor: pointer;
+		  display: inline-block;
+		  zoom: 1;
+		  background: #00a2b7;
+		  color: #fff;
+		  border: 1px solid #0aa2b5;
+		  border-radius: 4px;
+		  padding: 5px 10px;
+		}
+
+        .table-calendar {
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+
+		.table-calendar td, .table-calendar th {
+		  padding: 5px;
+		  border: 1px solid #e2e2e2;
+		  text-align: center;
+		  vertical-align: top;
+		}
+
+		.date-picker.selected {
+		  font-weight: bold;
+		  outline: 1px dashed #00BCD4;
+		}
+
+		.date-picker.selected span {
+		  border-bottom: 2px solid currentColor;
+		}
+
+		/* sunday */
+		.date-picker:nth-child(1) {
+		color: red;
+		}
+
+		/* friday */
+		.date-picker:nth-child(6) {
+		color: green;
+		}
+
+		#monthAndYear {
+		  text-align: center;
+		  margin-top: 0;
+		}
+
+		.button-container-calendar {
+		  position: relative;
+		  margin-bottom: 1em;
+		  overflow: hidden;
+		  clear: both;
+		}
+
+		#previous {
+		  float: left;
+		}
+
+		#next {
+		  float: right;
+		}
+
+		.footer-container-calendar {
+		  margin-top: 1em;
+		  border-top: 1px solid #dadada;
+		  padding: 10px 0;
+		}
+
+		.footer-container-calendar select {
+		  cursor: pointer;
+		  display: inline-block;
+		  zoom: 1;
+		  background: #ffffff;
+		  color: #585858;
+		  border: 1px solid #bfc5c5;
+		  border-radius: 3px;
+		  padding: 5px 1em;
+		}
+
+        table, tr, th, td {
+            border: 1px solid #e3e3e3;
+            padding: 10px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        table tr td:hover {
+            background: #222;
+            color: #f4f3f2;
+            cursor: pointer;
+        }
+    </style>
+</head><body>
+    <h1>Monthly calendar view</h1>
+    <div class="row">
+        <div class="col-md-12">
+            
+            <!-- calendar -->
+            <div class="wrapper">
+                <div class="container-calendar">
+                    <h3 id="monthAndYear"></h3>
+                    <div class="button-container-calendar">
+                        <button id="previous" onclick="previous()">&#8249;</button>
+                        <button id="next" onclick="next()">&#8250;</button>
+                    </div>
+        
+                    <table class="table-calendar table table-striped text-center table-hover table-responsive-lg" id="calendarForm" data-lang="en">
+                        <thead id="thead-month"></thead>
+                        <tbody id="calendar-body"></tbody>
+                    </table>
+        
+                    <div class="footer-container-calendar">
+                        <label for="month">Jump To: </label>
+                        <select id="month" onchange="jump()">
+                            <option value=0>Jan</option>
+                            <option value=1>Feb</option>
+                            <option value=2>Mar</option>
+                            <option value=3>Apr</option>
+                            <option value=4>May</option>
+                            <option value=5>Jun</option>
+                            <option value=6>Jul</option>
+                            <option value=7>Aug</option>
+                            <option value=8>Sep</option>
+                            <option value=9>Oct</option>
+                            <option value=10>Nov</option>
+                            <option value=11>Dec</option>
+                        </select>
+        
+                        <select id="year" onchange="jump()"></select>       
+                    </div>
+                </div>
+            </div>
+            <!-- calendar ends -->
+
+            <div class="spacer-0"></div>
+
+            <div id="monthDiv">Select a date to begin.</div>
+
+            <div class="spacer-1"></div>
+            
+        </div>
+
+		<!-- create calendar script -->
+        <!-- <script src="./assets/js/book/createMonthCal.js"></script> -->
+
+        <!-- bookSeed.js -->
+        <!-- <script src="./assets/js/book/bookSeed.js"></script> -->
+
+		<script>
+			var url_1 = "./assets/js/book/createMonthCal.js";
+			$.getScript(url_1);
+			var url_2 = "./assets/js/book/bookSeed.js";
+			$.getScript(url_2);
+		</script>
+    </div>
+</body></html>
