@@ -1,0 +1,231 @@
+<html>
+
+<head>
+    <!-- ajax loader script -->
+    <!-- <script src="./assets/js/calendarLoader.js"></script> -->
+    <script>
+        var url = "./assets/js/calendarLoader.js";
+        $.getScript(url);
+    </script>
+
+    <!-- ajax loader script -->
+    <!-- <script src="./assets/js/book/bookSeed.js"></script> -->
+    <script>
+        // alert messages and notifications
+        function alertBox(num) {
+            //open modal: data-toggle = "modal" data-target = "#messageModal"
+            // adding data: $('#modalDate').html(reqDate); // dismiss: data-dismiss="modal"
+            var message = $('#message');
+            var Notif_Array = [
+                    'Thank you for your feedback!',
+                    'UnSuccessfull',
+                    'Your name cannot be shorter that 2 characters',
+                    'Please enter a valid phone number',
+                    'Please enter your email address',
+                    'Please enter a valid email address',
+                    'All input fields must be filled.'
+                ]
+                // update message
+            message.html(Notif_Array[num]);
+
+            var msgTitle = '';
+            if ((num == 0) || (num == 1)) {
+                msgTitle = '<h4 class="text-primary">Notification</h4>';
+
+            } else {
+                msgTitle = '<h4 class="text-danger">Warning!</h4>'
+            }
+            $('#modal-title').html(msgTitle);
+
+            // show message
+            $('#messageModal').modal('show');
+
+        }
+
+        function submitToAPI(e) {
+            e.preventDefault();
+            var cusName = $('#cusName').val();
+            var cusPhone = $('#cusPhone').val();
+            var cusEmail = $('#cusEmail').val();
+            var cusDesc = $('#cusDesc').val();
+            var bookDate = $('#modalDate').text();
+            var bookTime = $('#modalTime').text();
+
+            // data validation
+            if (cusName == "" || cusPhone == "" || cusEmail == "") {
+                // alert("Please enter your email address");
+                alertBox(6);
+                return;
+            }
+
+            var NameCheck = /[A-Za-z]{1}[A-Za-z]/;
+            if (!NameCheck.test(cusName)) {
+                // alert("Your name cannot be shorter that 2 characters");
+                alertBox(2);
+                return;
+            }
+            var MobileCheck = /[0-9]{10}/;
+            if (!MobileCheck.test(cusPhone)) {
+                // alert("Please enter a valid phone number");
+                alertBox(3);
+                return;
+            }
+            if (cusEmail == "") {
+                // alert("Please enter your email address");
+                alertBox(4);
+                return;
+            }
+
+            var EmailCheck = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
+            if (!EmailCheck.test(cusEmail)) {
+                // alert("Please enter a valid email address");
+                alertBox(5);
+                return;
+            }
+
+            var data = {
+                date: bookDate,
+                time: bookTime,
+                name: cusName,
+                phone: cusPhone,
+                email: cusEmail,
+                desc: cusDesc
+            };
+
+            $.ajax({
+                type: "POST",
+
+                url: "https://kdokvb9mrf.execute-api.us-east-1.amazonaws.com/luxlab1-0/s3-to-db-insert",
+                dataType: "json",
+                crossDomain: "true",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+
+                success: function() {
+                    // open notifiaton modal & show a success message
+                    // alert("Thank you for your feedback");
+                    alertBox(0);
+
+                    document.getElementById("contact-form").reset();
+                    // location.reload();
+
+                    // close modal
+                    $('#sendBookingRequest').attr('data-dismiss', 'modal');
+                },
+                error: function() {
+                    // show an error message
+                    alert("UnSuccessfull");
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <!--  ======================= content body =======================  -->
+    <div class="spacer-1"></div>
+    <div class="container" id="tempoContent">
+        <div class="row">
+            <div class="col-md-12 text-center fade-in">
+                <div id="calButtons">
+
+                    <div class="spacer-0"></div>
+                    <button class="btn daily">Daily</button>
+                    <!-- <button class="btn weekly">Weekly</button> -->
+                    <!-- <button class="btn monthly">Monthly</button> -->
+                </div>
+
+                <!--popup modal-->
+                <div class="modal fade mb-5" tabindex="-1" role="dialog" id="calModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+                                <h4 class="modal-title">
+                                    Date: <span class="text-primary" id="modalDate">Tuesday</span> | Hour: <span class="text-primary" id="modalTime">9:00am-10:00am</span>
+                                </h4>
+                            </div>
+                            <!-- modal 1 -->
+                            <div class="modal-body">
+                                <form class="request-form">
+                                    <div class="form-row">
+
+                                        <div class="col-md-4 mb-3">
+                                            <label for="cusName">Full Name</label>
+                                            <input type="text" class="form-control is-invalid" id="cusName" placeholder="Full Name ... " required>
+                                            <!-- <code>Please enter more than 5 characters.</code>  -->
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="cusPhone">Phone Number</label>
+                                            <input type="text" class="form-control" id="cusPhone" placeholder="Phone Number ..." required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="cusEmail">Email</label>
+                                            <input type="email" class="form-control" id="cusEmail" placeholder="Email address ..." aria-describedby="inputGroupPrepend2" required>
+                                        </div>
+
+                                        <div class="col-md-12 mb-3">
+                                            <label for="cusEmail">Feedback (optional)</label>
+                                            <textarea class="form-control" id="cusDesc" placeholder="feedback and preferences"></textarea>
+                                        </div>
+
+                                        <div class="spacer-2"></div>
+
+                                        <input type="submit" id="sendBookingRequest" value="Send Request" class="btn btn-primary btn-block" onClick="submitToAPI(event)">
+
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /modal ends-->
+
+                <!-- modal 2 -->
+                <div class="modal fade mb-5" tabindex="-1" role="dialog" id="messageModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+                                <h4 class="modal-title" id="modal-title">Notification</h4>
+
+                            </div>
+
+                            <div class="modal-body">
+                                <form class="request-form">
+                                    <div class="form-row">
+
+                                        <div id="message"></div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /modal 2 -->
+
+                <div class="calendarLoader card-on"></div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="spacer-2"></div> -->
+
+</body>
+
+</html>

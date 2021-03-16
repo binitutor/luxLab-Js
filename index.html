@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lux Lab | Appointment Booking</title>
+
+    <!--  Bootstrap css CDN  -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> -->
+
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!--  Bootstrap min CDN -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!--  font awesome icons  -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+
+    <!--  custom css file  -->
+    <link rel="stylesheet" type="text/css" href="./assets/css/stylesheet.css">
+
+    <!-- slider script -->
+    <!--<script src="./assets/js/animateContent.js"></script>-->
+
+    <!-- login Okta script -->
+    <script src="https://global.oktacdn.com/okta-signin-widget/4.3.0/js/okta-sign-in.min.js" type="text/javascript"></script>
+    <!-- <link href="https://global.oktacdn.com/okta-signin-widget/4.3.0/css/okta-sign-in.min.css" type="text/css" rel="stylesheet" /> -->
+
+    <!-- ajax loader script -->
+    <script src="./assets/js/loader.js"></script>
+
+    <!-- favicons -->
+    <link rel="icon" type="image/png" href="./assets/img/favicon/favicon.png" />
+    <link rel='shortcut icon' type='image/x-icon' href='./assets/img/favicon/favicon.ico' />
+
+    <link rel="shortcut icon" href="./assets/img/favicon/favicon.ico">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="./assets/img/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="196x196" href="./assets/img/favicon/favicon-192.png">
+    <link rel="icon" type="image/png" sizes="160x160" href="./assets/img/favicon/favicon-160.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="./assets/img/favicon/favicon-96.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="./assets/img/favicon/favicon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon/favicon-16.png">
+    <link rel="apple-touch-icon" href="./assets/img/favicon/favicon-57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./assets/img/favicon/favicon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./assets/img/favicon/favicon-72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./assets/img/favicon/favicon-144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./assets/img/favicon/favicon-60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./assets/img/favicon/favicon-120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/favicon/favicon-76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./assets/img/favicon/favicon-152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/favicon/favicon-180.png">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="./assets/img/favicon/favicon-144.png">
+    <meta name="msapplication-config" content="./assets/img/favicon/browserconfig.xml">
+    <!-- ****** faviconit.com favicons ****** -->
+    <script>
+        // $(document).ready(function() {
+        //     //Make the DIV element draggagle:
+        //     dragElement(document.getElementById("draggableBtn"));
+        // });
+
+
+        function admin_login_modal(e) {
+            // show message
+            $('#loginModal').modal('show');
+        }
+
+        // calls for login 
+        function admin_login(e) {
+            //
+            alert('here')
+        }
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <!--  ======================= sidebar =======================  -->
+        <div id="sidebar-wrapper">
+            <!--  =================== logo & social =======================  -->
+            <div class="container-fluid" id="sidebar-header">
+                <div class="row">
+
+                    <div class="spacer-1"></div>
+
+                    <div class="col-xs-4 text-center">
+                        <a href="index.html">
+                            <img src="./assets/img/logoLuxLab.png" alt="Logo" class="profilePic">
+                        </a>
+                    </div>
+                    <div>
+                        <div class="col-lg-12 text-center">
+                            <a href="index.html">
+                                <h3>Lux Lab <br>Hair Salon</h3>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <div class="social text-center">
+                            <h5 class="text-uppercase">Social</h5>
+                            <a href="https://www.facebook.com/Luxlab13" target="_blank" class="social-icons"><i class="fab fa-facebook"></i></a>
+                            <a href="https://www.instagram.com/Luxlab13" target="_blank" class="social-icons"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--logo & social ends-->
+
+            <ul class="sidebar-nav">
+                <li id="book"><a href="#"><i class="fa fa-user-clock"></i> Open Hours</a></li>
+                <li id="about"><a href="#"><i class="fa fa-address-card"></i> About Us</a></li>
+                <li id="location"><a href="#"><i class="fa fa-location-arrow"></i> Location</a></li>
+                <li id="contact"><a href="#"><i class="fa fa-file-signature"></i> Contact Us</a></li>
+                <!-- <li id="create"><a href="#"><i class="fa fa-book"></i> Create Booking</a></li> -->
+                <!-- <li id="decide"><a href="#"><i class="fa fa-table"></i> Decision Table</a></li> -->
+            </ul>
+
+            <div class="col-lg-12">
+                <a onClick="admin_login_modal(event)" class="text-primary adminLogin">Admin Login</a>
+            </div>
+            <!-- <div class="col-lg-12">
+                <a href="https://luxlabadmin.auth.us-east-2.amazoncognito.com/login?response_type=token&client_id=6u71nc9l8q2d7ljc97u02k0d0n&redirect_uri=https://prototype1-0.s3.amazonaws.com/luxlab4.0/index.html" class="text-primary adminLogin">Admin Login</a>
+            </div> -->
+
+
+        </div>
+        <!--sidebar ends-->
+
+        <!--  ======================= sidebar hidden =======================  -->
+        <div id="sidebar-hidden">
+            <ul class="sidebar-nav">
+                <a href="index.html">
+                    <img src="./assets/img/logoLuxLab.png" alt="Logo" class="profilePic">
+                </a>
+                <li class="book-min"><a href="#"><i class="fa fa-user-clock"></i></a></li>
+                <li id="about-min"><a href="#"><i class="fa fa-address-card"></i></a></li>
+                <li id="location-min"><a href="#"><i class="fa fa-location-arrow"></i></a></li>
+                <li id="contact-min"><a href="#"><i class="fa fa-file-signature"></i></a></li>
+                <!-- <li id="create-min"><a href="#"><i class="fa fa-book"></i></a></li> -->
+                <!-- <li id="decide-min"><a href="#"><i class="fa fa-table"></i></a></li> -->
+            </ul>
+
+            <div class="col-lg-12">
+                <a onClick="admin_login_modal(event)" class="text-primary adminLogin">
+                    <i class="fa fa-sign-in"></i>
+                </a>
+            </div>
+
+            <!-- <div class="col-lg-12">
+                <a href="https://luxlabadmin.auth.us-east-2.amazoncognito.com/login?response_type=token&client_id=6u71nc9l8q2d7ljc97u02k0d0n&redirect_uri=https://prototype1-0.s3.amazonaws.com/luxlab4.0/index.html" class="text-primary adminLogin"><i class="fa fa-sign-in"></i></a>
+            </div> -->
+
+        </div>
+        <!--sidebar hidden ends-->
+
+        <!--  ======================= page content =======================  -->
+        <div id="page-content-wrapper">
+            <!--  ======================= toggler =======================  -->
+            <div class="toggler">
+                <div class="col-xs-2">
+                    <a href="#" class="" id="menu-toggle">
+                        <div id="toggle-btn">
+                            <i class="fa fa-bars btn btn-success"></i>
+                            <i class="fa fa-window-close btn btn-danger"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xs-8">
+                    <h2 class="display-4 text-center">
+                        <!--<i class="fa fa-tachometer-alt-fast"></i> -->
+                        <img src="./assets/img/logoLuxLab.png" alt="Logo">
+                        <span class="text-primary">Lux Lab</span> Hair Salon
+                    </h2>
+                </div>
+            </div>
+            <!-- toggler ends-->
+
+            <!--  ======================= content body =======================  -->
+            <div class="container-fluid fade-in" id="tempoContent">
+                <div class="row">
+                    <header id="showcase">
+                        <h1>Welcome To Lux Lab</h1>
+                        <p>We are ready to serve. Book an appointment and get the best service.</p>
+                        <a href="#" class="button book-min">Book Now</a>
+                    </header>
+
+                    <section id="section-a">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit minus impedit maxime, quae soluta quis cumque perferendis! Doloribus quaerat, placeat iste facere, aspernatur.</p>
+                    </section>
+                    <section id="section-b">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit minus impedit maxime, quae soluta quis cumque perferendis! Doloribus quaerat, placeat iste facere, aspernatur ex cum veritatis.</p>
+                    </section>
+                    <section id="section-c">
+                        <div class="box-1">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa dolorum est, molestias dolores quis sunt nobis temporibus veritatis libero odio!
+                        </div>
+                        <div class="box-2">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa dolorum est, molestias dolores quis sunt nobis temporibus veritatis libero odio!
+                        </div>
+                        <div class="box-3">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa dolorum est, molestias dolores quis sunt nobis temporibus veritatis libero odio!
+                        </div>
+                    </section>
+
+
+                    <!-- <div id="draggableBtn">Tutorial</div> -->
+                </div>
+            </div>
+            <!-- content body ends-->
+
+            <!--  ======================= footer =======================  -->
+            <div class="row footer-area">
+                <div class="col-md-12">
+
+
+                    <footer class="footer-area">
+
+                        <div class="social text-center">
+                            <h5 class="text-uppercase">Follow Us | Lux Lab Social</h5>
+                            <a href="https://www.facebook.com/Luxlab13" target="_blank" class="social-icons"><i class="fab fa-facebook"></i></a>
+                            <a href="https://www.instagram.com/Luxlab13" target="_blank" class="social-icons"><i class="fab fa-instagram"></i></a>
+                            <!-- <a href="" target="_blank" class="social-icons"><i class="fab fa-youtube"></i></a>
+                                        <a href="" target="_blank" class="social-icons"><i class="fab fa-twitter"></i></a>
+                                        <a href="" target="_blank" class="social-icons"><i class="fab fa-linkedin"></i></a> -->
+                        </div>
+
+                        <div class="copyrights text-center">
+                            <a onClick="admin_login_modal(event)" class="text-primary adminLoginFooter">
+                                <i class="fa fa-sign-in"></i>
+                            </a>
+
+                            <div class="dropup">
+                                Copyright &copy;
+                                <script>
+                                    var date = new Date();
+                                    document.write(date.getFullYear());
+                                </script>
+                                All rights reserved | Lux Lab Hair Salon | Developers info <i class="fa fa-heart" style="color:red"></i>
+                                <!-- <a href="http://portfolio.binitutor.com/" target="_blank"><span style="color: var(--primary-color);">BiniTutor</span>
+                                        </a> -->
+                                <a class="dropbtn">Team Phive</a>
+
+                                <div class="dropup-content">
+                                    <a href="#">Amarilis</a>
+                                    <a href="http://portfolio.binitutor.com/" target="_blank">Biniam Alemayehu</a>
+                                    <a href="#">Bryce</a>
+                                    <a href="#">Mahdi Samadi</a>
+                                    <a href="#">Ramzi Jouhar</a>
+                                    <a href="#">Yeshua</a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </footer>
+                    <div class="spacer-0"></div>
+                </div>
+            </div>
+            <!-- footer ends-->
+
+        </div>
+        <!-- page content ends-->
+
+
+
+        <!--  ======================= Login modal =======================  -->
+        <div class="col-xs-8">
+            <div class="modal fade mb-5" tabindex="-1" role="dialog" id="loginModal">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="modal-title">Admin Login</h4>
+
+
+
+                        </div>
+
+                        <div class="modal-body">
+
+                            <div class="col-md-4 mb-3">
+                                <div id="okta-login-container"></div>
+                            </div>
+
+
+                            <!-- <button id="logout" class="button" onclick="logout()">Logout</button> -->
+
+
+                            <script type="text/javascript">
+                                var oktaSignIn = new OktaSignIn({
+                                    baseUrl: "https://dev-88261420.okta.com",
+                                    clientId: "0oabqxa5zbVF1UcJM5d6",
+                                    // redirectUri: 'http://127.0.0.1:5500/admin.html',
+
+                                    redirectUri: 'https://prototype1-0.s3.amazonaws.com/luxlab5.0/admin.html',
+                                    authParams: {
+                                        issuer: "https://dev-88261420.okta.com/oauth2/default",
+                                        responseType: ['token', 'id_token'],
+                                        display: 'page'
+                                    }
+                                });
+
+                                if (oktaSignIn.hasTokensInUrl()) {
+                                    oktaSignIn.authClient.token.parseFromUrl().then(
+                                        // If we get here, the user just logged in.
+                                        function success(res) {
+                                            var accessToken = res.tokens.accessToken;
+                                            var idToken = res.tokens.idToken;
+                                            alert('Just logged in')
+                                            oktaSignIn.authClient.tokenManager.add('accessToken', accessToken);
+                                            oktaSignIn.authClient.tokenManager.add('idToken', idToken);
+
+                                            document.getElementById("messageBox").innerHTML = "Hello, " + idToken.claims.email + "! You just logged in! :)";
+                                            document.getElementById("logout").style.display = 'block';
+                                        },
+                                        function error(err) {
+                                            console.error(err);
+                                        }
+                                    );
+                                } else {
+                                    oktaSignIn.authClient.token.getUserInfo().then(function(user) {
+                                        // user has details about the user
+                                        document.getElementById("messageBox").innerHTML = "Hello, " + user.email + "! You are *still* logged in! :)";
+                                        document.getElementById("logout").style.display = 'block';
+                                        alert('user has details about the user')
+                                    }, function(error) {
+                                        oktaSignIn.renderEl({
+                                                el: '#okta-login-container'
+                                            },
+                                            function success(res) {},
+                                            function error(err) {
+                                                console.error(err);
+                                            }
+                                        );
+                                    });
+                                };
+
+                                function logout() {
+                                    oktaSignIn.authClient.signOut();
+                                    location.reload();
+                                }
+                            </script>
+
+
+
+                            <!-- <form class="request-form">
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="username">Username:</label>
+                                        <input type="text" class="form-control" id="username" placeholder="Enter username ..." required>
+                                        <code>Please enter more than 5 characters.</code> 
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="password">Password:</label>
+                                        <input type="password" class="form-control" id="password" placeholder="Enter password ..." required>
+                                    </div>
+                                    <div id="message"></div>
+                                    <div class="spacer-1"></div>
+
+                                    <input type="submit" id="login" value="Log in" class="btn btn-primary btn-block" onClick="admin_login(event)">
+
+                                </div>
+                            </form> -->
+
+                            <!-- load login page into modal -->
+                            <div id="login_form"></div>
+                            <script>
+                                // $('#login_form').load('./login.html');
+                            </script>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /modal 2 -->
+
+
+    </div>
+    <!-- wrapper ends-->
+
+    <!--  ======================= Custom Scripts =======================  -->
+    <!-- sidemenu toggle script -->
+    <script src="./assets/js/toggleScript.js"></script>
+
+    <!-- input validator script -->
+    <!-- <script src="./assets/js/bootstrap-validate.js"></script>
+        <script src="./assets/js/customValidator.js"></script> -->
+
+    <!-- jQuery UI CDN -->
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script> -->
+
+    <!-- <script src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script> -->
+    <!-- <script src="./assets/js/verifier.js"></script>
+    <script src="./assets/js/userprofile.js"></script> -->
+
+</body>
+
+</html>

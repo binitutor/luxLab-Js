@@ -1,0 +1,80 @@
+<html>
+
+<head></head>
+
+<body>
+    <!--  ======================= content body =======================  -->
+    <div class="spacer-1"></div>
+    <div class="container" id="tempoContent">
+        <div class="row">
+
+            <div class="col-lg-8 fade-in card-on">
+
+                <h3 class="display-5 text-center">Questions or Comments?</h3>
+                <form action="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="name" class="form-control" placeholder="Enter first and last name" id="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email address:</label>
+                        <input type="email" class="form-control" placeholder="Enter email address" id="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="phone" class="form-control" placeholder="Enter phone number" id="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comment">Comment:</label>
+                        <textarea class="form-control" rows="5" id="comment" placeholder="Enter questions or comments"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+
+            <div class="col-lg-4 fade-in card-on">
+                <p><strong>Phone:</strong> 571-659-3838
+                    <br>
+                    <em>Texting is preferred when using phone number.<br>
+                    Usually responds within a day</em>
+                </p>
+                <p><strong>Address: </strong><br> Lux Lab<br> 10370 Festival Ln<br> Manassas, VA 20109
+                </p>
+                <p><strong>Social Media:</strong><br>
+                    <a href="https://www.facebook.com/Luxlab13" target="_blank" class="social-icons"><i class="fab fa-facebook" alt="Facebook"></i></a>
+                    <a href="https://www.instagram.com/Luxlab13" target="_blank" class="social-icons"><i class="fab fa-instagram" alt="Instagram"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- content body ends-->
+
+    <div class="spacer-1"></div>
+
+    <!-- script -->
+    <script>
+        /* slider script */
+        $(function() {
+            var box = $('.fade-in');
+
+            // box
+            box.animate({
+                top: 0,
+                opacity: '0'
+            });
+
+            box.animate({
+                top: 50,
+                opacity: '1'
+            });
+        });
+    </script>
+
+</body>
+
+</html>
