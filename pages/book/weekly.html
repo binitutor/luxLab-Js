@@ -1,0 +1,561 @@
+<html>
+
+<head>
+
+    <script>
+        // load today's data
+        $(document).ready(function() {
+            // load this week first and last days labels
+            load_this_week();
+        });
+
+        /*
+            load this week first day and last day 
+        */
+        function load_this_week() {
+            // load this week days label
+            var dateObj = new Date(); // today object
+
+            var thisDay = dateObj.getDay(); // 0 - 6
+            var thisDate = dateObj.getDate(); // 1 - 31
+            var thisFirstDate, thisLastDate;
+
+            // finding first and last days (1 - 31) of current week
+            if (thisDay == 0) {
+                thisFirstDate = parseInt(thisDate);
+                thisLastDate = parseInt(thisDate) + 6;
+            } else if (thisDay == 1) {
+                thisFirstDate = parseInt(thisDate) - 1;
+                thisLastDate = parseInt(thisDate) + 5;
+            } else if (thisDay == 2) {
+                thisFirstDate = parseInt(thisDate) - 2;
+                thisLastDate = parseInt(thisDate) + 4;
+            } else if (thisDay == 3) {
+                thisFirstDate = parseInt(thisDate) - 3;
+                thisLastDate = parseInt(thisDate) + 3;
+            } else if (thisDay == 4) {
+                thisFirstDate = parseInt(thisDate) - 4;
+                thisLastDate = parseInt(thisDate) + 2;
+            } else if (thisDay == 5) {
+                thisFirstDate = parseInt(thisDate) - 5;
+                thisLastDate = parseInt(thisDate) + 1;
+            } else if (thisDay == 6) {
+                thisFirstDate = parseInt(thisDate) - 6;
+                thisLastDate = parseInt(thisDate);
+            }
+
+            var thisMonth = dateObj.getMonth(); // 0 - 11
+            if (parseInt(thisMonth) < 10) {
+                thisMonth = String('0' + thisMonth); // 2 ==> '02'
+            }
+
+            var thisYear = dateObj.getFullYear(); // 2021
+
+            var daysArr = [
+                "Sunday", "Monday", "Tuesday",
+                "Wednesday", "Thursday", "Friday", "Saturday"
+            ];
+
+            var monthsArr = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+
+            // generate new date objects for first and last days
+            var firstDateObj = new Date(thisYear, thisMonth, thisFirstDate);
+            var lastDateObj = new Date(thisYear, thisMonth, thisLastDate);
+
+            // for first day
+            var newFirstDay = firstDateObj.getDay(); // 0 - 6
+            var newFirstDate = firstDateObj.getDate(); // 1 - 31
+            var newFirstDateName = daysArr[newFirstDay]; // Tuesday
+            var newFirstMonthNum = firstDateObj.getMonth();
+            var newFirstMonthName = monthsArr[newFirstMonthNum]; // March
+            var newFirstYear = firstDateObj.getFullYear(); // 2021
+
+            var newFirstDayFormat = newFirstDateName + ', ' + newFirstMonthName +
+                ' ' + newFirstDate + ', ' + newFirstYear; // Tuesday, March 29, 2021
+
+            // for last day
+            var newLastDay = lastDateObj.getDay(); // 0 - 6
+            var newLastDate = lastDateObj.getDate(); // 1 - 31
+            var newLastDateName = daysArr[newLastDay]; // Tuesday
+            var newLastMonthNum = lastDateObj.getMonth(); // 0 - 11
+            var newLastMonthName = monthsArr[newLastMonthNum]; // March
+            var newLastYear = lastDateObj.getFullYear(); // 2021
+
+            var newLastDayFormat = newLastDateName + ', ' + newLastMonthName +
+                ' ' + newLastDate + ', ' + newLastYear; // Tuesday, March 29, 2021
+
+            $('#firstWeekDay').html(newFirstDayFormat);
+            $('#lastWeekDay').html(newLastDayFormat);
+
+
+            // call for json data
+            ajax_GET_call(newFirstDayFormat, newLastDayFormat);
+        }
+
+        /*
+            ajax call for all time slots from database
+            GET request to aws dynamoDB
+        */
+        function ajax_GET_call(firstDay, lastDay) {
+
+            var myURL = 'https://6d0dy2iffj.execute-api.us-east-1.amazonaws.com/items';
+
+            $.ajax({
+                type: 'GET',
+                url: myURL,
+                success: function(db_data) {
+
+                    // GET, load this week's time slots
+                    get_weekly_time_slots(db_data, firstDay, lastDay);
+
+                },
+                error: function(db_data) {
+                    alert('Sorry! Error occured while fetching data from database!');
+                }
+            });
+
+
+        }
+
+        /*
+            GET request to Db, loads time slots
+        */
+        function get_weekly_time_slots(jDATA, firstWeekDay, lastWeekDay) {
+            var allWeekdays = get_all_weekdays(firstWeekDay, lastWeekDay); // array
+
+            var timeSlots = '';
+            var slot, slotArr, cTime;
+            var duplicateContainer = []; // array of timeslots
+            var counter = 0;
+            var hoursArr = new Array();
+            var hourDashed = new Array();
+
+            jDATA = JSON.parse(jDATA);
+
+            // console.log('=======/');
+
+            var OpenTimeSlotsObj = new Array();
+            var cc = 0;
+            var BookedTimeSlotsObj = new Array();
+            var dd = 0;
+
+
+
+            for (slot in jDATA.Items) {
+
+                slotArr = jDATA.Items[slot];
+
+                //===============
+
+                if ((jDATA.Items[slot].date == allWeekdays[0] || jDATA.Items[slot].date == allWeekdays[1] ||
+                        jDATA.Items[slot].date == allWeekdays[2] || jDATA.Items[slot].date == allWeekdays[3] ||
+                        jDATA.Items[slot].date == allWeekdays[4] || jDATA.Items[slot].date == allWeekdays[5] ||
+                        jDATA.Items[slot].date == allWeekdays[6])) {
+
+                    // && (jDATA.Items[slot].name == '') && (jDATA.Items[slot].phone == '')
+
+                    slotArr = jDATA.Items[slot];
+
+                    // correct hour format
+                    for (cTime in slotArr.timeFrom) {
+                        hourDashed[cTime] = slotArr.timeFrom[cTime] + ' - ';
+                    }
+                    for (cTime in slotArr.timeTo) {
+                        hourDashed[cTime] += slotArr.timeTo[cTime]; // 8:00am - 10:00am
+                    }
+
+                    // if not booked
+                    if ((jDATA.Items[slot].name == '') && (jDATA.Items[slot].phone == '')) {
+                        for (cTime in hourDashed) {
+                            hoursArr[cTime] = hourDashed[cTime];
+
+                            var newElement = {};
+                            newElement['date'] = jDATA.Items[slot].date;
+                            newElement['time'] = hoursArr[cTime]
+                            OpenTimeSlotsObj.push(newElement);
+                        }
+                    }
+
+                    // if booked
+                    if (!(jDATA.Items[slot].name == '') && !(jDATA.Items[slot].phone == '')) {
+                        for (cTime in hourDashed) {
+                            hoursArr[cTime] = hourDashed[cTime];
+
+                            // show as booked
+                            timeSlots = '<div class="col-md-3 card-on dynamic-date-card">';
+                            timeSlots += '<h5 class="tblDate">' + jDATA.Items[slot].date + '</h5>';
+                            timeSlots += '<h6 class="tblTime">' + hoursArr[cTime] + '</h6>';
+                            timeSlots += '<button class="btn btn-secondary btn-block" data-toggle="modal" disabled onclick="bookTheTime(event)" data-target="#calModal">Booked</button>';
+                            timeSlots += '</div>';
+
+                            var newElement = {};
+                            newElement['date'] = jDATA.Items[slot].date;
+                            newElement['time'] = hoursArr[cTime]
+                            BookedTimeSlotsObj.push(newElement);
+
+                            duplicateContainer[counter] = timeSlots;
+                            counter++;
+                        }
+                    }
+
+                    // var empty_test = false;
+
+                    // for(i in OpenTimeSlotsObj){
+                    //     if(!(OpenTimeSlotsObj[i] == '')){
+                    //         empty_test = true; // value found
+                    //     } 
+                    // }
+                    // for(i in BookedTimeSlotsObj){
+                    //     if(!(BookedTimeSlotsObj[i] == '')){
+                    //         empty_test = true; // value found
+                    //     }
+                    // }
+                    // if arr length > 0, it has values
+
+                    // if (OpenTimeSlotsObj.length > 0) {
+                    //     empty_test = true; // value found
+                    // } else if (BookedTimeSlotsObj.length > 0) {
+                    //     empty_test = true; // value found
+                    // }
+
+                    // if (empty_test == false) {
+                    //     timeSlots = '<div class="col-md-3 card-on dynamic-date-card">';
+                    //     timeSlots += '<h5 class="tblDate text-uppercase text-info">No time slots available for this day</h5>';
+                    //     timeSlots += '<h6 class="tblTime"><em>Sorry</em></h6>';
+                    //     timeSlots += '<button class="btn btn-secondary btn-block" disabled data-toggle="modal" data-target="#calModal">Unavailable</button>';
+                    //     timeSlots += '</div>';
+
+                    //     duplicateContainer[counter] = timeSlots;
+                    //     counter++;
+                    // }
+
+                }
+
+            }
+
+            var empty_test = false;
+
+            if (OpenTimeSlotsObj.length > 0) {
+                empty_test = true; // value found
+            } else if (BookedTimeSlotsObj.length > 0) {
+                empty_test = true; // value found
+            }
+
+            if (empty_test == false) {
+                timeSlots = '<div class="col-md-3 card-on dynamic-date-card">';
+                timeSlots += '<h5 class="tblDate text-uppercase text-info">No time slots available for this week</h5>';
+                timeSlots += '<h6 class="tblTime"><em>Sorry</em></h6>';
+                timeSlots += '<button class="btn btn-secondary btn-block" disabled data-toggle="modal" data-target="#calModal">Unavailable</button>';
+                timeSlots += '</div>';
+
+                duplicateContainer[counter] = timeSlots;
+                counter++;
+            }
+
+            // if (timeSlots == '') {
+            //     timeSlots = '<div class="col-md-3 card-on dynamic-date-card">';
+            //     timeSlots += '<h5 class="tblDate text-uppercase text-info">No time slots available for this day</h5>';
+            //     timeSlots += '<h6 class="tblTime"><em>Sorry</em></h6>';
+            //     timeSlots += '<button class="btn btn-secondary btn-block" disabled data-toggle="modal" data-target="#calModal">Unavailable</button>';
+            //     timeSlots += '</div>';
+
+            //     duplicateContainer[counter] = timeSlots;
+            //     counter++;
+            // }
+
+
+            const res = OpenTimeSlotsObj.filter(({
+                date: a,
+                time: x
+            }) => !BookedTimeSlotsObj.some(({
+                date: b,
+                time: y
+            }) => a === b && x === y));
+            // console.log(res);
+
+            for (index in res) {
+                // show as booked
+                timeSlots = '<div class="col-md-3 card-on dynamic-date-card">';
+                timeSlots += '<h5 class="tblDate">' + res[index].date + '</h5>';
+                timeSlots += '<h6 class="tblTime">' + res[index].time + '</h6>';
+                timeSlots += '<button class="btn btn-info btn-block" data-toggle="modal" onclick="bookTheTime(event)" data-target="#calModal">Book</button>';
+                timeSlots += '</div>';
+
+                duplicateContainer[counter] = timeSlots;
+                counter++;
+            }
+
+
+            // if duplicated, remove index
+            var uniqueArray = removeDuplicateValue(duplicateContainer);
+            // var uniqueArray = removeDuplicateValue(joinArray);
+
+            // convert array back to string
+            var newVal = uniqueArray.join("");
+
+            $('#dynamic-date-board').html(newVal);
+
+        }
+
+        // remove duplicate value
+        // Defining function to get unique values from an array
+        function removeDuplicateValue(dupArray) {
+            var uniqueArray = [];
+
+            // Loop through array values
+            for (var value of dupArray) {
+                if (uniqueArray.indexOf(value) === -1) {
+                    uniqueArray.push(value);
+                }
+            }
+            return uniqueArray;
+        }
+
+        /*
+            generate all weekdays array full format
+        */
+        function get_all_weekdays(firstWeekDay, lastWeekDay) {
+            var weekdaysArr = new Array(7);
+
+            var str = firstWeekDay.split(', '); // [Sunday] [March 28] [2021]
+            var str2 = str[1].split(' '); // [March] [28]
+            var daysArr = [
+                "Sunday", "Monday", "Tuesday",
+                "Wednesday", "Thursday", "Friday", "Saturday"
+            ];
+            var monthsArr = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+            var newDate = str2[1];
+            var newMonth = monthsArr.indexOf(str2[0]); // 3
+            if (parseInt(newMonth) < 10) {
+                newMonth = String('0' + newMonth); // 3 ==> '03'
+            }
+            var newYear = str[2];
+
+            var secondWeekDay = full_date_format((parseInt(newDate) + 1), newMonth, newYear); // Monday, March 29, 2021
+            var thirdWeekDay = full_date_format((parseInt(newDate) + 2), newMonth, newYear); // Tuesday, March 30, 2021
+            var fourthWeekDay = full_date_format((parseInt(newDate) + 3), newMonth, newYear); // Wednesday, March 31, 2021
+            var fifthWeekDay = full_date_format((parseInt(newDate) + 4), newMonth, newYear); // Thursday, April 1, 2021
+            var sixthWeekDay = full_date_format((parseInt(newDate) + 5), newMonth, newYear); // Friday, April 2, 2021
+
+            weekdaysArr[0] = firstWeekDay; // Sunday, March 28, 2021
+            weekdaysArr[1] = secondWeekDay; // Monday, March 29, 2021
+            weekdaysArr[2] = thirdWeekDay; // Tuesday, March 30, 2021
+            weekdaysArr[3] = fourthWeekDay; // Wednesday, March 31, 2021
+            weekdaysArr[4] = fifthWeekDay; // Thursday, April 1, 2021
+            weekdaysArr[5] = sixthWeekDay; // Friday, April 2, 2021
+            weekdaysArr[6] = lastWeekDay; // Saturday, April 3, 2021
+
+            return weekdaysArr;
+        }
+
+        /*
+            receives day, month, year ... generates new date object and  
+            returns weekdays full foramt string
+        */
+        function full_date_format(date, month, year) {
+            var dateObj = new Date(year, month, date);
+
+            var fullDateFormat = '';
+
+            var daysArr = [
+                "Sunday", "Monday", "Tuesday",
+                "Wednesday", "Thursday", "Friday", "Saturday"
+            ];
+            var monthsArr = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+
+            var dateNum = dateObj.getDate(); // 1 - 31
+            var dayNum = dateObj.getDay(); // 0 - 6
+            var dateName = daysArr[dayNum]; // Monday
+            var monthNum = dateObj.getMonth(); // 0 - 11
+            var monthName = monthsArr[monthNum]; // March
+            var thisYear = dateObj.getFullYear(); // 2021
+
+            fullDateFormat = dateName + ', ' + monthName + ' ' + dateNum + ', ' + thisYear; // Monday, March 29, 2021
+
+            return fullDateFormat;
+        }
+
+        /*
+            load previous week first day and last day 
+        */
+        function retrievePrevData(e) {
+            e.preventDefault();
+            var firstWeekDay = $('#firstWeekDay').text();
+            // alert(firstWeekDay)
+            var num = -7;
+            generate_week_days(num, firstWeekDay);
+
+        }
+
+        /*
+            load next week first day and last day 
+        */
+        function retrieveNextData(e) {
+            e.preventDefault();
+            var lastWeekDay = $('#lastWeekDay').text();
+            // alert(lastWeekDay)
+            var num = 7;
+            generate_week_days(num, lastWeekDay);
+        }
+
+        /*
+            on button click, load week first day and last day 
+        */
+        function generate_week_days(n, weekDay) {
+
+            var daysArr = [
+                "Sunday", "Monday", "Tuesday",
+                "Wednesday", "Thursday", "Friday", "Saturday"
+            ];
+
+            var monthsArr = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+
+            var newFirstDayFormat, newLastDayFormat, newFirstDayNum, newLastDayNum;
+
+            var str = weekDay.split(', '); // [Sunday] [March 9] [2021]
+            var str2 = str[1].split(' '); // [March] [9]
+
+            var newYear = str[2];
+            var monthNum = monthsArr.indexOf(str2[0]);
+            if (parseInt(monthNum) < 10) {
+                monthNum = String('0' + monthNum); // 2 ==> '02'
+            }
+
+            if (n == -7) {
+
+                newFirstDayNum = parseInt(str2[1]) + n; // 9 - 7 = 2
+                newLastDayNum = newFirstDayNum + 6; // 2 + 6 = 8
+
+                // generate new date format for first Day
+                var firstDateObj = new Date(newYear, monthNum, newFirstDayNum); // yyyy, MM, dd
+
+                var newFirstDay = firstDateObj.getDay(); // 0 - 6
+                var newFirstDate = firstDateObj.getDate(); // 1 - 31
+                var newFirstDateName = daysArr[newFirstDay]; // Tuesday
+                var newFirstMonthNum = firstDateObj.getMonth(); // 0 - 11
+                var newFirstMonthName = monthsArr[newFirstMonthNum]; // March
+                var newFirstYear = firstDateObj.getFullYear(); // 2021
+
+                newFirstDayFormat = newFirstDateName + ', ' + newFirstMonthName +
+                    ' ' + newFirstDate + ', ' + newFirstYear;
+
+                // generate new date format for last Day
+                var lastDateObj = new Date(newYear, monthNum, newLastDayNum); // yyyy, MM, dd
+
+                var newLastDay = lastDateObj.getDay(); // 0 - 6
+                var newLastDate = lastDateObj.getDate(); // 1 - 31
+                var newLastDateName = daysArr[newLastDay]; // Tuesday
+                var newLastMonthNum = lastDateObj.getMonth(); // 0 - 11
+                var newLastMonthName = monthsArr[newLastMonthNum]; // March
+                var newLastYear = lastDateObj.getFullYear(); // 2021
+
+                newLastDayFormat = newLastDateName + ', ' + newLastMonthName +
+                    ' ' + newLastDate + ', ' + newLastYear;
+
+            } else if (n == 7) {
+
+                newLastDayNum = parseInt(str2[1]) + n;
+                newFirstDayNum = newLastDayNum - 6;
+
+                // generate new date format for first Day
+                var firstDateObj = new Date(newYear, monthNum, newFirstDayNum); // yyyy, MM, dd
+
+                var newFirstDay = firstDateObj.getDay(); // 0 - 6
+                var newFirstDate = firstDateObj.getDate(); // 1 - 31
+                var newFirstDateName = daysArr[newFirstDay]; // Tuesday
+                var newFirstMonthNum = firstDateObj.getMonth(); // 0 - 11
+                var newFirstMonthName = monthsArr[newFirstMonthNum]; // March
+                var newFirstYear = firstDateObj.getFullYear(); // 2021
+
+                newFirstDayFormat = newFirstDateName + ', ' + newFirstMonthName +
+                    ' ' + newFirstDate + ', ' + newFirstYear;
+
+                // generate new date format for last Day
+                var lastDateObj = new Date(newYear, monthNum, newLastDayNum); // yyyy, MM, dd
+
+                var newLastDay = lastDateObj.getDay(); // 0 - 6
+                var newLastDate = lastDateObj.getDate(); // 1 - 31
+                var newLastDateName = daysArr[newLastDay]; // Tuesday
+                var newLastMonthNum = lastDateObj.getMonth(); // 0 - 11
+                var newLastMonthName = monthsArr[newLastMonthNum]; // March
+                var newLastYear = lastDateObj.getFullYear(); // 2021
+
+                newLastDayFormat = newLastDateName + ', ' + newLastMonthName +
+                    ' ' + newLastDate + ', ' + newLastYear;
+
+            }
+
+            // assign new day to div
+            $('#firstWeekDay').html(newFirstDayFormat)
+            $('#lastWeekDay').html(newLastDayFormat)
+
+
+
+            ajax_GET_call(newFirstDayFormat, newLastDayFormat)
+        }
+
+
+        //
+    </script>
+</head>
+
+<body>
+    <h1>Weekly Calendar View</h1>
+    <div class="row">
+        <!-- table week -->
+        <h4>Book the date and time of your choosing.</h4>
+        <div class="col-md-12">
+
+            <div class="row">
+                <div class="col-lg-12 arrow">
+                    <div class="col-xs-6">
+                        <i class="fa fa-arrow-circle-left" onClick="retrievePrevData(event)"></i>
+                    </div>
+                    <div class="col-xs-6">
+                        <i class="fas fa-arrow-circle-right" onClick="retrieveNextData(event)"></i>
+                    </div>
+                    <div class="col-xs-12 text-center" id="weeklyTHead">
+                        <div class="col-xs-4">
+                            <code><h4 id="firstWeekDay">(first day of week placeholder)</h4></code>
+                        </div>
+                        <div class="col-xs-4">
+                            <h3>to</h3>
+                        </div>
+                        <div class="col-xs-4">
+                            <code><h4 id="lastWeekDay">(last day of week placeholder)</h4></code>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12 card-on" id="dynamic-date-board"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
