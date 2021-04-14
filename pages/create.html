@@ -1,0 +1,1740 @@
+<html>
+
+<head>
+
+    <script>
+        // on load
+        $(document).ready(function() {
+            var daysEdge = load_Days();
+            var newFirstDayFormat = daysEdge[0];
+            var newLastDayFormat = daysEdge[1];
+
+            $('#firstWeekDay').html(newFirstDayFormat);
+            $('#lastWeekDay').html(newLastDayFormat);
+        });
+
+
+        // alert messages and notifications
+        function alertBox(num) { //, msg
+            //open modal: data-toggle = "modal" data-target = "#messageModal"
+            // adding data: $('#modalDate').html(reqDate); // dismiss: data-dismiss="modal"
+            var message = $('#message');
+            var Notif_Array = [
+                    'Please fill in the form!', // Notification
+                    'Booking Slot saved Successfully!', // Notification
+                    'Bulk Time Slots Data deleted Successfully!', // Notification
+                    'All customer requests Data deleted Successfully!', // Notification
+                    'Data deleted Successfully!', // Notification // [4]
+                    'Invalid hour format! start and end hours cannot be equal.', // Warning
+                    'Invalid hour format! End hour cannot proceed the start hour.', // Warning
+                    'Invalid hour format! You can not book more than 11:30 hours in one slot!', // Warning
+                    'Sorry! Error occured while fetching data from database!', // Warning
+                    'Data not found!', // Warning
+                    'It is advised to space time slots 30 min apart from eachother.', // [10]
+                    'WARNING!! Conflicting time slots found!' // Warning
+                ]
+                // update message
+            message.html(Notif_Array[num]);
+
+            var msgTitle = '';
+            if ((num <= 4) || (num == 10)) {
+                msgTitle = '<h4 class="text-success">Notification</h4>';
+
+            } else {
+                msgTitle = '<h4 class="text-danger">Warning!</h4>'
+            }
+            $('#modal-title').html(msgTitle);
+
+            // show message
+            $('#messageModal').modal('show');
+
+        }
+
+        // =========
+
+        $('#createRecord').click(function(e) {
+            e.preventDefault();
+
+            var crDate = $('#crDate').val(); // 2021-03-11
+            // convert to new date format
+            var str = crDate.split("-"); // [2021, 03, 11]
+            var yr = str[0]; // 2021
+            var mm = str[1] - 1; // 02 (0 - 11)
+            if (parseInt(mm) < 10) {
+                mm = String('0' + mm);
+            }
+
+            var months = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+
+            var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+            var dt = str[2]; // 11
+            var date = new Date(yr, mm, dt); // full form
+
+            var crDay = date.getDay(); // 0 - 6
+            var crDate = date.getDate(); // 1 - 31
+            var dateName = weekdays[crDay]; // Thursday
+            var crMonth = date.getMonth(); // 0 - 11
+            var monthName = months[crMonth]; // March
+            var crYear = date.getFullYear(); // 2021
+            var crDateFormat = dateName + ", " + monthName + ' ' +
+                crDate + ', ' + crYear; // Thursday, March 11, 2021
+
+            // if date comes from safari (MM/dd/yyyy)
+            if (crDateFormat == 'undefined, undefined NaN, NaN') {
+                var crDate2 = $('#crDate').val(); // 03/11/2021
+                var str = crDate2.split('/');
+                var mm2 = parseInt(str[0]) - 1; // correct month (0 - 11)
+                var dt2 = str[1];
+                var yr2 = str[2];
+                if (parseInt(mm2) < 10) {
+                    mm2 = String('0' + mm2);
+                }
+
+                var dateObj = new Date(yr2, mm2, dt2); // full form
+
+                var crDay = dateObj.getDay(); // 0 - 6
+                var crDate = dateObj.getDate(); // 1 - 31
+                var dateName = weekdays[crDay]; // Thursday
+                var crMonth = dateObj.getMonth(); // 0 - 11
+                var monthName = months[crMonth]; // March
+                var crYear = dateObj.getFullYear(); // 2021
+                var crDateFormat = dateName + ", " + monthName + ' ' +
+                    crDate + ', ' + crYear; // Thursday, March 11, 2021
+            }
+
+            var startHour = '';
+            var endHour = '';
+            startHour = $('#startHour').val();
+            endHour = $('#endHour').val();
+
+            validate_hour(crDateFormat, startHour, endHour);
+        });
+
+        // check to make sure hours cannot be created backwards
+        function validate_hour(crDateFormat, startHour, endHour) {
+            var compareHours = false;
+            var startHr = startHour.split(':'); // [12][00am]
+            var endHr = endHour.split(':'); // [12][00am]
+            sHr = startHr[0]; // 12
+            sMin = startHr[1]; // 00am
+            eHr = endHr[0]; // 12
+            eMin = endHr[1]; // 00am
+
+            var hoursEqual = false, // start hour == end hour
+                startHourHasAM = false,
+                startHourHasPM = false,
+                endHourHasAM = false,
+                endHourHasPM = false,
+                startHourEqual12 = false,
+                endHourEqual12 = false,
+                bothStartEndHoursAM = false, // start hour = 1am, end hour = 7:00am
+                bothStartEndHoursPM = false, // start hour = 1pm, end hour = 7:00pm
+                startHourGreaterThanEndHour = false, // start hour > end hour
+                startHourLessThanEndHour = false,
+                startHourEqualsEndHour = false,
+                onlyStartHourAM = false,
+                onlyStartHourPM = false,
+                startMinEquals30 = false,
+                endMinEquals00 = false,
+                timeSlotExceedsMAXValue = false,
+                invalidTimeSlot = false;
+
+            ///////////////////////////
+            if (startHour.includes('am')) {
+                startHourHasAM = true; // check if start hour is '12am to 11am'
+            }
+            if (startHour.includes('pm')) {
+                startHourHasPM = true; // check if start hour is '12pm to 11pm'
+            }
+            if (endHour.includes('am')) {
+                endHourHasAM = true; // check if end hour is '12am to 11am'
+            }
+            if (endHour.includes('pm')) {
+                endHourHasPM = true; // check if end hour is '12pm to 11pm'
+            }
+            // both am or pm
+            if (startHourHasAM && endHourHasAM) {
+                bothStartEndHoursAM = true;
+            }
+            if (startHourHasPM && endHourHasPM) {
+                bothStartEndHoursPM = true;
+            }
+            // start Hour = 12
+            if (startHour.includes('12')) {
+                startHourEqual12 = true; // check if start hour is '12:00am, 12:30am, 12:00pm, 12:30pm'
+            }
+            if (endHour.includes('12')) {
+                endHourEqual12 = true; // check if start hour is '12:00am, 12:30am, 12:00pm, 12:30pm'
+            }
+            // start Hour > End Hour
+            if ((parseInt(sHr) > parseInt(eHr))) {
+                startHourGreaterThanEndHour = true; // 3:00pm - 2:00pm
+            }
+            // only one am or pm
+            if (startHour.includes('am') && endHour.includes('pm')) {
+                onlyStartHourAM = true;
+            }
+            if (startHour.includes('pm') && endHour.includes('am')) {
+                onlyStartHourPM = true;
+            }
+            // start Hour < End Hour
+            if (parseInt(sHr) < parseInt(eHr)) {
+                startHourLessThanEndHour = true;
+            }
+            // start Hour = End Hour
+            if (parseInt(sHr) == parseInt(eHr)) {
+                startHourEqualsEndHour = true;
+            }
+            // start Hour Min = 30
+            if (startHour.includes('30')) {
+                startMinEquals30 = true;
+            }
+            // end Hour Min = 30
+            if (endHour.includes('00')) {
+                endMinEquals00 = true;
+            }
+
+            // invalidTimeSlot: Start Hour > End hour!! msg = 'Invalid hour format! End hour cannot proceed the start hour.''
+            // 1. 10:00am - 9:00am (both am or pm, sHr > eHr, sHr != 12, eHr != 12)
+            // 2. 12:00am - 10:00pm OR 12:00pm - 10:00am (only one am or pm, sHr = 12, eHr != 12)
+            // 3. 10:00am - 12:00am OR 10:00pm - 12:00pm (both am or pm, eHr = 12, sHr != 12)
+            // 4. 2:00am - 11:00pm OR 2:00pm - 11:00am (only one am or pm, sHr != 12, eHr != 12, sHr < eHr)
+            // 5. 10:30am - 10:00am OR 10:30pm - 10:00pm (both am or pm, sHr = eHr, sMin = 30, eMin = 00)
+            if (startHourGreaterThanEndHour && (!startHourEqual12) && (!endHourEqual12) && (bothStartEndHoursAM || bothStartEndHoursPM)) {
+                invalidTimeSlot = true;
+            }
+            if ((onlyStartHourAM || onlyStartHourPM) && (startHourEqual12) && (!endHourEqual12)) {
+                invalidTimeSlot = true;
+            }
+            if ((bothStartEndHoursAM || bothStartEndHoursPM) && (!startHourEqual12) && (endHourEqual12)) {
+                invalidTimeSlot = true;
+            }
+            if ((bothStartEndHoursAM || bothStartEndHoursPM) && (startHourEqualsEndHour) && (startMinEquals30) && (endMinEquals00)) {
+                invalidTimeSlot = true;
+            }
+
+            // timeSlotExceedsMAXValue, msg = 'Invalid hour format! You can not book more than 11:30 hours in one slot!'
+            // what makes hour Invalid?! start hour > end hour
+            // exceeded MAX 11:30 hours per slot! [11:30 hours --> 10:00am - 9:30pm]
+            // 1 10:00am - 10:00pm OR 10:00pm - 10:00am (eHr = sHr, only one pm or am)
+            // 2. 10:30pm - 10:00pm OR 10:30am - 10:00am  (eHr = sHr, both am or pm, sMin = 30, eMin = 00)
+            // 3. 10:00am - 11:00pm OR 10:00pm - 11:00am (sHr != 12, eHr != 12, only one pm or am, sHr < eHr)
+            // 4. 11:00pm - 10:00pm OR 11:00am - 10:00am  (sHr != 12, eHr != 12, both pm or am, sHr > eHr)
+            // 5. 10:00am - 12:00am OR 10:00pm - 12:00pm (eHr = 12, both pm or am, sHr < eHr)
+            // 6. 12:00am - 10:00pm OR 12:00pm - 10:00am (sHr = 12, only one pm or am, sHr > eHr)
+            if ((onlyStartHourAM || onlyStartHourPM) && (startHourEqualsEndHour)) {
+                timeSlotExceedsMAXValue = true;
+            }
+            if ((!startHourEqual12) && (!endHourEqual12) && (onlyStartHourAM || onlyStartHourPM) && (startHourLessThanEndHour)) {
+                timeSlotExceedsMAXValue = true; // same as invalidTimeSlot no. 4
+            }
+            if ((endHourEqual12) && (bothStartEndHoursAM || bothStartEndHoursPM) && (startHourLessThanEndHour)) {
+                timeSlotExceedsMAXValue = true;
+            }
+            if ((startHourEqual12) && (onlyStartHourAM || onlyStartHourPM) && startHourGreaterThanEndHour) {
+                timeSlotExceedsMAXValue = true;
+            }
+
+            // ================= Condition stats here ...
+
+            // condition 1: check if the forms are filled properly
+            if (crDateFormat == 'undefined, undefined NaN, NaN' || crDateFormat == '' || startHour == '' || endHour == '') {
+                alertBox(0); // alert('Please fill in the form!');
+            }
+            // condition 2: check if start hour Equals end hour (12am = 12am or 6pm = 6pm)
+            else if (startHour == endHour) {
+                alertBox(5); // alert('Invalid hour format! start and end hours cannot be equal.');
+            }
+            // condition 3: check if end hour is less than start hour (1am - 12am OR 3pm - 2pm OR 1pm - 11am)
+            else if (invalidTimeSlot) {
+                alertBox(6); // alertBox('Invalid hour format! end hour cannot proceed and start hour.');
+            }
+            // condition 4: check if time slot exceeds MAX 11:30 hours
+            else if (timeSlotExceedsMAXValue) {
+                alertBox(7); // alert('Invalid hour format! You can not book more than 11:30 hours in one slot!');
+            }
+            // all conditions met
+            else {
+                var newBookHour = startHour + ' - ' + endHour; // '8:00am - 10:00am'
+                // alertBox(1);
+                ajax_GET_slots(crDateFormat, newBookHour);
+            }
+
+        }
+
+        /*
+            ajax call for all time slots from database
+            GET request to aws dynamoDB
+        */
+        function ajax_GET_slots(newDate, newHour) {
+
+            var myURL = 'https://6d0dy2iffj.execute-api.us-east-1.amazonaws.com/items';
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text/plain */",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                url: myURL,
+                success: function(db_data) {
+
+                    compare_time_slots(db_data, newDate, newHour);
+
+                },
+                error: function(db_data) {
+                    // alertBox('Sorry! Error occured while fetching data from database!');
+                    alertBox(8);
+                }
+            });
+
+
+
+        }
+
+        /*
+            ajax call for all time slots from database
+            GET request to aws dynamoDB
+        */
+        function compare_time_slots(jDATA, newDate, newHour) {
+            var slot, slotArr, cTime;
+            var hoursArr = new Array();
+            var dataFound = false;
+            var hourDashed = new Array();
+            var hourFound = false;
+
+            for (slot in jDATA.Items) {
+                // date already exists in table
+                if (jDATA.Items[slot].date == newDate) {
+                    dataFound = true; // if date is found in db
+                    // alert('date is found, checking hour...')
+
+                    slotArr = jDATA.Items[slot];
+
+                    var captureEmailKey = jDATA.Items[slot].email; // key
+
+                    // correct hour format for multiple hours of the same day
+                    for (cTime in slotArr.timeFrom) {
+                        hourDashed[cTime] = slotArr.timeFrom[cTime] + ' - ';
+                    }
+                    for (cTime in slotArr.timeTo) {
+                        hourDashed[cTime] += slotArr.timeTo[cTime]; // 8:00am - 10:00am
+                    }
+
+                    // fill hours
+                    for (cTime in hourDashed) {
+                        hoursArr[cTime] = hourDashed[cTime]; // this is irrelevant 
+                    }
+
+                    // check each hour of the day
+                    for (cTime in hourDashed) {
+
+                        // if hour exists
+                        if (hourDashed[cTime] == newHour) {
+                            // alert('Time Slot is already created for: ' + newDate + ' || ' + newHour);
+                            alertBox(11);
+                            hourFound = true;
+                            break;
+                        } else {
+                            // check for overlay. Given, same date slot already created. checking hours ...
+                            var newStartHourAM = false,
+                                newStartHourPM = false,
+                                newEndHourAM = false,
+                                newEndHourPM = false,
+                                oldStartHourAM = false,
+                                oldStartHourPM = false,
+                                oldEndHourAM = false,
+                                oldEndHourPM = false,
+                                newOldStartHourAM = false,
+                                newOldStartHourPM = false,
+                                newStartHourEqualsOldStartHour = false,
+                                overlayedHourFound = false,
+                                newStartHourBetweenOldHours = false,
+                                newStartHourEqualsOldEndHour = false,
+                                newEndHourEqualsOldStartHour = false,
+                                newEndHourBetweenOldHours = false,
+                                newEndHourEqualsOldEndHour = false,
+                                newStartHourLessThanOldStartHour = false,
+                                newEndHourGreaterThanOldEndHour = false;
+
+                            var oldHour = hourDashed[cTime]; // 8:00am - 9:00am
+                            var str = oldHour.split(' - '); // [8:00am] [9:00am]
+                            var str2 = str[0].split(':'); // [8] [00am]
+                            var str3 = str[1].split(':'); // [9] [00am]
+
+                            var oldsHr = str2[0]; // start hour of Old Hour, 8 not 8:00
+                            var oldsMin = str2[1]; // start min of Old Hour, 00am
+                            var oldeHr = str3[0]; // end hour of Old Hour, 9 not 9:00
+                            var oldeMin = str3[1];
+                            var oldStartingHour = str[0]; // 8:00am
+                            var oldEndingHour = str[1]; // 9:00am
+
+                            var str4 = newHour.split(' - '); // [7:00am] [10:00am]
+                            var str5 = str4[0].split(':'); // [7] [00am]
+                            var str6 = str4[1].split(':'); // [10] [00am]
+
+                            var newsHr = str5[0]; // 7
+                            var newsMin = str5[1]; // 00am
+                            var neweHr = str6[0]; // 10
+                            var neweMin = str6[1]; // 00am
+                            var newStartingHour = str4[0]; // 7:00am
+                            var newEndingHour = str4[1]; // 10:00am
+
+                            if (newStartingHour.includes('am')) {
+                                newStartHourAM = true;
+                            }
+                            if (newStartingHour.includes('pm')) {
+                                newStartHourPM = true;
+                            }
+                            if (newEndingHour.includes('am')) {
+                                newEndHourAM = true;
+                            }
+                            if (newEndingHour.includes('pm')) {
+                                newEndHourPM = true;
+                            }
+
+                            if (oldStartingHour.includes('am')) {
+                                oldStartHourAM = true;
+                            }
+                            if (oldStartingHour.includes('pm')) {
+                                oldStartHourPM = true;
+                            }
+                            if (oldEndingHour.includes('am')) {
+                                oldEndHourAM = true;
+                            }
+                            if (oldEndingHour.includes('pm')) {
+                                oldEndHourPM = true;
+                            }
+                            if (newStartHourAM && oldStartHourAM) {
+                                newOldStartHourAM = true;
+                            }
+                            if (newStartHourPM && oldStartHourPM) {
+                                newOldStartHourPM = true;
+                            }
+
+                            // starting hours the same --- old: 7:00am - 10:00am && new: 7:00am - 11:00am
+                            if (newStartingHour == oldStartingHour) {
+                                newStartHourEqualsOldStartHour = true;
+                            }
+                            if (newStartHourEqualsOldStartHour) {
+                                overlayedHourFound = true;
+                            }
+                            // ending hours the same --- old: 7:00am - 10:00am && new: 8:00am - 10:00am
+                            if (newEndingHour == oldEndingHour) {
+                                newEndHourEqualsOldEndHour = true;
+                            }
+                            if (newEndHourEqualsOldEndHour) {
+                                overlayedHourFound = true;
+                            }
+                            // old covers new start hour --- old: 7:00am/7:00am - 10:00am/3:00pm && new start hour: 8:00am/1:00pm 
+                            if ((parseInt(newsHr) > parseInt(oldsHr)) && (parseInt(neweHr) < parseInt(oldeHr))) {
+                                newStartHourBetweenOldHours = true;
+                            }
+                            if (newStartHourBetweenOldHours) {
+                                overlayedHourFound = true;
+                            }
+                            if ((parseInt(neweHr) == 12) && ((newEndHourAM && oldEndHourAM) || (newEndHourPM && oldEndHourPM))) {
+                                overlayedHourFound = true;
+                            }
+                            if ((parseInt(oldeHr) == 12) && (parseInt(newsHr) == 12)) {
+                                overlayedHourFound = false;
+                            }
+                            if (overlayedHourFound) {
+                                alertBox(11); // Invalid Hour format! Overlayed hours found!
+                                hourFound = true;
+                            }
+
+                        }
+                    }
+
+
+                    if (!hourFound) {
+                        for (cTime in hourDashed) {
+                            // update the same slot with new hour
+                            var existingDate = newDate;
+
+                            // add new hour to hours array
+                            hoursArr.push(newHour);
+
+                            create_new_time_slot(existingDate, newHour);
+                            break;
+                        }
+                    }
+
+                }
+
+            }
+
+            if (!dataFound) {
+                create_new_time_slot(newDate, newHour);
+            }
+
+        }
+
+        /*
+            create new time slot to database
+            POST request to aws dynamoDB
+        */
+        function create_new_time_slot(newDate, newBookHour) {
+
+            var myURL = 'https://6d0dy2iffj.execute-api.us-east-1.amazonaws.com/items';
+
+            var hoursFromArr = new Array();
+            var hoursToArr = new Array();
+            var str = newBookHour.split(' - ');
+            hoursFromArr[0] = str[0];
+            hoursToArr[0] = str[1];
+
+            // add new hour to hours array
+            // hoursArr.push(newBookHour);
+            // for (i in hoursArr) {
+            //     var str = hoursArr[i].split(' - ');
+            //     hoursFromArr[i] = str[0];
+            //     hoursToArr[i] = str[1];
+            // }
+
+            // create random email for keyword
+            var chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
+            var string1 = '',
+                string2 = '';
+            for (var ii = 0; ii < 15; ii++) {
+                string1 += chars[Math.floor(Math.random() * chars.length)];
+                string2 += chars[Math.floor(Math.random() * chars.length)];
+            }
+
+            var randomEmail = string1 + '@' + string2 + '.com';
+
+            var placeholderPhone = '',
+                placeholderName = '',
+                placeholderFeedback = '';
+
+            var data = {
+                email: randomEmail,
+                date: newDate,
+                timeFrom: hoursFromArr,
+                timeTo: hoursToArr,
+                phone: placeholderPhone,
+                name: placeholderName,
+                feedback: placeholderFeedback
+            }
+
+            $.ajax({
+                type: 'PUT',
+                dataType: 'json',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text/plain */",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                url: myURL,
+                data: JSON.stringify(data),
+                success: function(db_data) {
+
+                    // alert('Booking Slot saved Successfully!');
+                    alertBox(1);
+
+                },
+                error: function(db_data) {
+                    // alert('Data not Saved!');
+                    alertBox(7);
+                }
+            });
+
+        }
+
+        /*
+            update the hour of the same time slot
+            PUT request to aws dynamoDB
+        */
+        function update_the_slot_hour(existingDate, hoursArr, emailKey) {
+
+            // var myURL = 'https://6d0dy2iffj.execute-api.us-east-1.amazonaws.com/items';
+
+            // var hoursFromArr = new Array();
+            // var hoursToArr = new Array();
+
+            // for (i in hoursArr) {
+            //     var str = hoursArr[i].split(' - ');
+            //     hoursFromArr[i] = str[0];
+            //     hoursToArr[i] = str[1];
+            // }
+
+            // var placeholderPh = '',
+            //     placeholderNa = '',
+            //     placeholderFd = '';
+
+            // var data = {
+            //     email: emailKey,
+            //     date: existingDate,
+            //     timeFrom: hoursFromArr,
+            //     timeTo: hoursToArr,
+            //     phone: placeholderPh,
+            //     name: placeholderNa,
+            //     feedback: placeholderFd
+            // }
+
+            // $.ajax({
+            //     type: 'PUT',
+            //     dataType: 'json',
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //         "Accept": "application/json, text/plain */",
+            //         "Access-Control-Allow-Origin": "*"
+            //     },
+            //     url: myURL,
+            //     data: JSON.stringify(data),
+            //     success: function(db_data) {
+
+            //         // alert('Booking Slot saved Successfully!'); 
+            //         alertBox(1);
+            //     },
+            //     error: function(db_data) {
+            //         // alert('Data not Saved!');
+            //         alertBox(7);
+            //     }
+            // });
+
+        }
+
+
+        //
+        $('#fetchWeeklyHours').click(function() {
+            $('#fetchWeeklyHours').removeClass();
+            $('#fetchWeeklyHours').addClass('btn btn-info btn-block');
+
+            $('#fetchWeeklyRequests').removeClass();
+            $('#fetchWeeklyRequests').addClass('btn btn-secondary btn-block');
+
+            var btnType = 'hours';
+
+            load_this_week_data(btnType);
+
+
+        });
+
+        $('#fetchWeeklyRequests').click(function() {
+            $('#fetchWeeklyRequests').removeClass();
+            $('#fetchWeeklyRequests').addClass('btn btn-info btn-block');
+
+            $('#fetchWeeklyHours').removeClass();
+            $('#fetchWeeklyHours').addClass('btn btn-secondary btn-block');
+
+            // $('#fetchAllRequests').removeClass();
+            // $('#fetchAllRequests').addClass('btn btn-secondary btn-block');
+            var btnType = 'requests';
+
+            load_this_week_data(btnType);
+
+        });
+
+        function load_this_week_data(btnType) {
+            // var daysEdge = load_Days();
+            // var newFirstDayFormat = daysEdge[0];
+            // var newLastDayFormat = daysEdge[1];
+
+            var firstWeekDay = $('#firstWeekDay').text();
+            var lastWeekDay = $('#lastWeekDay').text();
+
+            ajax_GET_call(firstWeekDay, lastWeekDay, btnType);
+
+        }
+
+        /*
+            ajax call for all time slots from database
+            GET request to aws dynamoDB
+        */
+        function ajax_GET_call(firstDay, lastDay, btnType) {
+
+            var myURL = 'https://6d0dy2iffj.execute-api.us-east-1.amazonaws.com/items';
+
+            $.ajax({
+                type: 'GET',
+                url: myURL,
+                success: function(db_data) {
+
+                    // GET, load this week's time slots
+                    get_weekly_time_slots(db_data, firstDay, lastDay, btnType);
+
+                },
+                error: function(db_data) {
+                    // alert('Sorry! Error occured while fetching data from database!');
+                    alertBox(8);
+                }
+            });
+
+
+        }
+
+        /*
+            GET request to Db, loads time slots
+        */
+        function get_weekly_time_slots(jDATA, firstWeekDay, lastWeekDay, btnType) {
+            var allWeekdays = get_all_weekdays(firstWeekDay, lastWeekDay); // array
+
+            var timeSlots = '';
+            var slot, slotArr, cTime;
+            var duplicateContainer = []; // array of timeslots
+            var counter = 0;
+
+            var slotsContainer = [],
+                timeSlotsContainerDate = [],
+                timeSlotsContainerHour = [],
+                timeSlotsContainerKey = []; // for slots
+            var counter1 = 0,
+                counter2 = 0;
+
+            var hoursKeyContainer = [],
+                requestsKeyContainer = [];
+
+            // var requestsContainer = []; // for requests
+            // var counter2 = 0;
+
+
+            var hoursArr = new Array();
+            var hourDashed = new Array();
+
+            jDATA = JSON.parse(jDATA);
+
+
+            for (slot in jDATA.Items) {
+
+                slotArr = jDATA.Items[slot];
+
+                //===============
+
+                if (((jDATA.Items[slot].date == allWeekdays[0] || jDATA.Items[slot].date == allWeekdays[1] ||
+                        jDATA.Items[slot].date == allWeekdays[2] || jDATA.Items[slot].date == allWeekdays[3] ||
+                        jDATA.Items[slot].date == allWeekdays[4] || jDATA.Items[slot].date == allWeekdays[5] ||
+                        jDATA.Items[slot].date == allWeekdays[6]))) {
+                    //&& (jDATA.Items[slot].name == '') && (jDATA.Items[slot].phone == '')
+
+                    slotArr = jDATA.Items[slot];
+
+                    // correct hour format
+                    for (cTime in slotArr.timeFrom) {
+                        hourDashed[cTime] = slotArr.timeFrom[cTime] + ' - ';
+                    }
+                    for (cTime in slotArr.timeTo) {
+                        hourDashed[cTime] += slotArr.timeTo[cTime]; // 8:00am - 10:00am
+                    }
+
+                    if (btnType == 'hours') {
+                        // if not booked
+                        if ((jDATA.Items[slot].name == '') && (jDATA.Items[slot].phone == '')) {
+                            for (cTime in hourDashed) {
+                                hoursArr[cTime] = hourDashed[cTime];
+
+                                // show as booked
+                                timeSlots = '<div class="col-md-12 card-on dynamic-date-card">';
+
+                                timeSlots += '<div class="col-xs-8">';
+                                timeSlots += '<h5 class="tblDate">' + jDATA.Items[slot].date + '</h5>';
+                                timeSlots += '<h6 class="tblTime">' + hoursArr[cTime] + '</h6>';
+                                timeSlots += '<p class="cusEmail" hidden>' + jDATA.Items[slot].email + '</p>';
+                                timeSlots += '</div>';
+
+                                timeSlots += '<div class="col-xs-4">';
+                                timeSlots += '<button class="btn btn-danger btn-block" data-toggle="modal" onclick="deleteTheTime(event)" data-target="#calModal">Delete</button>';
+                                timeSlots += '</div>';
+
+                                timeSlots += '</div>';
+
+                                timeSlotsContainerDate[counter1] = jDATA.Items[slot].date;
+                                timeSlotsContainerHour[counter1] = hoursArr[cTime];
+                                timeSlotsContainerKey[counter1] = jDATA.Items[slot].email;
+                                hoursKeyContainer[counter1] = jDATA.Items[slot].email; // keys for hours
+                                counter1++;
+
+
+
+
+                                duplicateContainer[counter] = timeSlots;
+                                counter++;
+                            }
+                        }
+                    } else if (btnType == 'requests') {
+                        // if booked
+                        if (!(jDATA.Items[slot].name == '') && !(jDATA.Items[slot].phone == '')) {
+                            for (cTime in hourDashed) {
+                                hoursArr[cTime] = hourDashed[cTime];
+
+                                // show as booked
+                                timeSlots = '<div class="col-md-12 card-on dynamic-date-card">';
+
+                                timeSlots += '<div class="col-xs-8">';
+                                timeSlots += '<h5 class="cusName">' + jDATA.Items[slot].name + '</h5>';
+                                timeSlots += '<h5 class="cusPhone">' + jDATA.Items[slot].phone + '</h5>';
+                                timeSlots += '<h6 class="cusEmail">' + jDATA.Items[slot].email + '</h6>';
+                                timeSlots += '<p class="cusFeedback">' + jDATA.Items[slot].feedback + '</p>';
+
+                                timeSlots += '<h5 class="tblDate">' + jDATA.Items[slot].date + '</h5>';
+                                timeSlots += '<h6 class="tblTime">' + hoursArr[cTime] + '</h6>';
+
+                                timeSlots += '</div>';
+
+                                timeSlots += '<div class="col-xs-4">';
+                                timeSlots += '<button class="btn btn-danger btn-block" data-toggle="modal" onclick="deleteTheRequest(event)" data-target="#calModal">Delete</button>';
+                                timeSlots += '</div>';
+
+                                timeSlots += '</div>';
+
+                                requestsKeyContainer[counter2] = jDATA.Items[slot].email; // keys for requests
+                                counter2++;
+
+                                duplicateContainer[counter] = timeSlots;
+                                counter++;
+                            }
+                        }
+                    }
+
+
+                }
+
+            }
+
+            if (timeSlots == '') {
+
+                // show as booked
+                timeSlots = '<div class="col-md-12 card-on dynamic-date-card">';
+
+                timeSlots += '<div class="col-xs-8">';
+                timeSlots += '<h5 class="tblDate text-uppercase text-info">No data available for this week</h5>';
+                timeSlots += '</div>';
+
+                timeSlots += '<div class="col-xs-4">';
+                timeSlots += '<button class="btn btn-danger btn-block" data-toggle="modal" disabled data-target="#calModal">Delete</button>';
+                timeSlots += '</div>';
+
+                timeSlots += '</div>';
+
+                duplicateContainer[counter] = timeSlots;
+                counter++;
+            }
+
+            // if duplicated, remove index
+            var uniqueArray = removeDuplicateValue(duplicateContainer);
+
+            // order by hour
+            var orderedArrayByHour = orderByHour(uniqueArray);
+
+            // order by date
+            var orderedArrayByDate = orderByDate(orderedArrayByHour);
+
+            // convert array back to string
+            var newVal = orderedArrayByDate.join("");
+
+            if (btnType == 'hours') {
+                $('#dynamic-board').html(newVal);
+            } else if (btnType == 'requests') {
+                $('#dynamic-board').html(newVal);
+            }
+
+            // hoursKeyContainer
+            // bulk data management
+            $('#deleteAllWeeklyHours').click(function() {
+                // alert('delete all')
+                var successMsg = false;
+                // var hoursKeyContainer = []; //??
+                for (index in hoursKeyContainer) {
+                    // delete_content(hoursKeyContainer[index]);
+                    // make a DELETE request for single item to the database
+                    var myURL = `https://6d0dy2iffj.execute-api.us-east-1.amazonaws.com/items/${hoursKeyContainer[index]}`;
+
+                    $.ajax({
+                        type: 'DELETE',
+                        url: myURL,
+                        success: function() {
+                            successMsg = true;
+                        },
+                        error: function() {
+                            successMsg = false;
+                        }
+                    });
+                }
+
+                if (successMsg == true) {
+                    // alert('Bulk Time Slots Data deleted Successfully!');
+                    alertBox(2);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else if (successMsg == false) {
+                    // alert('Data not found!'); alertBox(9);
+                    // alert('Bulk Time Slots Data deleted Successfully!');
+                    alertBox(2);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
+
+            });
+
+            // manage requests bulk data
+            $('#deleteAllWeeklyRequests').click(function() {
+                var successMsg = false;
+
+                for (index in requestsKeyContainer) {
+                    var myURL = `https://6d0dy2iffj.execute-api.us-east-1.amazonaws.com/items/${requestsKeyContainer[index]}`;
+
+                    $.ajax({
+                        type: 'DELETE',
+                        url: myURL,
+                        success: function() {
+                            successMsg = true;
+                        },
+                        error: function() {
+                            successMsg = false;
+                        }
+                    });
+                }
+
+                if (successMsg == true) {
+                    // alert('All customer requests Data deleted Successfully!');
+                    alertBox(3);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else if (successMsg == false) {
+                    // alert('Data not found!');
+                    // alert('All customer requests Data deleted Successfully!');
+                    alertBox(3);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
+
+            });
+
+
+
+        }
+
+        // remove duplicate value
+        // Defining function to get unique values from an array
+        function removeDuplicateValue(dupArray) {
+            var uniqueArray = [];
+
+            // Loop through array values
+            for (var value of dupArray) {
+                if (uniqueArray.indexOf(value) === -1) {
+                    uniqueArray.push(value);
+                }
+            }
+            return uniqueArray;
+        }
+
+        // Sunday ..> Saturday
+        function orderByDate(orderedArray) {
+
+            // order by date
+            orderedArray.sort(function(a, b) {
+                // Sunday
+                if (
+                    a.includes('Sunday') &&
+                    (
+                        b.includes('Monday') || b.includes('Tuesday') || b.includes('Wednesday') ||
+                        b.includes('Thursday') || b.includes('Friday') || b.includes('Saturday')
+                    )
+                ) {
+                    return -1;
+                }
+                // Monday
+                if (
+                    a.includes('Monday') &&
+                    (
+                        b.includes('Tuesday') || b.includes('Wednesday') ||
+                        b.includes('Thursday') || b.includes('Friday') || b.includes('Saturday')
+                    )
+                ) {
+                    return -1;
+                } else if (a.includes('Monday') && b.includes('Sunday')) {
+                    return 1;
+                }
+                // Tuesday
+                if (
+                    a.includes('Tuesday') &&
+                    (
+                        b.includes('Wednesday') || b.includes('Thursday') || b.includes('Friday') || b.includes('Saturday')
+                    )
+                ) {
+                    return -1;
+                } else if (a.includes('Tuesday') && (
+                        b.includes('Sunday') || b.includes('Monday')
+                    )) {
+                    return 1;
+                }
+                // Wednesday
+                if (
+                    a.includes('Wednesday') &&
+                    (
+                        b.includes('Thursday') || b.includes('Friday') || b.includes('Saturday')
+                    )
+                ) {
+                    return -1;
+                } else if (a.includes('Wednesday') && (
+                        b.includes('Sunday') || b.includes('Monday') || a.includes('Tuesday')
+                    )) {
+                    return 1;
+                }
+                // Thursday
+                if (
+                    a.includes('Thursday') &&
+                    (
+                        b.includes('Friday') || b.includes('Saturday')
+                    )
+                ) {
+                    return -1;
+                } else if (a.includes('Thursday') && (
+                        b.includes('Sunday') || b.includes('Monday') || a.includes('Tuesday') || b.includes('Wednesday')
+                    )) {
+                    return 1;
+                }
+                // Friday
+                if (
+                    a.includes('Friday') &&
+                    (
+                        b.includes('Saturday')
+                    )
+                ) {
+                    return -1;
+                } else if (a.includes('Friday') && (
+                        b.includes('Sunday') || b.includes('Monday') || a.includes('Tuesday') || b.includes('Wednesday') ||
+                        a.includes('Thursday')
+                    )) {
+                    return 1;
+                }
+                // Saturday
+                if (a.includes('Saturday') && (
+                        b.includes('Sunday') || b.includes('Monday') || a.includes('Tuesday') ||
+                        b.includes('Wednesday') || b.includes('Thursday') || b.includes('Friday')
+                    )) {
+                    return 1;
+                }
+
+                return 0;
+            });
+
+            return orderedArray;
+        }
+
+        /*
+            order by hour
+            12:00am -, 12:30am -, 1:00am -, 1:30am -, 2:00am -, 2:30am -, 3:00am -, 3:30am -, 4:00am -, 4:30am -
+            5:00am -, 5:30am -, 6:00am -, 6:30am -, 7:00am -, 7:30am -, 8:00am -, 8:30am -, 9:00am -
+            9:30am -, 10:00am -, 10:30am -, 11:00am -, 11:30am -
+            12:00pm -, 12:30pm -, 1:00pm -, 1:30pm -, 2:00pm -, 2:30pm -, 3:00pm -, 3:30pm -, 4:00pm -, 4:30pm -
+            5:00pm -, 5:30pm -, 6:00pm -, 6:30pm -, 7:00pm -, 7:30pm -, 8:00pm -, 8:30pm -, 9:00pm -
+            9:30pm -, 10:00pm -, 10:30pm -, 11:00pm -, 11:30pm -
+        */
+        function orderByHour(orderedArray) {
+            var timeSlots = ['12:00am -', '12:30am -', '1:00am -', '1:30am -', '2:00am -', '2:30am -',
+                '3:00am -', '3:30am -', '4:00am -', '4:30am -', '5:00am -', '5:30am -', '6:00am -', '6:30am -',
+                '7:00am -', '7:30am -', '8:00am -', '8:30am -', '9:00am -', '9:30am -', '10:00am -', '10:30am -',
+                '11:00am -', '11:30am -', '12:00pm -', '12:30pm -', '1:00pm -', '1:30pm -', '2:00pm -', '2:30pm -',
+                '3:00pm -', '3:30pm -', '4:00pm -', '4:30pm -', '5:00pm -', '5:30pm -', '6:00pm -', '6:30pm -',
+                '7:00pm -', '7:30pm -', '8:00pm -', '8:30pm -', '9:00pm -', '9:30pm -', '10:00pm -',
+                '10:30pm -', '11:00pm -', '11:30pm -'
+            ]; // length = 48
+
+            // order by date
+            orderedArray.sort(function(a, b) {
+                var arrIndex = 0,
+                    currentIndex = 0;
+                for (index in timeSlots) {
+                    arrIndex = index;
+                    // 12:00am --------------- first
+                    if (arrIndex == 0) {
+                        if (a.includes(timeSlots[index])) {
+                            return -1;
+                        }
+                    }
+                    // 11:30pm --------------- last
+                    else if (arrIndex == (timeSlots.length - 1)) {
+                        if (a.includes(timeSlots[index])) {
+                            return 1;
+                        }
+                    } else {
+                        if (a.includes(timeSlots[index])) {
+                            // compare to prev slots
+                            for (var i = index; i >= 0; i--) {
+                                if (b.includes(timeSlots[i])) {
+                                    return 1;
+                                }
+                            }
+                            // compare to next slots
+                            for (var i = index; i < timeSlots.length; i++) {
+                                if (b.includes(timeSlots[i])) {
+                                    return -1;
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                return 0;
+            });
+
+            return orderedArray;
+        }
+
+        /*
+            generate all weekdays array full format
+        */
+        function get_all_weekdays(firstWeekDay, lastWeekDay) {
+            var weekdaysArr = new Array(7);
+
+            var str = firstWeekDay.split(', '); // [Sunday] [March 28] [2021]
+            var str2 = str[1].split(' '); // [March] [28]
+            var daysArr = [
+                "Sunday", "Monday", "Tuesday",
+                "Wednesday", "Thursday", "Friday", "Saturday"
+            ];
+            var monthsArr = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+            var newDate = str2[1];
+            var newMonth = monthsArr.indexOf(str2[0]); // 3
+            if (parseInt(newMonth) < 10) {
+                newMonth = String('0' + newMonth); // 3 ==> '03'
+            }
+            var newYear = str[2];
+
+            var secondWeekDay = full_date_format((parseInt(newDate) + 1), newMonth, newYear); // Monday, March 29, 2021
+            var thirdWeekDay = full_date_format((parseInt(newDate) + 2), newMonth, newYear); // Tuesday, March 30, 2021
+            var fourthWeekDay = full_date_format((parseInt(newDate) + 3), newMonth, newYear); // Wednesday, March 31, 2021
+            var fifthWeekDay = full_date_format((parseInt(newDate) + 4), newMonth, newYear); // Thursday, April 1, 2021
+            var sixthWeekDay = full_date_format((parseInt(newDate) + 5), newMonth, newYear); // Friday, April 2, 2021
+
+            weekdaysArr[0] = firstWeekDay; // Sunday, March 28, 2021
+            weekdaysArr[1] = secondWeekDay; // Monday, March 29, 2021
+            weekdaysArr[2] = thirdWeekDay; // Tuesday, March 30, 2021
+            weekdaysArr[3] = fourthWeekDay; // Wednesday, March 31, 2021
+            weekdaysArr[4] = fifthWeekDay; // Thursday, April 1, 2021
+            weekdaysArr[5] = sixthWeekDay; // Friday, April 2, 2021
+            weekdaysArr[6] = lastWeekDay; // Saturday, April 3, 2021
+
+            return weekdaysArr;
+        }
+
+        /*
+            receives day, month, year ... generates new date object and  
+            returns weekdays full foramt string
+        */
+        function full_date_format(date, month, year) {
+            var dateObj = new Date(year, month, date);
+
+            var fullDateFormat = '';
+
+            var daysArr = [
+                "Sunday", "Monday", "Tuesday",
+                "Wednesday", "Thursday", "Friday", "Saturday"
+            ];
+            var monthsArr = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+
+            var dateNum = dateObj.getDate(); // 1 - 31
+            var dayNum = dateObj.getDay(); // 0 - 6
+            var dateName = daysArr[dayNum]; // Monday
+            var monthNum = dateObj.getMonth(); // 0 - 11
+            var monthName = monthsArr[monthNum]; // March
+            var thisYear = dateObj.getFullYear(); // 2021
+
+            fullDateFormat = dateName + ', ' + monthName + ' ' + dateNum + ', ' + thisYear; // Monday, March 29, 2021
+
+            return fullDateFormat;
+        }
+
+
+        function load_Days() {
+            // load this week days label
+            var dateObj = new Date(); // today object
+
+            var thisDay = dateObj.getDay(); // 0 - 6
+            var thisDate = dateObj.getDate(); // 1 - 31
+            var thisFirstDate, thisLastDate;
+
+            // finding first and last days (1 - 31) of current week
+            if (thisDay == 0) {
+                thisFirstDate = parseInt(thisDate);
+                thisLastDate = parseInt(thisDate) + 6;
+            } else if (thisDay == 1) {
+                thisFirstDate = parseInt(thisDate) - 1;
+                thisLastDate = parseInt(thisDate) + 5;
+            } else if (thisDay == 2) {
+                thisFirstDate = parseInt(thisDate) - 2;
+                thisLastDate = parseInt(thisDate) + 4;
+            } else if (thisDay == 3) {
+                thisFirstDate = parseInt(thisDate) - 3;
+                thisLastDate = parseInt(thisDate) + 3;
+            } else if (thisDay == 4) {
+                thisFirstDate = parseInt(thisDate) - 4;
+                thisLastDate = parseInt(thisDate) + 2;
+            } else if (thisDay == 5) {
+                thisFirstDate = parseInt(thisDate) - 5;
+                thisLastDate = parseInt(thisDate) + 1;
+            } else if (thisDay == 6) {
+                thisFirstDate = parseInt(thisDate) - 6;
+                thisLastDate = parseInt(thisDate);
+            }
+
+            var thisMonth = dateObj.getMonth(); // 0 - 11
+            if (parseInt(thisMonth) < 10) {
+                thisMonth = String('0' + thisMonth); // 2 ==> '02'
+            }
+
+            var thisYear = dateObj.getFullYear(); // 2021
+
+            var daysArr = [
+                "Sunday", "Monday", "Tuesday",
+                "Wednesday", "Thursday", "Friday", "Saturday"
+            ];
+
+            var monthsArr = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+
+            // generate new date objects for first and last days
+            var firstDateObj = new Date(thisYear, thisMonth, thisFirstDate);
+            var lastDateObj = new Date(thisYear, thisMonth, thisLastDate);
+
+            // for first day
+            var newFirstDay = firstDateObj.getDay(); // 0 - 6
+            var newFirstDate = firstDateObj.getDate(); // 1 - 31
+            var newFirstDateName = daysArr[newFirstDay]; // Tuesday
+            var newFirstMonthNum = firstDateObj.getMonth();
+            var newFirstMonthName = monthsArr[newFirstMonthNum]; // March
+            var newFirstYear = firstDateObj.getFullYear(); // 2021
+
+            var newFirstDayFormat = newFirstDateName + ', ' + newFirstMonthName +
+                ' ' + newFirstDate + ', ' + newFirstYear; // Tuesday, March 29, 2021
+
+            // for last day
+            var newLastDay = lastDateObj.getDay(); // 0 - 6
+            var newLastDate = lastDateObj.getDate(); // 1 - 31
+            var newLastDateName = daysArr[newLastDay]; // Tuesday
+            var newLastMonthNum = lastDateObj.getMonth(); // 0 - 11
+            var newLastMonthName = monthsArr[newLastMonthNum]; // March
+            var newLastYear = lastDateObj.getFullYear(); // 2021
+
+            var newLastDayFormat = newLastDateName + ', ' + newLastMonthName +
+                ' ' + newLastDate + ', ' + newLastYear; // Tuesday, March 29, 2021
+
+            //
+            var daysEdgeArray = [];
+            daysEdgeArray[0] = newFirstDayFormat;
+            daysEdgeArray[1] = newLastDayFormat;
+
+            return daysEdgeArray;
+        }
+
+        /*
+            load previous week first day and last day 
+        */
+        function retrievePrevData(e) {
+            e.preventDefault();
+
+            var firstWeekDay = $('#firstWeekDay').text();
+
+            // var btnType = 'all';
+
+            var num = -7;
+            generate_week_days(num, firstWeekDay);
+
+        }
+
+        /*
+            load next week first day and last day 
+        */
+        function retrieveNextData(e) {
+            e.preventDefault();
+
+            var lastWeekDay = $('#lastWeekDay').text();
+
+            // var btnType = 'all';
+
+            var num = 7;
+            generate_week_days(num, lastWeekDay);
+        }
+
+
+        /*
+            on button click, load week first day and last day 
+        */
+        function generate_week_days(n, weekDay) {
+
+            var daysArr = [
+                "Sunday", "Monday", "Tuesday",
+                "Wednesday", "Thursday", "Friday", "Saturday"
+            ];
+
+            var monthsArr = [
+                "January", "February", "March",
+                "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+
+            var newFirstDayFormat, newLastDayFormat, newFirstDayNum, newLastDayNum;
+
+            var str = weekDay.split(', '); // [Sunday] [March 9] [2021]
+            var str2 = str[1].split(' '); // [March] [9]
+
+            var newYear = str[2];
+            var monthNum = monthsArr.indexOf(str2[0]);
+            if (parseInt(monthNum) < 10) {
+                monthNum = String('0' + monthNum); // 2 ==> '02'
+            }
+
+            if (n == -7) {
+
+                newFirstDayNum = parseInt(str2[1]) + n; // 9 - 7 = 2
+                newLastDayNum = newFirstDayNum + 6; // 2 + 6 = 8
+
+                // generate new date format for first Day
+                var firstDateObj = new Date(newYear, monthNum, newFirstDayNum); // yyyy, MM, dd
+
+                var newFirstDay = firstDateObj.getDay(); // 0 - 6
+                var newFirstDate = firstDateObj.getDate(); // 1 - 31
+                var newFirstDateName = daysArr[newFirstDay]; // Tuesday
+                var newFirstMonthNum = firstDateObj.getMonth(); // 0 - 11
+                var newFirstMonthName = monthsArr[newFirstMonthNum]; // March
+                var newFirstYear = firstDateObj.getFullYear(); // 2021
+
+                newFirstDayFormat = newFirstDateName + ', ' + newFirstMonthName +
+                    ' ' + newFirstDate + ', ' + newFirstYear;
+
+                // generate new date format for last Day
+                var lastDateObj = new Date(newYear, monthNum, newLastDayNum); // yyyy, MM, dd
+
+                var newLastDay = lastDateObj.getDay(); // 0 - 6
+                var newLastDate = lastDateObj.getDate(); // 1 - 31
+                var newLastDateName = daysArr[newLastDay]; // Tuesday
+                var newLastMonthNum = lastDateObj.getMonth(); // 0 - 11
+                var newLastMonthName = monthsArr[newLastMonthNum]; // March
+                var newLastYear = lastDateObj.getFullYear(); // 2021
+
+                newLastDayFormat = newLastDateName + ', ' + newLastMonthName +
+                    ' ' + newLastDate + ', ' + newLastYear;
+
+            } else if (n == 7) {
+
+                newLastDayNum = parseInt(str2[1]) + n;
+                newFirstDayNum = newLastDayNum - 6;
+
+                // generate new date format for first Day
+                var firstDateObj = new Date(newYear, monthNum, newFirstDayNum); // yyyy, MM, dd
+
+                var newFirstDay = firstDateObj.getDay(); // 0 - 6
+                var newFirstDate = firstDateObj.getDate(); // 1 - 31
+                var newFirstDateName = daysArr[newFirstDay]; // Tuesday
+                var newFirstMonthNum = firstDateObj.getMonth(); // 0 - 11
+                var newFirstMonthName = monthsArr[newFirstMonthNum]; // March
+                var newFirstYear = firstDateObj.getFullYear(); // 2021
+
+                newFirstDayFormat = newFirstDateName + ', ' + newFirstMonthName +
+                    ' ' + newFirstDate + ', ' + newFirstYear;
+
+                // generate new date format for last Day
+                var lastDateObj = new Date(newYear, monthNum, newLastDayNum); // yyyy, MM, dd
+
+                var newLastDay = lastDateObj.getDay(); // 0 - 6
+                var newLastDate = lastDateObj.getDate(); // 1 - 31
+                var newLastDateName = daysArr[newLastDay]; // Tuesday
+                var newLastMonthNum = lastDateObj.getMonth(); // 0 - 11
+                var newLastMonthName = monthsArr[newLastMonthNum]; // March
+                var newLastYear = lastDateObj.getFullYear(); // 2021
+
+                newLastDayFormat = newLastDateName + ', ' + newLastMonthName +
+                    ' ' + newLastDate + ', ' + newLastYear;
+
+            }
+
+            // assign new day to div
+            $('#firstWeekDay').html(newFirstDayFormat)
+            $('#lastWeekDay').html(newLastDayFormat)
+
+            // ajax_GET_call(newFirstDayFormat, newLastDayFormat, btnType)
+        }
+
+        /*
+            delete slot
+        */
+        function deleteTheTime(e) {
+            var parentDiv = e.target.parentNode.parentNode;
+            var emailDiv = parentDiv.querySelector('p');
+            var dateDiv = parentDiv.querySelector('.tblDate');
+            var hourDiv = parentDiv.querySelector('.tblTime');
+
+            var email = '',
+                date = '',
+                hour = '';
+            email = emailDiv.textContent;
+            date = dateDiv.textContent;
+            hour = hourDiv.textContent;
+
+            // alert(hour)
+            delete_content(email);
+        }
+        /*
+            delete request
+        */
+        function deleteTheRequest(e) {
+            var parentDiv = e.target.parentNode.parentNode;
+            var cusEmailDiv = parentDiv.querySelector('.cusEmail');
+            var cusHourDiv = parentDiv.querySelector('.tblTime');
+            var cusDateDiv = parentDiv.querySelector('.tblDate');
+
+            var cusEmail = '',
+                cusHour = '',
+                cusDate = '';
+
+            cusEmail = cusEmailDiv.textContent;
+            cusHour = cusHourDiv.textContent;
+            cusDate = cusDateDiv.textContent;
+
+            // alert(cusHour)
+            delete_content(cusEmail);
+        }
+
+
+        /*
+            delete request '' ``
+        */
+        function delete_content(cusEmail) {
+            // make a DELETE request for single item to the database
+            var myURL = `https://6d0dy2iffj.execute-api.us-east-1.amazonaws.com/items/${cusEmail}`;
+
+            $.ajax({
+                type: 'DELETE',
+                url: myURL,
+                success: function() {
+
+                    // alert('Data deleted Successfully!');
+                    alertBox(4);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function() {
+                    // alert('Data not found!');
+                    alertBox(9);
+                }
+            });
+
+        }
+
+
+        //
+    </script>
+
+</head>
+
+<body>
+    <!--  ======================= content body =======================  -->
+    <div class="spacer-1"></div>
+    <div class="container" id="tempoContent">
+        <div class="row">
+
+            <div class="col-xs-12 fade-in card-on">
+
+                <!-- create booking -->
+                <h3 class="display-5 text-center">Create Booking</h3>
+                <p>To create time slots, enter date, starting time and ending time.</p>
+                <p class="text-danger">This is for Lux Lab hairsalon staff.</p>
+
+                <form id="bookingCreationForm">
+                    <div class="form-group">
+                        <label for="date">Pick a Date</label>
+                        <input type="date" id="crDate" name="crDate" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pick Start Time</label>
+                        <br>
+
+                        <div class="col-lg-6">
+                            <label for="startHour">Start Hour</label>
+                            <select name="startHour" type="text" id="startHour" class="form-control">
+                                <option value="">Select starting time</option>
+                                <option value="12:00am">12:00am</option>
+                                <option value="12:30am">12:30am</option>
+                                <option value="1:00am">1:00am</option>
+                                <option value="1:30am">1:30am</option>
+                                <option value="2:00am">2:00am</option>
+                                <option value="2:30am">2:30am</option>
+                                <option value="3:00am">3:00am</option>
+                                <option value="3:30am">3:30am</option>
+                                <option value="4:00am">4:00am</option>
+                                <option value="4:30am">4:30am</option>
+                                <option value="5:00am">5:00am</option>
+                                <option value="5:30am">5:30am</option>
+                                <option value="6:00am">6:00am</option>
+                                <option value="6:30am">6:30am</option>
+                                <option value="7:00am">7:00am</option>
+                                <option value="7:30am">7:30am</option>
+                                <option value="8:00am">8:00am</option>
+                                <option value="8:30am">8:30am</option>
+                                <option value="9:00am">9:00am</option>
+                                <option value="9:30am">9:30am</option>
+                                <option value="10:00am">10:00am</option>
+                                <option value="10:30am">10:30am</option>
+                                <option value="11:00am">11:00am</option>
+                                <option value="11:30am">11:30am</option>
+                                <option value="12:00pm">12:00pm</option>
+                                <option value="12:30pm">12:30pm</option>
+                                <option value="1:00pm">1:00pm</option>
+                                <option value="1:30pm">1:30pm</option>
+                                <option value="2:00pm">2:00pm</option>
+                                <option value="2:30pm">2:30pm</option>
+                                <option value="3:00pm">3:00pm</option>
+                                <option value="3:30pm">3:30pm</option>
+                                <option value="4:00pm">4:00pm</option>
+                                <option value="4:30pm">4:30pm</option>
+                                <option value="5:00pm">5:00pm</option>
+                                <option value="5:30pm">5:30pm</option>
+                                <option value="6:00pm">6:00pm</option>
+                                <option value="6:30pm">6:30pm</option>
+                                <option value="7:00pm">7:00pm</option>
+                                <option value="7:30pm">7:30pm</option>
+                                <option value="8:00pm">8:00pm</option>
+                                <option value="8:30pm">8:30pm</option>
+                                <option value="9:00pm">9:00pm</option>
+                                <option value="9:30pm">9:30pm</option>
+                                <option value="10:00pm">10:00pm</option>
+                                <option value="10:30pm">10:30pm</option>
+                                <option value="11:00pm">11:00pm</option>
+                                <option value="11:30pm">11:30pm</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <label for="endHour">End Hour</label>
+                            <select name="endHour" type="text" id="endHour" class="form-control">
+                                <option value="">Select ending time</option>
+                                <option value="12:00am">12:00am</option>
+                                <option value="12:30am">12:30am</option>
+                                <option value="1:00am">1:00am</option>
+                                <option value="1:30am">1:30am</option>
+                                <option value="2:00am">2:00am</option>
+                                <option value="2:30am">2:30am</option>
+                                <option value="3:00am">3:00am</option>
+                                <option value="3:30am">3:30am</option>
+                                <option value="4:00am">4:00am</option>
+                                <option value="4:30am">4:30am</option>
+                                <option value="5:00am">5:00am</option>
+                                <option value="5:30am">5:30am</option>
+                                <option value="6:00am">6:00am</option>
+                                <option value="6:30am">6:30am</option>
+                                <option value="7:00am">7:00am</option>
+                                <option value="7:30am">7:30am</option>
+                                <option value="8:00am">8:00am</option>
+                                <option value="8:30am">8:30am</option>
+                                <option value="9:00am">9:00am</option>
+                                <option value="9:30am">9:30am</option>
+                                <option value="10:00am">10:00am</option>
+                                <option value="10:30am">10:30am</option>
+                                <option value="11:00am">11:00am</option>
+                                <option value="11:30am">11:30am</option>
+                                <option value="12:00pm">12:00pm</option>
+                                <option value="12:30pm">12:30pm</option>
+                                <option value="1:00pm">1:00pm</option>
+                                <option value="1:30pm">1:30pm</option>
+                                <option value="2:00pm">2:00pm</option>
+                                <option value="2:30pm">2:30pm</option>
+                                <option value="3:00pm">3:00pm</option>
+                                <option value="3:30pm">3:30pm</option>
+                                <option value="4:00pm">4:00pm</option>
+                                <option value="4:30pm">4:30pm</option>
+                                <option value="5:00pm">5:00pm</option>
+                                <option value="5:30pm">5:30pm</option>
+                                <option value="6:00pm">6:00pm</option>
+                                <option value="6:30pm">6:30pm</option>
+                                <option value="7:00pm">7:00pm</option>
+                                <option value="7:30pm">7:30pm</option>
+                                <option value="8:00pm">8:00pm</option>
+                                <option value="8:30pm">8:30pm</option>
+                                <option value="9:00pm">9:00pm</option>
+                                <option value="9:30pm">9:30pm</option>
+                                <option value="10:00pm">10:00pm</option>
+                                <option value="10:30pm">10:30pm</option>
+                                <option value="11:00pm">11:00pm</option>
+                                <option value="11:30pm">11:30pm</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="spacer-1"></div>
+
+                    <input type="submit" value="Create Time Slot" id="createRecord" class="btn btn-info btn-block">
+
+                </form>
+
+                <div class="spacer-1"></div>
+
+                <div>
+                    <!-- class="col-xs-12" -->
+                    <h3 class="text-center">Fetch Slots & Requests</h3>
+                    <!-- <p class="text-danger">Date and time created now.</p> -->
+
+                    <div class="col-md-12 arrow text-center">
+                        <div class="spacer-0"></div>
+
+
+                        <div class="col-xs-1">
+                            <i class="fa fa-arrow-circle-left" onClick="retrievePrevData(event)"></i>
+                        </div>
+                        <div class="col-xs-4">
+                            <code><h4 id="firstWeekDay">(first day of week placeholder)</h4></code>
+                        </div>
+                        <div class="col-xs-1">
+                            <h4>to</h4>
+                        </div>
+                        <div class="col-xs-4">
+                            <code><h4 id="lastWeekDay">(last day of week placeholder)</h4></code>
+                        </div>
+                        <div class="col-xs-1">
+                            <i class="fas fa-arrow-circle-right" onClick="retrieveNextData(event)"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="spacer-1"></div>
+
+                    <div class="col-xs-6">
+                        <!-- <input type="submit" value="Open Hours" id="fetchWeeklyHours" class="btn btn-info btn-block"> -->
+                        <div class="col-md-6">
+                            <input type="submit" value="Open Hours" id="fetchWeeklyHours" class="btn btn-info btn-block">
+                        </div>
+                        <div class="col-md-6 bulkDataBtn">
+                            <input type="submit" value="Delete All Time Slots" id="deleteAllWeeklyHours" class="btn btn-danger btn-block">
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <!-- <input type="submit" value="Booked Hours" id="fetchWeeklyRequests" class="btn btn-secondary btn-block"> -->
+                        <div class="col-md-6">
+                            <input type="submit" value="Booked Hours" id="fetchWeeklyRequests" class="btn btn-secondary btn-block">
+                        </div>
+                        <div class="col-md-6 bulkDataBtn">
+                            <input type="submit" value="Delete All Booked Hours" id="deleteAllWeeklyRequests" class="btn btn-danger btn-block">
+                        </div>
+                    </div>
+
+                    <div class="spacer bulkDataBtn"></div>
+
+                    <div class="col-xs-6 bulkDataBtn">
+                        <!-- <div class="col-md-4">
+                            <input type="submit" value="Delete All Time Slots" id="deleteAllWeeklyHours" class="btn btn-danger btn-block">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="submit" value="Delete By Date" id="deleteAllHoursByDate" class="btn btn-danger btn-block">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="submit" value="Delete By Hour" id="deleteAllHoursByHour" class="btn btn-danger btn-block">
+                        </div> -->
+                    </div>
+                    <div class="col-xs-6 bulkDataBtn">
+                        <!-- <div class="col-md-4">
+                            <input type="submit" value="Delete All Booked Hours" id="deleteAllWeeklyRequests" class="btn btn-danger btn-block">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="submit" value="Delete By Date" id="deleteAllRequestsByDate" class="btn btn-danger btn-block">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="submit" value="Delete By Hour" id="deleteAllRequestsByHour" class="btn btn-danger btn-block">
+                        </div> -->
+                    </div>
+
+                    <div class="spacer-1"></div>
+
+                    <div class="col-xs-2"></div>
+
+                    <div class="col-xs-8" id="dynamic-board">
+                        Click on the button to see list of data!
+                    </div>
+
+                    <div class="col-xs-2"></div>
+
+                    <div class="col-md-6" id="dynamic-time-slot-board"></div>
+                    <div class="col-md-6" id="dynamic-request-board"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- modal 2 -->
+    <div class="modal fade mb-5" tabindex="-1" role="dialog" id="messageModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-title">Notification</h4>
+
+                </div>
+
+                <div class="modal-body">
+                    <form class="request-form">
+                        <div class="form-row">
+
+                            <div id="message"></div>
+
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- /modal 2 -->
+    <!-- date UI for safari browser -->
+    <script>
+        var dateClass = '#crDate';
+        $(document).ready(function() {
+            if (document.querySelector(dateClass).type !== 'date') {
+                var oCSS = document.createElement('link');
+                oCSS.type = 'text/css';
+                oCSS.rel = 'stylesheet';
+                oCSS.href = '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css';
+                // oCSS.href = './assets/js/jquery-ui.css';
+                oCSS.onload = function() {
+                    var oJS = document.createElement('script');
+                    oJS.type = 'text/javascript';
+                    oJS.src = '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js';
+                    // oJS.src = './assets/js/jquery-ui.min.js';
+                    oJS.onload = function() {
+                        $(dateClass).datepicker();
+                    }
+                    document.body.appendChild(oJS);
+                }
+                document.body.appendChild(oCSS);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

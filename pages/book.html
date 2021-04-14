@@ -1,0 +1,287 @@
+<html>
+
+<head>
+    <script>
+        var url = "./assets/js/calendarLoader.js";
+        $.getScript(url);
+    </script>
+
+</head>
+
+<body>
+    <!--  ======================= content body =======================  -->
+    <div class="spacer-1"></div>
+    <div class="container" id="tempoContent">
+        <div class="row">
+            <div class="col-md-12 text-center fade-in">
+                <div id="calButtons">
+
+                    <div class="spacer-0"></div>
+                    <button class="btn daily">Daily</button>
+                    <button class="btn weekly">Weekly</button>
+                    <!-- <button class="btn monthly">Monthly</button> -->
+                </div>
+
+                <!--popup modal-->
+                <div class="modal fade mb-5" tabindex="-1" role="dialog" id="calModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+                                <h4 class="modal-title">
+                                    Date: <span class="text-primary" id="modalDate">Tuesday</span> | Hour: <span class="text-primary" id="modalTime">9:00am-10:00am</span>
+                                </h4>
+                            </div>
+                            <!-- modal 1 -->
+                            <div class="modal-body">
+                                <form class="request-form">
+                                    <div class="form-row">
+
+                                        <div class="col-md-4 mb-3">
+                                            <label for="cusName">Full Name</label>
+                                            <input type="text" class="form-control is-invalid" id="cusName" placeholder="Full Name ... " required>
+                                            <!-- <code>Please enter more than 5 characters.</code>  -->
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="cusPhone">Phone Number</label>
+                                            <input type="text" class="form-control" id="cusPhone" placeholder="Phone Number ..." required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="cusEmail">Email</label>
+                                            <input type="email" class="form-control" id="cusEmail" placeholder="Email address ..." aria-describedby="inputGroupPrepend2" required>
+                                        </div>
+
+                                        <div class="col-md-12 mb-3">
+                                            <label for="cusEmail">Feedback (optional)</label>
+                                            <textarea class="form-control" id="cusDesc" placeholder="feedback and preferences"></textarea>
+                                        </div>
+
+                                        <div class="col-md-12 mb-3">
+                                            <input type="checkbox" name="checkAgreement" id="checkAgreement" value="80"> Check here to indicate that you have read and agree to the terms of the <span class="text-info"><a href="./assets/files/agreement.pdf" target="_blank">Lux Lab Customer Agreement</a></span>
+                                        </div>
+
+                                        <div class="spacer-2"></div>
+
+                                        <input type="submit" id="sendBookingRequest" value="Send Request" class="btn btn-primary btn-block" onClick="submitToAPI(event)">
+
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /modal ends-->
+
+                <!-- modal 2 -->
+                <div class="modal fade mb-5" tabindex="-1" role="dialog" id="messageModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+                                <h4 class="modal-title" id="modal-title">Notification</h4>
+
+                            </div>
+
+                            <div class="modal-body">
+                                <form class="request-form">
+                                    <div class="form-row">
+
+                                        <div id="message"></div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /modal 2 -->
+
+                <div class="calendarLoader card-on"></div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="spacer-2"></div> -->
+
+
+    <script>
+        // alert messages and notifications
+        function alertBox(num) {
+
+            var message = $('#message');
+            var Notif_Array = [
+                    'Thank you for your feedback!',
+                    'UnSuccessfull',
+                    'Your name cannot be shorter that 2 characters',
+                    'Please enter a valid phone number',
+                    'Please enter your email address',
+                    'Please enter a valid email address',
+                    'All input fields must be filled.',
+                    'You must agree to terms and conditions before your request is submitted',
+                    'Booking request is submitted successfully!'
+                ]
+                // update message
+            message.html(Notif_Array[num]);
+
+            var msgTitle = '';
+            if ((num == 0) || (num == 1)) {
+                msgTitle = '<h4 class="text-primary">Notification</h4>';
+            } else if ((num == 8)) {
+                msgTitle = '<h4 class="text-success">Notification</h4>';
+            } else {
+                msgTitle = '<h4 class="text-danger">Warning!</h4>'
+            }
+            $('#modal-title').html(msgTitle);
+
+            // show message
+            $('#messageModal').modal('show');
+
+        }
+
+        // update modal title
+        function bookTheTime(e) {
+            var text = e.target.textContent; // Book
+            var parentDiv = e.target.parentElement;
+
+            var h5El = parentDiv.querySelector('h5'); // h5 element
+            var h6El = parentDiv.querySelector('h6'); // h6 element
+
+            var selectedDate = h5El.textContent;
+            var selectedTime = h6El.textContent;
+
+            document.getElementById('modalDate').innerHTML = selectedDate;
+            document.getElementById('modalTime').innerHTML = selectedTime;
+
+        }
+
+        function submitToAPI(e) {
+            e.preventDefault();
+
+            var cusName = $('#cusName').val();
+            var cusPhone = $('#cusPhone').val();
+            var cusEmail = $('#cusEmail').val();
+            var cusDesc = $('#cusDesc').val();
+            var bookDate = $('#modalDate').text();
+            var bookTime = $('#modalTime').text();
+            // var agreement = $('#checkAgreement').val(); //80
+            var agreement = '';
+            $('input[name="checkAgreement"]:checked').each(function() {
+                agreement = this.value;
+            });
+
+            var NameCheck = /[A-Za-z]{1}[A-Za-z]/;
+            var MobileCheck = /[0-9]{10}/;
+            var EmailCheck = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
+
+            // data validation
+            if (cusName == "" || cusPhone == "" || cusEmail == "") {
+                // alert("Please enter your email address");
+                alertBox(6);
+                // return;
+            } else if (!NameCheck.test(cusName)) {
+                // alert("Your name cannot be shorter that 2 characters");
+                alertBox(2);
+                // return;
+            } else if (!MobileCheck.test(cusPhone)) {
+                // alert("Please enter a valid phone number");
+                alertBox(3);
+                // return;
+            } else if (cusEmail == "") {
+                // alert("Please enter your email address");
+                alertBox(4);
+                // return;
+            } else if (!EmailCheck.test(cusEmail)) {
+                // alert("Please enter a valid email address");
+                alertBox(5);
+                // return;
+            } else if (!(agreement == '80')) {
+                // alert("You must agree to terms and conditions before your request is submitted");
+                alertBox(7);
+            } else {
+                // dismiss modal
+                $('#sendBookingRequest').attr('data-dismiss', 'modal');
+
+                var str = bookTime.split(' - ');
+                var tFrom = str[0];
+                var tTo = str[1];
+
+                var timeFrom = new Array();
+                timeFrom[0] = tFrom;
+                var timeTo = new Array();
+                timeTo[0] = tTo;
+
+                var data = {
+                    email: cusEmail,
+                    date: bookDate,
+                    timeFrom: timeFrom,
+                    timeTo: timeTo,
+                    name: cusName,
+                    phone: cusPhone,
+                    feedback: cusDesc
+                };
+
+                var myURL = 'https://6d0dy2iffj.execute-api.us-east-1.amazonaws.com/items';
+
+                $.ajax({
+                    type: 'PUT',
+                    dataType: 'json',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text/plain */",
+                        "Access-Control-Allow-Origin": "*"
+                    },
+                    url: myURL,
+                    data: JSON.stringify(data),
+                    success: function() {
+                        // open notifiaton modal & show a success message
+                        // alert("Booking request is submitted successfully!");
+                        alertBox(8);
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 3000);
+
+                    },
+                    error: function() {
+                        // show an error message
+                        // alert("UnSuccessfull");
+                        alertBox(1);
+                    }
+                });
+
+            }
+
+
+
+        }
+
+        function valueChange(e) {
+            // alert(e.value)
+            var agree = '';
+            if (e.value == null || e.value == undefined) {
+                agree = '';
+            } else {
+                agree = e.value;
+            }
+
+            termAgreed();
+        }
+        //
+    </script>
+</body>
+
+</html>
