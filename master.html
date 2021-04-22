@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- Javascript SDK-->
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="js/amazon-cognito-auth.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+    <script src="js/amazon-cognito-identity.min.js"></script>
+    <script src="js/config.js"></script>
+</head>
+
+
+<body>
+    <div>
+        <h1>1. Personal Information</h1>
+        <br>
+        <div>
+            <label>Email <span>(Username)</span></label>
+        </div>
+        <div>
+            <h3>
+                <label id="email_value">Please sign in to view content!</label>
+            </h3>
+        </div>
+    </div>
+
+    <br><br>
+
+    <form>
+        <h1>2. Please sign in</h1>
+
+        <input type="text" id="inputUsername" placeholder="Email address" name="username" required autofocus>
+        <input type="password" id="inputPassword" placeholder="Password" name="password" required><br><br>
+        <button type="button" onclick="signInButton()">Sign in</button>
+        <button type="button" onclick="forgotpasswordbutton()">Forgot Password</button>
+        <button type="button" onclick="signOut()">Sign out</button>
+        <!-- https://binitutor.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=6sfksp38pq48t3meo00912mtsf&redirect_uri=https://example.com/ -->
+    </form>
+
+    <br><br>
+
+    <form>
+        <h1>3. Please sign in (with AWS UI)</h1>
+        <a class="btn btn-block" target="_blank" href="https://binitutor.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=6sfksp38pq48t3meo00912mtsf&redirect_uri=https://example.com/">Sign In</a>
+    </form>
+
+    <br><br>
+
+    <h1 class="h3 mb-3 font-weight-normal" id="titleheader">4. Register an Account</h1>
+
+    <input type="personalname" class="form-control" id="personalnameRegister" placeholder="Name" pattern=".*" required>
+    <input type="email" class="form-control" id="emailInputRegister" placeholder="Email" pattern=".*" required>
+    <input type="password" class="form-control" id="passwordInputRegister" placeholder="Password" pattern=".*" required>
+    <input type="password" class="form-control" id="confirmationpassword" placeholder="Confirm Password" pattern=".*" required>
+    <button id="mainbutton" class="btn btn-lg btn-primary btn-block" type="button" onclick="registerButton()">Register</button>
+
+    <script>
+        // register
+        var username;
+        var password;
+        var personalname;
+        var poolData;
+
+        function registerButton() {
+
+            personalnamename = document.getElementById("personalnameRegister").value;
+            username = document.getElementById("emailInputRegister").value;
+
+            if (document.getElementById("passwordInputRegister").value != document.getElementById("confirmationpassword").value) {
+                alert("Passwords Do Not Match!")
+                throw "Passwords Do Not Match!"
+            } else {
+                password = document.getElementById("passwordInputRegister").value;
+            }
+
+            poolData = {
+                UserPoolId: _config.cognito.userPoolId, // Your user pool id here
+                ClientId: _config.cognito.clientId // Your client id here
+            };
+            var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+            var attributeList = [];
+
+            var dataEmail = {
+                Name: 'email',
+                Value: username, //get from form field
+            };
+
+            var dataPersonalName = {
+                Name: 'name',
+                Value: personalname, //get from form field
+            };
+
+            var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
+            var attributePersonalName = new AmazonCognitoIdentity.CognitoUserAttribute(dataPersonalName);
+
+
+            attributeList.push(attributeEmail);
+            attributeList.push(attributePersonalName);
+
+            userPool.signUp(username, password, attributeList, null, function(err, result) {
+                if (err) {
+                    alert(err.message || JSON.stringify(err));
+                    return;
+                }
+                cognitoUser = result.user;
+                console.log('user name is ' + cognitoUser.getUsername());
+                //change elements of page
+                document.getElementById("titleheader").innerHTML = "Check your email for a verification link";
+
+            });
+        }
+
+        // custom sign in
+        function signInButton() {
+
+            var authenticationData = {
+                Username: document.getElementById("inputUsername").value,
+                Password: document.getElementById("inputPassword").value,
+            };
+
+            var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+
+            var poolData = {
+                UserPoolId: _config.cognito.userPoolId, // Your user pool id here
+                ClientId: _config.cognito.clientId, // Your client id here
+            };
+
+            var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+            var userData = {
+                Username: document.getElementById("inputUsername").value,
+                Pool: userPool,
+            };
+
+            var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+            cognitoUser.authenticateUser(authenticationDetails, {
+                onSuccess: function(result) {
+                    var accessToken = result.getAccessToken().getJwtToken();
+                    console.log(accessToken);
+
+                    location.reload();
+                },
+
+                onFailure: function(err) {
+                    alert(err.message || JSON.stringify(err));
+                },
+            });
+        }
+
+        // forgot password
+        function forgotpasswordbutton() {
+            var poolData = {
+                UserPoolId: _config.cognito.userPoolId, // Your user pool id here
+                ClientId: _config.cognito.clientId, // Your client id here
+            };
+
+            var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+            var userData = {
+                Username: document.getElementById("inputUsername").value,
+                Pool: userPool,
+            };
+
+            var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+            cognitoUser.forgotPassword({
+                onSuccess: function(result) {
+                    console.log('call result: ' + result);
+                },
+                onFailure: function(err) {
+                    alert(err);
+                    console.log(err);
+                },
+                inputVerificationCode() {
+                    var verificationCode = prompt('Please input verification code ', '');
+                    var newPassword = prompt('Enter new password ', '');
+                    cognitoUser.confirmPassword(verificationCode, newPassword, this);
+                }
+            });
+        }
+
+        // sign out
+        var data = {
+            UserPoolId: _config.cognito.userPoolId,
+            ClientId: _config.cognito.clientId
+        };
+        var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
+        var cognitoUser = userPool.getCurrentUser();
+
+        window.onload = function() {
+            if (cognitoUser != null) {
+                cognitoUser.getSession(function(err, session) {
+                    if (err) {
+                        alert(err);
+                        return;
+                    }
+                    console.log('session validity: ' + session.isValid());
+                    //Set the profile info
+                    cognitoUser.getUserAttributes(function(err, result) {
+                        if (err) {
+                            console.log(err);
+                            return;
+                        }
+                        console.log(result);
+                        document.getElementById("email_value").innerHTML = result[2].getValue();
+                    });
+
+                });
+            }
+        }
+
+        function signOut() {
+            if (cognitoUser != null) {
+                cognitoUser.signOut();
+
+                document.getElementById("email_value").innerHTML = 'successfully signed out!';
+                // setTimeout(function(){ 
+                //     location.reload();
+                // }, 3000);
+            }
+        }
+
+
+
+        //
+    </script>
+
+</body>
+
+</html>
